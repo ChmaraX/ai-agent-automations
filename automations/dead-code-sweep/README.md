@@ -99,99 +99,30 @@ References:
 
 - [Codex Automations](https://openai.com/academy/codex-automations)
 
-## Claude Code / Codex CLI / Copilot Usage
+## Claude Code Usage
 
-For Codex CLI, Claude Code, GitHub Copilot coding agent, and similar agent tools, the usual pattern is: the agent does the work, and something else handles scheduling.
+1. No extra MCP setup is required for this automation.
+2. Make sure the runtime can execute a Knip command and the validation commands you expect. Preferred: repo-local `knip` script. Fallback: `pnpm dlx knip` in ephemeral runners.
+3. For repeated checks in an open Claude Code session, use `/loop`, for example:
 
-Common scheduling options:
-
-- GitHub Actions with `schedule:`
-- `cron`
-- `launchd`
-- `systemd` timers
-- wrapper scripts that run the CLI in headless or non-interactive mode
-
-Typical setup:
-
-1. Make sure the runtime can execute a Knip command and the validation commands you expect. Preferred: repo-local `knip` script. Fallback: `pnpm dlx knip` in ephemeral runners.
-2. Put this prompt in the command, script, workflow, issue template, or task payload that invokes the agent.
-3. Use your scheduler to run the workflow at the interval you want.
-4. Make sure the runtime has repository access and GitHub access if you want automatic PR creation.
-
-Example: scheduled GitHub Actions run with Codex
-
-```yaml
-name: Dead code sweep
-
-on:
-  schedule:
-    - cron: "0 9 * * 1"
-  workflow_dispatch:
-
-jobs:
-  cleanup:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v5
-      - uses: openai/codex-action@v1
-        with:
-          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          prompt-file: automations/dead-code-sweep/dead-code-sweep.md
+```text
+/loop 1d Follow the instructions in automations/dead-code-sweep/dead-code-sweep.md
 ```
 
-Example: scheduled GitHub Actions run with Claude Code
+4. For durable Claude-managed automation that survives outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 
-```yaml
-name: Dead code sweep
+Claude-native automation options:
 
-on:
-  schedule:
-    - cron: "0 9 * * 1"
-  workflow_dispatch:
-
-jobs:
-  cleanup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: anthropics/claude-code-action@v1
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: |
-            Follow the instructions in automations/dead-code-sweep/dead-code-sweep.md
-          claude_args: "--max-turns 10"
-```
-
-Example: local scheduled run
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-cd /path/to/repo
-
-claude -p "Follow the instructions in automations/dead-code-sweep/dead-code-sweep.md"
-```
-
-Crontab entry:
-
-```cron
-0 9 * * 1 /path/to/run-dead-code-sweep.sh >> /tmp/dead-code-sweep.log 2>&1
-```
-
-For local scheduling, use `cron`, `launchd`, `systemd` timers, or Windows Task Scheduler depending on your platform.
+- `/loop` for repeated runs in the current session
+- `/schedule` for scheduled routines managed by Claude
+- Routines in `claude.ai/code/routines` for durable cloud-hosted automation
 
 References:
 
-- [Codex CLI in GitHub Actions](https://cookbook.openai.com/examples/codex/autofix-github-actions)
-- [Codex GitHub Action](https://github.com/openai/codex-action)
-- [Claude Code GitHub Actions](https://docs.anthropic.com/en/docs/claude-code/github-actions)
-- [Claude Code SDK](https://docs.anthropic.com/en/docs/claude-code/sdk)
-- [Claude Code Headless Mode](https://docs.anthropic.com/en/docs/claude-code/sdk/sdk-headless)
-- [GitHub Copilot coding agent](https://docs.github.com/en/copilot/concepts/coding-agent/coding-agent)
+- [Claude Code MCP](https://code.claude.com/docs/en/mcp)
+- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-usage)
+- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
+- [Automate work with routines](https://code.claude.com/docs/en/web-scheduled-tasks)
 
 ## Recommended Defaults
 
