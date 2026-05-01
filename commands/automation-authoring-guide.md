@@ -16,7 +16,8 @@ Create promoted automation packages that are:
 ## Core Rules
 
 1. Promote from evidence, not from taste.
-   The promoted automation should come from the strongest candidate in the idea package README, synthesis notes, and drafted prompts.
+   The promoted automation should come from the strongest candidate in the idea package README, `research.md` or legacy synthesis notes, and drafted prompts.
+   The promoted output should match the real user value. If the user wants post drafts, the automation should output post drafts, not just a supporting summary.
 2. Promote one automation per folder.
    A promoted automation is a standalone package under `automations/<automation-name>/`.
    Do not create multi-prompt suite folders in `automations/`.
@@ -29,23 +30,40 @@ Create promoted automation packages that are:
 5. Be consistent in standards, not in shape.
    All promoted automations should share the same quality bar, tone, safety discipline, and README rigor.
    The prompt structure should match the task type.
+6. README setup paths should be MCP or a true CLI alternative only.
+   Do not document raw GraphQL APIs, SDKs, or ad hoc scripts as the human-facing setup path in promoted READMEs.
+   If there is no credible CLI path, document MCP only and omit the CLI section.
+   If both MCP and an official CLI cover the workflow well, document them as co-equal setup paths rather than framing the CLI as a fallback.
 
 ## Promotion Workflow
 
-### 1. Start from the idea package
+### 1. Start from the full idea package
 
 Read, at minimum:
 
 - `ideas/<topic>/README.md`
-- `ideas/<topic>/research/synthesis-notes.md`
-- the strongest relevant draft `README.md`
-- the strongest relevant draft `prompt.md`
+- `ideas/<topic>/research.md` or legacy `ideas/<topic>/research/synthesis-notes.md`
+- every draft `README.md`
+- every draft `prompt.md`
+- every draft `meta.json`, if present
 
-Also inspect supporting research artifacts when the choice is unclear.
+Also inspect legacy supporting research artifacts when the choice is unclear.
+
+Before promoting anything, synthesize the idea folder into an automation inventory:
+
+- the strongest primary promotion candidate
+- adjacent candidates that should likely become separate promoted automations
+- weak, redundant, or high-risk drafts that should stay unpromoted for now
+- a short explanation for each automation so a reader can understand its job and why it does or does not deserve promotion
+
+Do this synthesis from the full folder, not just the top-level README. The goal is to understand the automation set the research actually supports before picking a single folder to promote.
 
 ### 2. Choose the exact promotion target
 
 Promote the strongest standalone candidate, not the entire idea package.
+
+If the idea package clearly supports multiple automations, note the recommended set and promotion order, but still promote only one automation per `automations/<name>/` folder.
+Whenever you list that set, include a one- or two-sentence explanation for each automation rather than naming slugs only.
 
 Good promotion target:
 
@@ -103,6 +121,7 @@ Do:
 
 - use defaults like "default 24h window" or "up to 5 issues"
 - discover scope when possible
+- assume the current repository for repo-local automations unless the workflow is explicitly cross-repo
 - fall back to preview/report mode when writes are unavailable
 - stop when safe inference is impossible
 - only rely on persistent state such as cooldowns, dedupe memory, or prior-run tracking when the automation platform actually provides that state
@@ -124,6 +143,7 @@ Prefer:
 - one short process section or clear steps
 - one guardrails section
 - one exact output section
+- plain operator language when a simple word works
 
 Remove:
 
@@ -133,6 +153,11 @@ Remove:
 - long tool-priority sections unless tool choice is essential
 - setup instructions that belong in the README
 - fake "verify tool access" ceremony when the real step can simply attempt the action and stop or fall back if it fails
+- vague posture adjectives such as "conservative", "careful", or "smart" when they are standing in for concrete operating rules
+- framework or research jargon such as "review boundary", "candidate set", or "decision surface" when "time range", "list", or "input" would say the same thing
+
+Prefer concrete behavior over posture labels.
+Instead of describing the automation as "conservative", spell out the actual constraints such as read-only by default, bounded search, explicit scope, preview-first delivery, or stop conditions.
 
 ### Match the prompt shape to the automation type
 
@@ -163,10 +188,14 @@ Examples:
 
 Make explicit:
 
-- scope boundaries
+- repo and time-range limits
 - safe defaults
 - non-negotiable safety rules
 - exact output shape
+
+For repo-local automations, prefer wording like "use the current repo" over wording like "pick the repo" or "resolve repository scope" unless cross-repo discovery is actually part of the job.
+
+For time-based automations, prefer a built-in default such as "latest release to HEAD" or "last 7 days" over language that makes the automation sound like it is inventing its own time range.
 
 Let the model infer:
 
@@ -178,7 +207,7 @@ Do not over-specify judgment-heavy ranking logic unless the automation becomes u
 
 For recurring automations, make the search space explicit but keep interpretation flexible:
 
-- be fairly strict about query boundaries, time windows, and candidate pool size
+- be fairly strict about query boundaries, time windows, and first-pass list size
 - be lighter about ranking formulas unless the automation proves unstable without them
 - if the automation explores a repo broadly, bound the first-pass review to a fixed number of surfaces, candidates, or findings
 
@@ -194,18 +223,21 @@ Each promoted automation README should usually include:
 4. Cursor Cloud usage
 5. Codex app usage
 6. Claude Code / Codex CLI / Copilot usage
-7. CLI alternative, if relevant
-8. Recommended defaults
-9. Useful repo-specific or workspace-specific inputs
+7. Recommended defaults
+8. Useful repo-specific or workspace-specific inputs
+
+Add a separate CLI section only when it adds real value. Do not force one into every README.
 
 ### README expectations
 
 - explain what the automation does in plain language
 - explain when to use it
-- give explicit setup steps for MCP/providers when relevant
+- give explicit setup steps for MCP or a true CLI alternative when relevant
+- treat a capable official CLI as a first-class alternative when it covers the same workflow as MCP
 - link the local prompt file directly
 - document sane defaults and safe customization points
 - make provider/tool setup at least as explicit as the strongest comparable promoted README in the repo
+- keep `Prerequisites` minimal and high-signal
 - omit sections that would only repeat obvious setup, especially `Prerequisites`
 
 ### README anti-patterns
@@ -215,11 +247,15 @@ Do not:
 - dump generic links at the end if the rest of the promoted READMEs do not do that
 - add a trailing "Useful Docs" or similar link-dump section unless those links are truly necessary for setup
 - leave setup vague when another automation in the repo shows the explicit provider setup pattern
+- document raw APIs, SDKs, or one-off scripts as the README setup path instead of MCP or a real CLI workflow
+- describe a capable official CLI as a fallback when it is a real alternative to MCP for that automation
+- force a separate CLI section when the same setup can be stated more cleanly inside the platform-specific usage sections
 - put placeholder-heavy variable forms into the README unless the automation actually uses them
 - describe runtime "automation inputs" if the automation model in this repo does not actually use input forms
 - add "when not to use it" sections instead of keeping the usage guidance focused on positive fit
 - pad "when to use it" sections with obvious restatements of the overview
 - list obvious prerequisites such as basic repository access unless the exact permission boundary matters
+- list obvious read access or write access bullets when a single provider-access prerequisite would say the same thing
 
 ## Safety Rules For Promotion
 
@@ -298,7 +334,7 @@ Use the closest template when it helps, but do not force a prompt into the wrong
 ### Lean prompt template
 
 ```md
-You are a conservative <type> automation.
+You are a <type> automation.
 
 ## Goal
 
@@ -324,7 +360,7 @@ You are a conservative <type> automation.
 ### Procedural prompt template
 
 ```md
-You are a conservative <type> automation.
+You are a <type> automation.
 
 Your goal is to <goal>. Prefer doing nothing over making a questionable change.
 
