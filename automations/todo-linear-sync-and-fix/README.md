@@ -22,14 +22,14 @@ Use the runtime prompt at [todo-linear-sync-and-fix.md](/Users/adamchmara/projec
 
 - Linear access that can create issues
 - Repository write access for code and comment edits
-- Git provider access that can open draft PRs
+- GitHub access that can open draft PRs through the GitHub plugin, GitHub MCP, or authenticated `gh`
 
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
 2. Name your automation and paste [todo-linear-sync-and-fix.md](/Users/adamchmara/projects/awesome-agent-automations/automations/todo-linear-sync-and-fix/todo-linear-sync-and-fix.md) as the automation prompt.
 3. Add Linear access through the official MCP server or managed connector with issue creation enabled.
-4. Add repository access plus draft PR creation access.
+4. Add repository access plus GitHub access that can open draft PRs, such as the built-in GitHub integration, a GitHub MCP server, or authenticated `gh` in the runtime.
 5. Save the automation and start with a low-frequency schedule until the behavior looks right in your repo.
 
 ## Codex App Usage
@@ -42,7 +42,7 @@ Use the runtime prompt at [todo-linear-sync-and-fix.md](/Users/adamchmara/projec
    ```
 2. Click `Automation` > `New Automation`.
 3. Name your automation and paste [todo-linear-sync-and-fix.md](/Users/adamchmara/projects/awesome-agent-automations/automations/todo-linear-sync-and-fix/todo-linear-sync-and-fix.md) as the automation prompt.
-4. Make sure the runtime also has repository write access and draft PR creation access.
+4. Add the GitHub plugin to Codex, a GitHub MCP server, or make authenticated `gh` available in the runtime for draft PR creation.
 5. Set the schedule or run manually and save the automation.
 
 ## Claude Code Usage
@@ -53,7 +53,7 @@ Use the runtime prompt at [todo-linear-sync-and-fix.md](/Users/adamchmara/projec
    claude mcp list
    ```
 2. Open Claude Code and run `/mcp` to authenticate with Linear in your browser.
-3. Make sure the runtime can edit the target repository, run validation commands, and open draft PRs.
+3. Make sure the runtime can edit the target repository, run validation commands, and open draft PRs through a GitHub connector, GitHub MCP, or authenticated `gh`.
 4. For repeated runs in an open session, use `/loop`, for example:
 
 ```text
