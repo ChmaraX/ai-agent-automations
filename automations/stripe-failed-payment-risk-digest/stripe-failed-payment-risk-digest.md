@@ -48,7 +48,15 @@ Use Stripe as the source of truth and produce one internal, read-only digest of 
    - single-cycle lapse: 1 open invoice with prior paid history
    - draft finalization pending: draft invoices with `amount_due > 0` that may auto-collect under account settings
    - unknown: insufficient data to categorize
-7. Render the digest as preview output unless a separate internal delivery tool is configured.
+7. Render the digest.
+   The Markdown digest is the canonical automation response.
+   If the workspace is writable, also create or update these companion artifacts:
+   - `.automation-state/stripe-failed-payment-risk-digest/reports/<YYYY-MM-DD>.md`
+   - `.automation-state/stripe-failed-payment-risk-digest/reports/<YYYY-MM-DD>.html`
+   The HTML file should be a static internal report, not an app.
+   It should include summary cards, the ranked risk table, cluster sections, recovery actions, and a compact embedded copy of the Markdown digest for auditability.
+   If artifact writes are unavailable, still return the Markdown digest and note the skipped artifact write in `Setup Gaps` or `Skipped This Run`.
+8. Render the digest as preview output unless a separate internal delivery tool is configured.
    If no items qualify, say so instead of forcing a noisy report.
 
 ## Guardrails
@@ -84,3 +92,5 @@ Sources: `<tools used>` | Data completeness: `<complete|partial>`
 
 `Skipped This Run` should include only items skipped on the current run because of the 10-item expansion cap or another run-specific constraint.
 Omit `Skipped This Run` entirely if nothing was skipped.
+
+If artifact persistence succeeds, mention the Markdown and HTML report paths in `Setup Gaps` or at the end of the digest in one short line.

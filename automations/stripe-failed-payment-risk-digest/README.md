@@ -12,6 +12,7 @@ Use it when finance, support, or revenue operations teams want one practical int
 2. Pulls a bounded candidate set with Stripe MCP convenience tools for payment intents, invoices, and past_due, unpaid, or incomplete subscriptions.
 3. Enriches up to 10 customers with recent invoice history so the digest can use true outstanding balance, consecutive open invoices, and prior paid amounts rather than relying on flat plan price alone.
 4. Flags usage spikes separately from ordinary failed collections and produces one concise internal digest with ranked risk, recovery actions, skipped items, and setup gaps.
+5. When the runtime can write files, also maintains a static HTML companion report alongside a Markdown snapshot for visual review.
 
 ```mermaid
 sequenceDiagram
@@ -57,6 +58,8 @@ Use restricted credentials where possible and keep the workflow read-only.
 5. If you want the digest posted somewhere, add Slack, GitHub, or email tooling separately from the Stripe credentials.
 6. Start with preview-only delivery, then add a daily schedule once the report shape is correct for your team.
 
+Cursor Cloud Automations support `Memory`. You can use it for light continuity across runs, for example to remember which accounts were surfaced recently, whether a risk is worsening, or whether a follow-up was already noted. Treat Memory as optional enrichment, not as required state or a source of truth.
+
 ## Codex App Usage
 
 1. Add Stripe MCP to Codex.
@@ -73,6 +76,13 @@ codex mcp list
 5. Optionally add Slack, GitHub, or email delivery tools, but keep them separate from Stripe auth and start in preview mode.
 6. Set a schedule or run manually and save the automation.
 
+If the runtime has workspace write access, the automation can also persist companion artifacts under:
+
+```text
+.automation-state/stripe-failed-payment-risk-digest/reports/<YYYY-MM-DD>.md
+.automation-state/stripe-failed-payment-risk-digest/reports/<YYYY-MM-DD>.html
+```
+
 ## Claude Code / Codex CLI / Copilot Usage
 
 1. Make sure the runtime has Stripe access through the hosted MCP server or a local `@stripe/mcp` process backed by a restricted key.
@@ -86,6 +96,8 @@ codex mcp list
 4. In Codex CLI or Copilot-style coding-agent environments, treat Stripe CLI as a sandbox-validation helper rather than the main runtime path.
 5. If you add Slack or GitHub delivery, start by rendering preview output before allowing routine posting.
 
+If durable file writes are available, keep the Markdown digest as the canonical response and treat the HTML file as a richer internal review artifact.
+
 ## Recommended Defaults
 
 | Setting | Default |
@@ -97,7 +109,7 @@ codex mcp list
 | Final digest size | `up to 10 ranked customers or accounts` |
 | Amount-at-risk source | `summed amount_remaining across open invoices when invoice data is available` |
 | Scope | `one Stripe account per run` |
-| Output mode | `internal report-only / preview-first` |
+| Output mode | `internal report-only / preview-first, with optional HTML artifact when writable` |
 | Customer identifiers | `customer name and email allowed for approved internal delivery` |
 
 Additional prompt behavior:
@@ -108,6 +120,7 @@ Additional prompt behavior:
 - Flag usage spikes separately because they often need a pricing or integration conversation instead of a simple payment follow-up.
 - Keep the final report short enough for finance or support triage, not as a full account export.
 - For non-enriched candidates, make it explicit that any balance estimate is based on plan rate only.
+- If artifact writes are possible, keep Markdown canonical and generate a static HTML companion report rather than a mini web app.
 - Never turn this into a customer-message sender or a billing-mutation workflow.
 
 ## Useful Stripe-Specific Inputs
@@ -143,3 +156,16 @@ Redaction example:
 ```text
 It is safe to include Stripe object IDs, product names, plan names, invoice amounts, customer name, customer email, and country in approved internal delivery. Do not include full card details, bank details, or full street addresses.
 ```
+
+## HTML Report
+
+When artifact writes are available, the HTML file should stay intentionally simple and static. The highest-value additions over Markdown are:
+
+- summary cards for total amount at risk, high-priority accounts, retry backlog, and usage spikes
+- a sortable-feeling visual layout for the ranked risk table, even if the file is plain static HTML
+- clearly separated risk-cluster sections
+- a compact embedded Markdown copy for auditability
+
+The HTML report should not become a client-side dashboard or require extra runtime services.
+
+The HTML artifact is optional. One practical use is to treat it as a visual companion for downstream delivery, for example by opening it with a browser-capable tool, taking a screenshot, and posting that image to Slack or another internal channel while keeping the Markdown digest as the canonical record.
