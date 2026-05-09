@@ -10,38 +10,70 @@ The Stripe CLI must be installed and authenticated against the target account be
 
 ```bash
 stripe --version
-stripe account
+stripe whoami
 ```
 
-`stripe account` should return the account ID, display name, and whether the key in use is live or test.
 If the CLI is not installed or not authenticated, stop and report. Do not fall back to MCP tools.
 Install with `brew install stripe/stripe-cli/stripe` and authenticate with `stripe login` or `stripe config --set api-key=<key>`.
 
 ## Process
 
 1. Confirm access, account identity, and mode.
-   Run `stripe account` and note the account ID, display name, and whether live or test mode is in use.
-   Use the same mode for all subsequent commands. If mode is ambiguous or account scope is unclear, stop and report.
-2. Collect all cancel-at-period-end subscriptions.
-   Run:
+   Run `stripe whoami`.
+   Record the account ID and display name from `Account:`.
+   Read whether `Test mode key` and `Live mode key` are available.
+   If exactly one mode key is available, use that mode for all subsequent commands.
+   If both test and live mode keys are available and the run was not explicitly configured to use one mode, stop and report that mode is ambiguous.
+   Validate the chosen account scope with:
+
+```bash
+stripe get /v1/account
+```
+
+   or, for live mode:
+
+```bash
+stripe get /v1/account --live
+```
+
+   If the scoped account read fails or returns a different account than `stripe whoami`, stop and report.
+2. Collect the 30-day review window with supported Stripe filters.
+   Compute `<window_start_unix>` as the current run time and `<window_end_unix>` as 30 days later.
+   Run one of:
 
 ```bash
 stripe subscriptions list \
-  --cancel-at-period-end=true \
+  --status=all \
   --limit=100 \
-  --expand=data.items
+  --expand=data.items \
+  -d "current_period_end[gte]=<window_start_unix>" \
+  -d "current_period_end[lte]=<window_end_unix>"
 ```
 
-   Treat all returned subscriptions as scheduled cancellations.
-   If the installed CLI rejects `--cancel-at-period-end`, stop and report instead of widening the query or using another tool.
-   Read `current_period_end`, calculate days remaining, and move subscriptions more than 30 days out into `Skipped This Run` with a count.
-   If the result set hits 100, note that additional subscriptions may exist and flag that in `Skipped This Run`.
+```bash
+stripe subscriptions list \
+  --live \
+  --status=all \
+  --limit=100 \
+  --expand=data.items \
+  -d "current_period_end[gte]=<window_start_unix>" \
+  -d "current_period_end[lte]=<window_end_unix>"
+```
+
+   If `has_more=true`, continue paging in the same mode and with the same filter window using `--starting-after=<last_subscription_id>` until `has_more=false` or you hit a hard cap of 10 pages total.
+   Treat only rows with `cancel_at_period_end=true` as scheduled cancellations.
+   Exclude already canceled subscriptions and all rows where `cancel_at_period_end=false`.
+   If the result set requires more than 10 pages, stop paging, keep the run partial, and note the page-cap truncation in `Skipped This Run`.
 3. Enrich the top candidates.
-   Select up to 10 candidates prioritized by soonest period end, highest plan value, and Business tier before Pro.
-   For each, run:
+   Select up to 10 candidates from the filtered scheduled-cancellation set, prioritized by soonest period end, highest plan value, and Business tier before Pro.
+   For each, run the invoice command in the same mode chosen above:
 
 ```bash
 stripe invoices list --customer=<customer_id> --limit=5
+```
+
+```bash
+stripe invoices list --live --customer=<customer_id> --limit=5
 ```
 
    Read:
@@ -69,6 +101,14 @@ stripe invoices list --customer=<customer_id> --limit=5
    - high-value upcoming cancellations: Business tier or ARR proxy above 1000 USD per year, ending within 30 days
    - billing-stress cancellations: open invoices alongside the scheduled cancellation
    - likely save opportunities: clean payment history, voluntary cancellation, period end within 14 days
+7. Render the digest.
+   The Markdown digest is the canonical automation response.
+   If the workspace is writable, also create or update these companion artifacts:
+   - `.automation-state/stripe-cancel-at-period-end-watch/reports/<YYYY-MM-DD>.md`
+   - `.automation-state/stripe-cancel-at-period-end-watch/reports/<YYYY-MM-DD>.html`
+   The HTML file should be a static internal watchlist, not an app.
+   It should include summary cards, the ranked watchlist table, and the main churn clusters.
+   If artifact writes are unavailable, still return the Markdown digest and note the skipped artifact write in `Skipped This Run`.
 
 ## Guardrails
 
@@ -76,6 +116,7 @@ stripe invoices list --customer=<customer_id> --limit=5
 - Cap enrichment at 10 subscriptions.
 - Use summed `amount_remaining` from invoice data as the balance signal, not plan rate alone.
 - Redact payment method details and full street addresses. Customer name, email, and country are appropriate for an internal digest.
+- Do not claim a complete account-wide count of scheduled cancellations beyond 30 days. This automation is intentionally scoped to subscriptions whose `current_period_end` falls within the next 30 days.
 
 ## Output
 
@@ -99,5 +140,7 @@ Sources: `Stripe CLI` | Data completeness: `<complete|partial>`
 ## Skipped This Run
 ```
 
-`Skipped This Run` should include only items skipped on this specific run because they were beyond the 30-day window, overflowed the 10-item enrichment cap, or the result set hit the 100-item limit.
+`Skipped This Run` should include only items skipped on this specific run because they overflowed the 10-item enrichment cap, the paged 30-day query hit the 10-page cap, or artifact persistence was unavailable.
 Omit `Skipped This Run` entirely if nothing was skipped.
+
+If artifact persistence succeeds, mention the Markdown and HTML report paths in `Skipped This Run` or in one short trailing note.
