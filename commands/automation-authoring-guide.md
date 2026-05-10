@@ -22,7 +22,7 @@ Create promoted automation packages that are:
    A promoted automation is a standalone package under `automations/<automation-name>/`.
    Do not create multi-prompt suite folders in `automations/`.
 3. Keep the runtime prompt self-contained.
-   The prompt should not depend on external variables, forms, placeholders, or a "required inputs" section.
+   The prompt should not depend on external variables, forms, placeholders, or a "required inputs" section by default.
    It should use safe defaults, discover what it can, and stop or degrade gracefully when it cannot infer something safely.
 4. Put detailed setup and customization in the README, not in the prompt.
    The README is the human-facing installation and adaptation document.
@@ -125,6 +125,7 @@ Do:
 - fall back to preview/report mode when writes are unavailable
 - stop when safe inference is impossible
 - only rely on persistent state such as cooldowns, dedupe memory, or prior-run tracking when the automation platform actually provides that state
+- when the automation cannot work reliably without bounded operator-supplied scope or policy, include a short required run-configuration block near the top of the prompt and fail closed if it is not completed
 
 Do not:
 
@@ -133,6 +134,24 @@ Do not:
 - assume the user filled out a variable form
 - depend on side instructions that are not part of the prompt
 - pretend the automation can remember prior runs when it cannot
+
+### Required run-configuration blocks are an allowed exception, not the default
+
+Most promoted prompts should not use placeholders or forms.
+
+Use a required run-configuration block only when all of the following are true:
+
+- the automation cannot operate reliably from safe defaults or discovery alone
+- missing scope or policy would materially increase the chance of wrong targets or misleading output
+- the required values are small, concrete, and easy for an operator to replace before the run
+
+When you use this pattern:
+
+- put the block near the top of the prompt
+- keep it short and operator-facing
+- use explicit sentinel values such as `REQUIRED_REPLACE_ME`
+- tell the automation to stop with a blocked result if the block is still incomplete, empty, or obviously generic filler
+- use it for scope, allowlists, policy boundaries, or compliance requirements, not for routine convenience knobs
 
 ### Keep the prompt lean
 
