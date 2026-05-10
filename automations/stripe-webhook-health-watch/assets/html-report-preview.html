@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stripe Webhook Health Watch Preview</title>
+  <style>
+    :root {
+      --bg: #f3efe8;
+      --paper: rgba(255, 251, 244, 0.92);
+      --panel: rgba(255,255,255,0.76);
+      --line: rgba(79, 63, 43, 0.14);
+      --ink: #1d150c;
+      --muted: #685540;
+      --accent: #bd5c2b;
+      --accent-soft: rgba(189, 92, 43, 0.12);
+      --bad: #a1372d;
+      --warn: #ad6c12;
+      --good: #2f7b54;
+      --shadow: 0 30px 90px rgba(68, 49, 29, 0.14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "SF Pro Display", "Inter", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 210, 160, 0.34), transparent 28%),
+        linear-gradient(180deg, #f7f2ea 0%, #efe7dc 100%);
+    }
+    .frame { width: 1440px; min-height: 980px; margin: 0 auto; padding: 42px; }
+    .report {
+      border: 1px solid rgba(79, 63, 43, 0.12);
+      border-radius: 30px;
+      padding: 34px;
+      background: linear-gradient(145deg, rgba(255,248,240,0.96), rgba(255,255,255,0.9));
+      box-shadow: var(--shadow);
+    }
+    .topbar, .grid { display: grid; gap: 18px; }
+    .topbar { grid-template-columns: 1.7fr 0.8fr; margin-bottom: 22px; }
+    .grid { grid-template-columns: 1.7fr 1fr; }
+    .eyebrow {
+      display:inline-flex; padding:8px 12px; border-radius:999px; background:var(--accent-soft);
+      color:var(--accent); font-size:13px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    }
+    h1 { margin:14px 0 10px; font-size:54px; line-height:.98; letter-spacing:-.05em; }
+    .subhead { margin:0; max-width:760px; color:var(--muted); font-size:17px; line-height:1.5; }
+    .meta, .cards { display:grid; gap:16px; }
+    .meta { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+    .cards { grid-template-columns: repeat(4, minmax(0,1fr)); margin-bottom: 18px; }
+    .card, .panel, .meta-card {
+      border:1px solid var(--line); border-radius:22px; background:var(--panel);
+    }
+    .card, .panel, .meta-card { padding:18px; }
+    .label { color:var(--muted); font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .value { margin-top:8px; font-size:18px; font-weight:700; }
+    .card .value { font-size:28px; letter-spacing:-.04em; }
+    .note { margin-top:8px; color:var(--muted); font-size:14px; line-height:1.45; }
+    .panel h2 { margin:0 0 14px; font-size:20px; letter-spacing:-.03em; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { padding:12px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+    tr:last-child td { border-bottom:0; }
+    .pill { display:inline-flex; padding:5px 9px; border-radius:999px; font-size:12px; font-weight:700; }
+    .critical { color:var(--bad); background:rgba(161,55,45,.12); }
+    .high { color:var(--warn); background:rgba(173,108,18,.12); }
+    .low { color:var(--good); background:rgba(47,123,84,.12); }
+    .list { display:grid; gap:12px; }
+    .item { border:1px solid var(--line); border-radius:18px; padding:14px; background:rgba(255,255,255,.56); }
+    .item strong { display:block; margin-bottom:6px; font-size:15px; }
+    .item span { color:var(--muted); font-size:13px; line-height:1.45; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <section class="report">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Stripe HTML Companion Artifact</div>
+          <h1>Stripe Webhook Health Watch</h1>
+          <p class="subhead">Compact internal health digest for live webhook delivery failures, endpoint drift, and production-routing mistakes. Markdown remains canonical. This HTML view is a fast operator scan.</p>
+        </div>
+        <div class="meta">
+          <div class="meta-card"><div class="label">Account</div><div class="value">Acme Cloud Billing · live</div></div>
+          <div class="meta-card"><div class="label">Checked</div><div class="value">2026-05-10 10:00 UTC</div></div>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="label">Active Delivery Issues</div><div class="value">3</div><div class="note">Ranked issues across live production endpoints only.</div></div>
+        <div class="card"><div class="label">Critical Findings</div><div class="value">1</div><div class="note">One live endpoint currently routes traffic to a non-production target.</div></div>
+        <div class="card"><div class="label">Endpoint Drift</div><div class="value">2</div><div class="note">Subscription coverage and API-version strategy differ across peers.</div></div>
+        <div class="card"><div class="label">Ignored Non-Prod</div><div class="value">4</div><div class="note">Disabled local and staging endpoints kept out of the main digest.</div></div>
+      </div>
+      <div class="grid">
+        <div class="panel">
+          <h2>Ranked Findings</h2>
+          <table>
+            <thead><tr><th>#</th><th>Endpoint</th><th>Pattern</th><th>Failures (24h)</th><th>Severity</th><th>Impact</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>billing-hooks.preview.example.com</td><td>Live traffic to non-production target</td><td>27</td><td><span class="pill critical">Critical</span></td><td>Checkout and billing events may be routed incorrectly.</td></tr>
+              <tr><td>2</td><td>api.acme.com/stripe/webhooks</td><td>Repeated invoice delivery failures</td><td>11</td><td><span class="pill high">High</span></td><td>Subscription and payment events show persistent backlog.</td></tr>
+              <tr><td>3</td><td>entitlements.acme.com/hooks</td><td>API version drift</td><td>0</td><td><span class="pill low">Low</span></td><td>Hygiene-only today, but upgrade planning is due.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h2>Operator View</h2>
+          <div class="list">
+            <div class="item"><strong>Immediate Action</strong><span>Fix the live endpoint pointing at preview infrastructure before retrying or replaying any events.</span></div>
+            <div class="item"><strong>Delivery Pressure</strong><span>Invoice-related failed deliveries are concentrated on one production receiver and now span more than one billing cycle.</span></div>
+            <div class="item"><strong>Hygiene Notes</strong><span>Grouped low-severity API-version drift stays visible without taking over the main incident surface.</span></div>
+            <div class="item"><strong>Coverage Gap</strong><span>Event-to-endpoint attribution remains account-level when CLI evidence is insufficient for a single receiver claim.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

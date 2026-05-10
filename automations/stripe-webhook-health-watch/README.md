@@ -8,6 +8,10 @@ Use it when you want a bounded operational report that surfaces production deliv
 
 It is intentionally report-only. It does not update webhook endpoints, resend events, or mutate Stripe state. It also avoids noisy inventory output for disabled test tunnels or staging endpoints unless they are actually wired into live traffic.
 
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
+
 ## How It Works
 
 1. Verifies that Stripe CLI is installed and authenticated for live-mode reads.
