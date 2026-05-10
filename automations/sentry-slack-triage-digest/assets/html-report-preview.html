@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sentry Slack Triage Digest Preview</title>
+  <style>
+    :root { --bg:#f6f0ee; --paper:rgba(255,251,250,.92); --panel:rgba(255,255,255,.76); --line:rgba(78,61,58,.14); --ink:#231917; --muted:#6a5a57; --accent:#d15f4d; --accent-soft:rgba(209,95,77,.12); --red:#b03b38; --amber:#bf7a1c; --green:#337b5a; --shadow:0 30px 90px rgba(56,39,34,.14);}
+    *{box-sizing:border-box} body{margin:0;font-family:"SF Pro Display","Inter",system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at top left, rgba(255,168,150,.24), transparent 28%),linear-gradient(180deg,#faf4f2 0%,#f0e6e2 100%)}
+    .frame{width:1440px;min-height:980px;margin:0 auto;padding:42px}.report{border:1px solid rgba(78,61,58,.11);border-radius:30px;padding:34px;background:linear-gradient(145deg,rgba(255,248,246,.96),rgba(255,255,255,.9));box-shadow:var(--shadow)}
+    .topbar,.cards,.grid{display:grid;gap:18px}.topbar{grid-template-columns:1.7fr .8fr;margin-bottom:22px}.cards{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.grid{grid-template-columns:1.55fr 1fr}
+    .eyebrow{display:inline-flex;padding:8px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase} h1{margin:14px 0 10px;font-size:54px;line-height:.98;letter-spacing:-.05em}.subhead{margin:0;max-width:760px;color:var(--muted);font-size:17px;line-height:1.5}
+    .card,.panel,.meta-card{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px}.label{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.value{margin-top:8px;font-size:18px;font-weight:700}.card .value{font-size:28px;letter-spacing:-.04em}.note{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.45}.panel h2{margin:0 0 14px;font-size:20px;letter-spacing:-.03em}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}tr:last-child td{border-bottom:0}
+    .pill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}.red{color:var(--red);background:rgba(176,59,56,.12)}.amber{color:var(--amber);background:rgba(191,122,28,.12)}.green{color:var(--green);background:rgba(51,123,90,.12)}
+  </style>
+</head>
+<body>
+  <div class="frame"><section class="report">
+    <div class="topbar">
+      <div><div class="eyebrow">Sentry HTML Companion Artifact</div><h1>Slack Triage Digest</h1><p class="subhead">Compact incident-review surface for the issues most worth attention before posting a single concise Slack digest to the team.</p></div>
+      <div><div class="meta-card"><div class="label">Scope</div><div class="value">payments-api · production</div></div><div style="height:12px"></div><div class="meta-card"><div class="label">Digest Window</div><div class="value">Last 24 hours</div></div></div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="label">Top Issues</div><div class="value">5</div><div class="note">Bounded ranked set for one readable Slack post.</div></div>
+      <div class="card"><div class="label">Regressed</div><div class="value">2</div><div class="note">Two issues returned after a previously quieter interval.</div></div>
+      <div class="card"><div class="label">High Impact</div><div class="value">3</div><div class="note">Affecting revenue or user-critical request paths.</div></div>
+      <div class="card"><div class="label">Linked Work</div><div class="value">2</div><div class="note">Existing issues already cover part of the current queue.</div></div>
+    </div>
+    <div class="grid">
+      <div class="panel">
+        <h2>Ranked Issues</h2>
+        <table>
+          <thead><tr><th>Issue</th><th>Signal</th><th>Owner Hint</th><th>Priority</th><th>Slack Framing</th></tr></thead>
+          <tbody>
+            <tr><td>PAY-443 null checkout token</td><td>Regressed, 84 events, release-linked</td><td>Billing platform</td><td><span class="pill red">High</span></td><td>User-facing checkout failures increased after the latest deploy.</td></tr>
+            <tr><td>PAY-211 webhook signature timeout</td><td>Escalating, spike in p95 latency</td><td>Infra or API edge</td><td><span class="pill red">High</span></td><td>Operationally important because retries may hide downstream backlog.</td></tr>
+            <tr><td>PAY-388 invoice sync retry noise</td><td>For review, linked work exists</td><td>Platform workflows</td><td><span class="pill amber">Medium</span></td><td>Still visible, but likely belongs in the linked cleanup item.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h2>Digest Shape</h2>
+        <table>
+          <thead><tr><th>Section</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>TL;DR</td><td>One-sentence statement of whether production error pressure is materially worse.</td></tr>
+            <tr><td>Top Issues</td><td>Only the highest-signal ranked issues with evidence and owner hints.</td></tr>
+            <tr><td>Needs Attention</td><td>Separates active incidents from linked-work or lower-confidence noise.</td></tr>
+            <tr><td>Linked Work</td><td>Shows where the team already has a tracking path instead of re-triaging from scratch.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section></div>
+</body>
+</html>

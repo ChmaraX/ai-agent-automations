@@ -6,6 +6,10 @@
 
 Use it when teams want production error triage to land in a channel people actually read, without automatically creating tickets, changing Sentry issue state, or opening pull requests.
 
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
+
 ## How It Works
 
 1. Queries Sentry for high-signal issues such as regressed, escalating, for-review, or high-priority unresolved issues.
