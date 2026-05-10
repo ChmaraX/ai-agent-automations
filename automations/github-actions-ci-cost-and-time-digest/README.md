@@ -6,6 +6,10 @@
 
 It is read-only. Each run shows where CI time is going now, what got slower or more expensive recently, and which hotspots are worth attention first.
 
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
+
 ## How It Works
 
 1. Reads recent successful and failed CI runs across the repository.

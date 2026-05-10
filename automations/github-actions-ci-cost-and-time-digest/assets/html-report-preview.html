@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub Actions CI Cost And Time Digest Preview</title>
+  <style>
+    :root { --bg:#f3f2ec; --paper:rgba(255,251,245,.92); --panel:rgba(255,255,255,.76); --line:rgba(71,65,50,.14); --ink:#1d2129; --muted:#666d79; --accent:#2b7a67; --accent-soft:rgba(43,122,103,.12); --amber:#b87a1a; --red:#ad4438; --shadow:0 30px 90px rgba(40,34,25,.13);}
+    *{box-sizing:border-box} body{margin:0;font-family:"SF Pro Display","Inter",system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at top left, rgba(90,166,143,.18), transparent 28%),linear-gradient(180deg,#f8f5ef 0%,#efebe2 100%)}
+    .frame{width:1440px;min-height:980px;margin:0 auto;padding:42px}.report{border:1px solid rgba(71,65,50,.12);border-radius:30px;padding:34px;background:linear-gradient(145deg,rgba(255,248,240,.96),rgba(255,255,255,.9));box-shadow:var(--shadow)}
+    .topbar,.cards,.grid{display:grid;gap:18px}.topbar{grid-template-columns:1.7fr .8fr;margin-bottom:22px}.cards{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.grid{grid-template-columns:1.5fr 1fr}
+    .eyebrow{display:inline-flex;padding:8px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase} h1{margin:14px 0 10px;font-size:52px;line-height:.98;letter-spacing:-.05em}.subhead{margin:0;max-width:760px;color:var(--muted);font-size:17px;line-height:1.5}
+    .card,.panel,.meta-card{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px}.label{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.value{margin-top:8px;font-size:18px;font-weight:700}.card .value{font-size:28px;letter-spacing:-.04em}.note{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.45}.panel h2{margin:0 0 14px;font-size:20px;letter-spacing:-.03em}
+    .row{display:grid;grid-template-columns:120px 1fr 80px;gap:10px;align-items:center;margin-bottom:12px}.name{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.track{height:12px;border-radius:999px;background:rgba(71,65,50,.08);overflow:hidden}.fill{height:100%;border-radius:999px}.green{background:linear-gradient(90deg,#62c29c,var(--accent))}.amber{background:linear-gradient(90deg,#e9c06c,var(--amber))}.red{background:linear-gradient(90deg,#e37d73,var(--red))}.value-text{text-align:right;font-size:13px;font-weight:700}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}tr:last-child td{border-bottom:0}
+  </style>
+</head>
+<body>
+  <div class="frame"><section class="report">
+    <div class="topbar">
+      <div><div class="eyebrow">GitHub HTML Companion Artifact</div><h1>CI Cost And Time Digest</h1><p class="subhead">Compact recurring view of where GitHub Actions time is going, what got slower, and which workflow hotspots deserve operator attention first.</p></div>
+      <div><div class="meta-card"><div class="label">Repository</div><div class="value">acme/platform</div></div><div style="height:12px"></div><div class="meta-card"><div class="label">Window</div><div class="value">Last 14 days vs prior 14</div></div></div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="label">Likely CI Cost Leader</div><div class="value">Build & Test</div><div class="note">Still the dominant runtime and rerun surface in the current window.</div></div>
+      <div class="card"><div class="label">Biggest Regression</div><div class="value">+19%</div><div class="note">Integration workflow grew the most against the baseline window.</div></div>
+      <div class="card"><div class="label">Expensive Jobs</div><div class="value">4</div><div class="note">Small set of jobs explains most of the current runtime pressure.</div></div>
+      <div class="card"><div class="label">Immediate Focus</div><div class="value">Cache misses</div><div class="note">Most actionable hotspot based on repeated install and restore time.</div></div>
+    </div>
+    <div class="grid">
+      <div class="panel">
+        <h2>Top Workflow Surfaces</h2>
+        <div class="row"><div class="name">Build & Test</div><div class="track"><div class="fill red" style="width:92%"></div></div><div class="value-text">41.2h</div></div>
+        <div class="row"><div class="name">Integration</div><div class="track"><div class="fill amber" style="width:73%"></div></div><div class="value-text">29.7h</div></div>
+        <div class="row"><div class="name">Preview Deploy</div><div class="track"><div class="fill green" style="width:56%"></div></div><div class="value-text">21.6h</div></div>
+        <div class="row"><div class="name">Lint</div><div class="track"><div class="fill green" style="width:24%"></div></div><div class="value-text">8.1h</div></div>
+        <table style="margin-top:16px">
+          <thead><tr><th>Workflow</th><th>What Changed</th><th>Likely Driver</th></tr></thead>
+          <tbody>
+            <tr><td>Integration</td><td>Runtime up 19% vs baseline</td><td>Slower dependency restore plus longer DB startup path</td></tr>
+            <tr><td>Preview Deploy</td><td>Run count up 12%</td><td>More branch-triggered previews than the prior window</td></tr>
+            <tr><td>Build & Test</td><td>Still largest absolute cost surface</td><td>Matrix fan-out and repeated install steps</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h2>Recommended Attention</h2>
+        <table>
+          <thead><tr><th>Priority</th><th>Focus</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Restore and install path</td><td>Most repeated cost driver across the slowest recurring jobs.</td></tr>
+            <tr><td>2</td><td>Integration startup sequence</td><td>Largest comparable regression against the prior window.</td></tr>
+            <tr><td>3</td><td>Preview run frequency</td><td>Not slower per run, but now a larger share of total CI spend.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section></div>
+</body>
+</html>
