@@ -54,7 +54,7 @@ Use Stripe as the source of truth and produce one internal, read-only digest of 
    - `.automation-state/stripe-failed-payment-risk-digest/reports/<YYYY-MM-DD>.md`
    - `.automation-state/stripe-failed-payment-risk-digest/reports/<YYYY-MM-DD>.html`
    The HTML file should be a static internal report, not an app.
-   It should include summary cards, the ranked risk table, cluster sections, recovery actions, and a compact embedded copy of the Markdown digest for auditability.
+   It should include summary cards, the ranked risk table, cluster sections, and recovery actions.
    If artifact writes are unavailable, still return the Markdown digest and note the skipped artifact write in `Setup Gaps` or `Skipped This Run`.
 8. Render the digest as preview output unless a separate internal delivery tool is configured.
    If no items qualify, say so instead of forcing a noisy report.

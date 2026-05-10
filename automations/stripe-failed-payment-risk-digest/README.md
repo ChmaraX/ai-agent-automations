@@ -6,6 +6,10 @@
 
 Use it when finance, support, or revenue operations teams want one practical internal report about failed invoices, past-due subscriptions, high-value open balances, retry gaps, usage spikes, and recovery blind spots without sending customer messages or mutating Stripe.
 
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
+
 ## How It Works
 
 1. Connects to Stripe, confirms the account, and infers live or test mode from Stripe objects.
@@ -164,7 +168,6 @@ When artifact writes are available, the HTML file should stay intentionally simp
 - summary cards for total amount at risk, high-priority accounts, retry backlog, and usage spikes
 - a sortable-feeling visual layout for the ranked risk table, even if the file is plain static HTML
 - clearly separated risk-cluster sections
-- a compact embedded Markdown copy for auditability
 
 The HTML report should not become a client-side dashboard or require extra runtime services.
 
