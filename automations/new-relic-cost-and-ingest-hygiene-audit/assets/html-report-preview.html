@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Relic Cost and Ingest Hygiene Audit Preview</title>
+  <style>
+    :root {
+      --bg: #f6f3ed;
+      --panel: #fffdf9;
+      --ink: #1f2933;
+      --muted: #5b6871;
+      --line: #d9d0c3;
+      --accent: #0f766e;
+      --warn: #c2410c;
+      --info: #2563eb;
+      --soft-accent: #d9f0ee;
+      --soft-warn: #fde7da;
+      --soft-info: #dbeafe;
+      --shadow: 0 12px 30px rgba(31, 41, 51, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, #efe7d7 0, transparent 32%),
+        linear-gradient(180deg, #f7f4ee 0%, #f3efe7 100%);
+    }
+
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 18px;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+    h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    p, li, td, th {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 18px;
+      margin-top: 16px;
+    }
+
+    .meta div {
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: linear-gradient(180deg, #fffaf2 0%, #fffefb 100%);
+    }
+
+    .kpi .value {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .actionable { background: var(--soft-accent); color: var(--accent); }
+    .drilldown { background: var(--soft-warn); color: var(--warn); }
+    .gap { background: var(--soft-info); color: var(--info); }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: #fffefa;
+    }
+
+    .card strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.15;
+      margin: 10px 0 8px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 230px 1fr 88px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .bar-label {
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .bar-track {
+      height: 12px;
+      border-radius: 999px;
+      background: #eee6da;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0f766e, #14b8a6);
+    }
+
+    .bar-fill.alt { background: linear-gradient(90deg, #c2410c, #f97316); }
+    .bar-fill.blue { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 0;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .grid-2, .cards {
+        grid-template-columns: 1fr;
+      }
+      .bar-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="panel">
+        <h1>New Relic Cost And Ingest Hygiene Audit</h1>
+        <p class="small">Production ingest audit for one bounded New Relic account, using usage and query data as the source of truth for concrete hygiene opportunities.</p>
+        <div class="meta">
+          <div>
+            <h3>Account</h3>
+            <p>platform-production</p>
+          </div>
+          <div>
+            <h3>Current Window</h3>
+            <p>Last 7 days</p>
+          </div>
+          <div>
+            <h3>Comparison Window</h3>
+            <p>Preceding 7 days</p>
+          </div>
+          <div>
+            <h3>Cost Visibility</h3>
+            <p>Inferred dollars, measured ingest bytes and event or sample counts</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Executive Summary</h2>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="small">Top reduction candidate</div>
+            <div class="value">8.4 GB/day</div>
+            <div>Repeated background-job lifecycle log pattern</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Largest ingest family</div>
+            <div class="value">54.2 GB</div>
+            <div>APM events in the current window</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Largest likely waste source</div>
+            <div class="value">14.1 GB/day</div>
+            <div>Two repetitive background-job info-log patterns combined</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Top caveat</div>
+            <div class="value">APM lever unclear</div>
+            <div>The biggest family is large, but the audit did not isolate a safe event-volume cut yet.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>Ingest Overview</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Ingest By Signal Family</h3>
+          <div class="bar-list">
+            <div class="bar-row">
+              <div class="bar-label">APM/custom events</div>
+              <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+              <div>54.2 GB</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Spans</div>
+              <div class="bar-track"><div class="bar-fill alt" style="width: 79.5%"></div></div>
+              <div>43.1 GB</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Metrics</div>
+              <div class="bar-track"><div class="bar-fill blue" style="width: 41.1%"></div></div>
+              <div>22.3 GB</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Logs</div>
+              <div class="bar-track"><div class="bar-fill" style="width: 34.9%"></div></div>
+              <div>18.9 GB</div>
+            </div>
+          </div>
+          <p class="footer-note">Measured from account consumption tables and signal-family usage summaries.</p>
+        </div>
+        <div>
+          <h3>Current Vs Comparison</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Family</th>
+                <th>Current</th>
+                <th>Comparison</th>
+                <th>Delta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>APM/custom events</td><td>54.2 GB</td><td>61.5 GB</td><td>-7.3 GB</td></tr>
+              <tr><td>Spans</td><td>43.1 GB</td><td>47.4 GB</td><td>-4.3 GB</td></tr>
+              <tr><td>Logs</td><td>18.9 GB</td><td>24.6 GB</td><td>-5.7 GB</td></tr>
+              <tr><td>Metrics</td><td>22.3 GB</td><td>23.8 GB</td><td>-1.5 GB</td></tr>
+            </tbody>
+          </table>
+          <p class="footer-note">Treat comparison as context. The main recommendation should still be driven by concrete current-window waste patterns.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>Top Reduction Candidates</h2>
+      <div class="cards">
+        <div class="card">
+          <span class="tag actionable">actionable</span>
+          <strong>Background-job scheduling log flood</strong>
+          <p><code>Queued background task &lt;*&gt; for execution</code> dominates one success path and carries low evidence of per-line human value.</p>
+          <p class="small">Smallest useful reduction: demote or sample this lifecycle log, while keeping failures and slow-path variants.</p>
+          <p class="small">Likely savings: <strong>8.4 GB/day</strong>.</p>
+        </div>
+        <div class="card">
+          <span class="tag actionable">actionable</span>
+          <strong>Background-job completion log flood</strong>
+          <p><code>Task lifecycle completed</code> emits high-volume terminal-state logs with weak evidence that every line is worth retaining.</p>
+          <p class="small">Smallest useful reduction: keep aggregate counters or error exceptions, but stop logging every success-state completion.</p>
+          <p class="small">Likely savings: <strong>5.7 GB/day</strong>.</p>
+        </div>
+        <div class="card">
+          <span class="tag actionable">actionable</span>
+          <strong>Generic service middleware span noise</strong>
+          <p>Framework middleware and interceptor spans add up to a large low-specificity tracing surface on the hottest internal routes.</p>
+          <p class="small">Smallest useful reduction: suppress generic middleware spans that add little diagnostic value.</p>
+          <p class="small">Likely savings: <strong>3.9 GB/day</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <h2>Hotspot Concentration</h2>
+      <div class="bar-list">
+        <div class="bar-row">
+          <div class="bar-label">Background-job APM transaction: task-processing-queue <span class="tag drilldown">needs deeper drilldown</span></div>
+          <div class="bar-track"><div class="bar-fill alt" style="width: 100%"></div></div>
+          <div>14.2 GB</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Background-job log: Queued background task <span class="tag actionable">actionable</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 59.2%"></div></div>
+          <div>8.4 GB</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Background-job log: Task lifecycle completed <span class="tag actionable">actionable</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 40.1%"></div></div>
+          <div>5.7 GB</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Internal service spans: generic middleware bundle <span class="tag actionable">actionable</span></div>
+          <div class="bar-track"><div class="bar-fill blue" style="width: 27.5%"></div></div>
+          <div>3.9 GB</div>
+        </div>
+      </div>
+      <p class="footer-note">Use this section to show concentration of the biggest current surfaces or concrete patterns, not just broad service totals.</p>
+    </section>
+
+    <section class="section grid-2">
+      <div class="panel">
+        <h2>Signal-Family Drilldowns</h2>
+        <h3>Logs</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Current Volume</th>
+              <th>Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Queued background task &lt;*&gt; for execution</code></td><td>8.4 GB / 11.2M lines</td><td>Very repetitive background-job lifecycle log.</td></tr>
+            <tr><td><code>Task lifecycle completed</code></td><td>5.7 GB / 6.8M lines</td><td>High-volume terminal-state log with weak per-line value.</td></tr>
+            <tr><td><code>Event dispatched to downstream queue</code></td><td>0.8 GB / 410k lines</td><td>Smaller than the main background-job flood, but still verbose.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:16px;">Spans</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Span Name</th>
+              <th>Current Volume</th>
+              <th>Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Framework/Middleware/AnonymousHandler</code></td><td>1.7 GB / 1.9M spans</td><td>Generic middleware span, low diagnostic specificity.</td></tr>
+            <tr><td><code>Framework/Route Path: /*</code></td><td>0.44 GB / 603k spans</td><td>Wildcard route tracing adds little granularity.</td></tr>
+            <tr><td><code>requestParser</code> + <code>payloadParser</code></td><td>0.61 GB / 540k spans</td><td>Parser middleware looks removable.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:16px;">Metrics</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Metric Surface</th>
+              <th>Current Volume</th>
+              <th>Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>goldenMetrics</code> source</td><td>412.0M rows</td><td>Largest metric source by row count.</td></tr>
+            <tr><td><code>cloud.loadbalancer</code> source</td><td>188.0M rows</td><td>Second-largest metric source by row count.</td></tr>
+            <tr><td><code>cache.primary.hitRate</code> + <code>cache.replica.hitRate</code></td><td>96.0M rows</td><td>Looks like a mirrored taxonomy pair, not distinct signal.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Large Surfaces Without A Concrete Lever Yet</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Surface</th>
+              <th>Current Volume</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Background-job APM transactions: <code>task-processing-queue</code></td>
+              <td>14.2 GB / 18.4M txns</td>
+              <td><span class="tag drilldown">needs deeper drilldown</span></td>
+            </tr>
+            <tr>
+              <td>Background-job APM transactions: <code>notification-processing-queue</code></td>
+              <td>4.9 GB / 7.6M txns</td>
+              <td><span class="tag drilldown">needs deeper drilldown</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="footer-note">Keep big surfaces here when the audit can prove they are expensive but still cannot name a safe low-value reduction lever.</p>
+
+        <h2 style="margin-top:20px;">Coverage Gaps And Caveats</h2>
+        <ul>
+          <li>Exact dollar cost was not exposed; savings are shown in measured GB or row-share estimates.</li>
+          <li>Comparison history is contextual, not a substitute for identifying concrete current-window waste patterns.</li>
+          <li>Drop rules, retention policy, and budget configuration were not audited in this read-only pass.</li>
+          <li>Custom-event and integration-error findings may be limited when those datasets are sparse or missing.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
