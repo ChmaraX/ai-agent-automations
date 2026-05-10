@@ -6,6 +6,10 @@
 
 Use it when you want a reliable answer to "what needs attention in our PR queue?" without merging, reviewing, relabeling, or otherwise mutating GitHub state.
 
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
+
 ## How It Works
 
 1. Reads a bounded set of open pull requests from the current repository or the explicitly provided repository scope.

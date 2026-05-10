@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub PR Review Router Preview</title>
+  <style>
+    :root {
+      --bg:#eff4fb; --paper:rgba(255,255,255,.9); --panel:rgba(255,255,255,.76); --line:rgba(38,57,86,.12);
+      --ink:#162337; --muted:#5c6f88; --accent:#2e6ad7; --accent-soft:rgba(46,106,215,.12);
+      --red:#b5403b; --amber:#d07d1e; --green:#2a7a62; --shadow:0 30px 90px rgba(28,45,74,.14);
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:"SF Pro Display","Inter",system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at top right, rgba(126,178,255,.22), transparent 28%), linear-gradient(180deg,#f4f8fd 0%,#e8eef8 100%)}
+    .frame{width:1440px;min-height:980px;margin:0 auto;padding:42px}.report{border:1px solid rgba(38,57,86,.1);border-radius:30px;padding:34px;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(245,249,255,.9));box-shadow:var(--shadow)}
+    .topbar,.grid,.cards{display:grid;gap:18px}.topbar{grid-template-columns:1.7fr .8fr;margin-bottom:22px}.grid{grid-template-columns:1.6fr 1fr}.cards{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}
+    .eyebrow{display:inline-flex;padding:8px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+    h1{margin:14px 0 10px;font-size:56px;line-height:.98;letter-spacing:-.05em}.subhead{margin:0;max-width:760px;color:var(--muted);font-size:17px;line-height:1.5}
+    .card,.panel,.meta-card{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px}.label{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.value{margin-top:8px;font-size:18px;font-weight:700}.card .value{font-size:28px;letter-spacing:-.04em}.note{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.45}.panel h2{margin:0 0 14px;font-size:20px;letter-spacing:-.03em}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}tr:last-child td{border-bottom:0}
+    .pill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}.author{color:var(--amber);background:rgba(208,125,30,.12)}.reviewer{color:var(--green);background:rgba(42,122,98,.12)}.blocked{color:var(--red);background:rgba(181,64,59,.12)}
+    .lane{border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(255,255,255,.58);margin-bottom:12px}.lane strong{display:block;margin-bottom:8px;font-size:15px}.lane span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <section class="report">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">GitHub HTML Companion Artifact</div>
+          <h1>PR Review Router</h1>
+          <p class="subhead">Queue-level routing brief for open pull requests. The preview focuses on blockers, ownership, and next action rather than raw GitHub metadata density.</p>
+        </div>
+        <div>
+          <div class="meta-card"><div class="label">Repository</div><div class="value">acme/platform</div></div>
+          <div style="height:12px"></div>
+          <div class="meta-card"><div class="label">Open PRs Reviewed</div><div class="value">18</div></div>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="label">Needs Author</div><div class="value">6</div><div class="note">Review feedback landed and is waiting on changes or response.</div></div>
+        <div class="card"><div class="label">Needs Reviewer</div><div class="value">5</div><div class="note">Author has pushed and the PR is ready for human review.</div></div>
+        <div class="card"><div class="label">Blocked By CI</div><div class="value">4</div><div class="note">Checks or deployment failures still prevent useful reviewer time.</div></div>
+        <div class="card"><div class="label">Ready For Maintainer</div><div class="value">3</div><div class="note">Low-friction merge candidates with no unresolved review threads.</div></div>
+      </div>
+      <div class="grid">
+        <div class="panel">
+          <h2>Active Queue</h2>
+          <table>
+            <thead><tr><th>PR</th><th>State</th><th>Summary</th><th>Next Owner</th></tr></thead>
+            <tbody>
+              <tr><td>#812 Improve invoice sync retries</td><td><span class="pill author">Needs author</span></td><td>Unresolved review thread on backoff semantics after two reviewer comments.</td><td>Author</td></tr>
+              <tr><td>#815 Add billing export job</td><td><span class="pill blocked">Blocked by CI</span></td><td>Migration checks red after workflow timeout in integration suite.</td><td>Author</td></tr>
+              <tr><td>#809 Docs for feature entitlements</td><td><span class="pill reviewer">Needs reviewer</span></td><td>Checks green, small docs-only follow-up after previous round.</td><td>Docs reviewer</td></tr>
+              <tr><td>#804 API pagination cleanup</td><td><span class="pill reviewer">Ready for maintainer</span></td><td>Checks green, no unresolved threads, one approval already present.</td><td>Maintainer</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h2>Routing Lanes</h2>
+          <div class="lane"><strong>Needs Author Response</strong><span>Prioritize PRs with reviewer questions, unresolved threads, or obvious design objections before re-requesting review.</span></div>
+          <div class="lane"><strong>Needs Reviewer</strong><span>These are the highest leverage queue items because author work is already done and checks are mostly green.</span></div>
+          <div class="lane"><strong>Blocked By CI</strong><span>Keep these visible, but route them back to authors instead of burning reviewer attention early.</span></div>
+          <div class="lane"><strong>Maintainer Ready</strong><span>Small merge-ready set for quick queue reduction once branch policy and deployment timing are acceptable.</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
