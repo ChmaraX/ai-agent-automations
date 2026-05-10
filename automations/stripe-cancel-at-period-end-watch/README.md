@@ -6,6 +6,10 @@
 
 Use it when you want an operational churn watchlist ranked by period-end urgency, ARR proxy, plan tier, billing stress, and save opportunity. It stays read-only and does not reactivate subscriptions, change cancellation settings, apply discounts, or contact customers.
 
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
+
 ## How It Works
 
 1. Verifies Stripe CLI is installed and authenticated against the intended account.

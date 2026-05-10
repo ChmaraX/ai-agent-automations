@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stripe Cancel At Period End Watch Preview</title>
+  <style>
+    :root {
+      --bg: #f4efe7;
+      --panel: rgba(255, 255, 255, 0.8);
+      --panel-strong: #fffaf3;
+      --line: rgba(97, 70, 39, 0.14);
+      --ink: #1f1308;
+      --muted: #74593a;
+      --accent: #b85c2f;
+      --accent-soft: rgba(184, 92, 47, 0.12);
+      --good: #236a4b;
+      --warn: #8c5a18;
+      --bad: #a43b2c;
+      --shadow: 0 28px 80px rgba(84, 54, 29, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "SF Pro Display", "Inter", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 210, 156, 0.4), transparent 30%),
+        linear-gradient(180deg, #f7f1ea 0%, #efe6da 100%);
+    }
+
+    .frame {
+      width: 1440px;
+      min-height: 980px;
+      margin: 0 auto;
+      padding: 42px;
+    }
+
+    .report {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(97, 70, 39, 0.12);
+      border-radius: 30px;
+      padding: 34px;
+      background:
+        linear-gradient(145deg, rgba(255, 248, 239, 0.94), rgba(255, 255, 255, 0.92)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+    }
+
+    .report::after {
+      content: "";
+      position: absolute;
+      right: -120px;
+      top: -120px;
+      width: 340px;
+      height: 340px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(184, 92, 47, 0.16), transparent 70%);
+      pointer-events: none;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .subhead {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      min-width: 280px;
+    }
+
+    .meta-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.74);
+    }
+
+    .meta-card .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .meta-card .value {
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px 18px 20px;
+      background: rgba(255, 255, 255, 0.74);
+    }
+
+    .card .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card .value {
+      margin-top: 10px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .card .note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .panel h2 {
+      margin: 0 0 16px;
+      font-size: 19px;
+      letter-spacing: -0.03em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .chip.warn {
+      color: var(--warn);
+      background: rgba(140, 90, 24, 0.12);
+    }
+
+    .chip.bad {
+      color: var(--bad);
+      background: rgba(164, 59, 44, 0.12);
+    }
+
+    .chip.good {
+      color: var(--good);
+      background: rgba(35, 106, 75, 0.12);
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 15px;
+      background: var(--panel-strong);
+    }
+
+    .list-item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .list-item span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .markdown {
+      margin-top: 18px;
+      border: 1px dashed rgba(97, 70, 39, 0.28);
+      border-radius: 18px;
+      padding: 16px 18px;
+      background: rgba(255, 252, 247, 0.8);
+    }
+
+    .markdown .label {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #4f3a22;
+      font-family: "SF Mono", "JetBrains Mono", monospace;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <section class="report">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Stripe HTML Companion Artifact</div>
+          <h1>Cancel At Period End Watch</h1>
+          <p class="subhead">
+            Internal watchlist for subscriptions already scheduled to cancel, ranked by urgency, ARR proxy,
+            billing stress, and likely save opportunity. Markdown stays canonical. This static HTML view is for
+            faster scanning and downstream screenshot delivery.
+          </p>
+        </div>
+        <div class="meta">
+          <div class="meta-card">
+            <div class="label">Account</div>
+            <div class="value">Acme Cloud Billing · live</div>
+          </div>
+          <div class="meta-card">
+            <div class="label">Window</div>
+            <div class="value">Period ends within 30 days</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="label">Ranked Accounts</div>
+          <div class="value">10</div>
+          <div class="note">Top cancellation risks kept bounded for operator review.</div>
+        </div>
+        <div class="card">
+          <div class="label">High-Value Upcoming</div>
+          <div class="value">4</div>
+          <div class="note">Business-tier or ARR proxy above $1k with near-term period end.</div>
+        </div>
+        <div class="card">
+          <div class="label">Billing-Stress Churn</div>
+          <div class="value">$8.4k</div>
+          <div class="note">Open invoice balance alongside scheduled cancellation.</div>
+        </div>
+        <div class="card">
+          <div class="label">Likely Save Opportunities</div>
+          <div class="value">3</div>
+          <div class="note">Clean payment history and short runway before cancellation lands.</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="panel">
+          <h2>Ranked Accounts At Risk</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Customer</th>
+                <th>ARR Proxy</th>
+                <th>Days Left</th>
+                <th>Churn Type</th>
+                <th>Suggested Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Northwind Ops</td>
+                <td>$4,800</td>
+                <td>6</td>
+                <td><span class="chip bad">Billing stress</span></td>
+                <td>Review open invoices before retention outreach.</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Helio Data</td>
+                <td>$3,600</td>
+                <td>9</td>
+                <td><span class="chip warn">Likely save</span></td>
+                <td>Route to CS owner with clean-history note.</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Pine AI Labs</td>
+                <td>$2,400</td>
+                <td>11</td>
+                <td><span class="chip bad">Billing stress</span></td>
+                <td>Check retry outcomes and invoice spike cause.</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Delta Fleet</td>
+                <td>$1,920</td>
+                <td>13</td>
+                <td><span class="chip good">Voluntary</span></td>
+                <td>Low-pressure save note if account is strategic.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="markdown">
+            <div class="label">Embedded Markdown Copy</div>
+            <pre>## Stripe Cancel At Period End Watch
+## Ranked Accounts At Risk
+1. Northwind Ops — billing-stress churn, 6 days left
+2. Helio Data — clean-history likely save opportunity
+3. Pine AI Labs — usage-spike invoice plus scheduled cancel</pre>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Churn Clusters</h2>
+          <div class="list">
+            <div class="list-item">
+              <strong>High-Value Upcoming Cancellations</strong>
+              <span>4 accounts ending within 30 days, concentrated in Business and annual plans.</span>
+            </div>
+            <div class="list-item">
+              <strong>Billing-Stress Cancellations</strong>
+              <span>3 accounts carry open invoices with non-zero amount remaining and should be routed through collections-first review.</span>
+            </div>
+            <div class="list-item">
+              <strong>Likely Save Opportunities</strong>
+              <span>3 clean-history accounts show voluntary cancellation signals with time left for human follow-up.</span>
+            </div>
+            <div class="list-item">
+              <strong>Setup Gaps</strong>
+              <span>ARR remains a proxy for mixed-tier subscriptions. One low-touch legacy plan was intentionally excluded.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
