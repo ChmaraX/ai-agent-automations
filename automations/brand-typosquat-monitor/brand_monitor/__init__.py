@@ -1,0 +1,1 @@
+"""Brand typosquat monitor package."""
