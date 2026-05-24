@@ -6,7 +6,11 @@
 
 Use it when Atlas spend is rising, cluster metrics alone are too noisy to trust, or the team wants a recurring review that asks the right owner questions before anyone scales down, removes backups, drops indexes, or cuts Search capacity.
 
-This automation is intentionally read-only. It does not resize or pause clusters, change auto-scaling, delete dev/test deployments, modify backup policy, drop indexes, change Search Nodes, or mutate billing settings.
+This automation is intentionally read-only. It does not resize or pause clusters, change auto-scaling, delete dev/test deployments, modify backup policy, drop indexes, change Search Nodes, or mutate billing settings. When the workspace is writable, it can also persist a companion static HTML artifact for faster review.
+
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
 
 ## How It Works
 
@@ -130,7 +134,7 @@ Relevant official docs:
 | Final ranked candidates | `up to 8` |
 | Cost visibility | `prefer measured billing, otherwise inferred` |
 | Savings language | `measured dollars when visible, otherwise qualitative direction` |
-| Delivery | `Markdown digest` |
+| Delivery | `Markdown digest with optional static HTML artifact` |
 
 Additional prompt behavior:
 

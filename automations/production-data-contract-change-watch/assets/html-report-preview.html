@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Production Data Contract Change Watch Preview</title>
+  <style>
+    :root { --bg:#f4f8f7; --panel:rgba(255,255,255,.88); --line:rgba(39,73,68,.12); --ink:#13211f; --muted:#5e7470; --accent:#0f766e; --warn:#c26a1b; --risk:#be4a34; --shadow:0 24px 70px rgba(32,61,56,.12); }
+    *{box-sizing:border-box} body{margin:0;font-family:"IBM Plex Sans","Inter",sans-serif;color:var(--ink);background:radial-gradient(circle at top right, rgba(15,118,110,.12), transparent 30%), linear-gradient(180deg,#f7fbfa,#edf4f2)}
+    .frame{width:1440px;min-height:980px;margin:0 auto;padding:40px}.report{border:1px solid var(--line);border-radius:30px;padding:32px;background:linear-gradient(160deg, rgba(255,255,255,.96), rgba(244,250,248,.92));box-shadow:var(--shadow)}
+    .top,.cards,.grid{display:grid;gap:16px}.top{grid-template-columns:1.45fr .95fr;margin-bottom:22px}.cards{grid-template-columns:repeat(4,1fr);margin-bottom:20px}.grid{grid-template-columns:1.15fr .85fr}
+    .panel,.card,.meta,.finding{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px}.eyebrow,.chip{display:inline-flex;border-radius:999px;font-size:12px;font-weight:700}.eyebrow{padding:8px 12px;background:rgba(15,118,110,.12);color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+    h1{margin:14px 0 10px;font-size:38px;line-height:1;letter-spacing:-.04em}p{margin:0}.subhead{max-width:760px;color:var(--muted);font-size:16px;line-height:1.55}.label,th{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}.value{margin-top:6px;font-size:18px;font-weight:700}.card .big{margin-top:10px;font-size:30px;font-weight:800;letter-spacing:-.04em}.card .note{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.4}
+    h2{margin:0 0 16px;font-size:19px;letter-spacing:-.03em}.chip{padding:6px 10px;margin-top:10px}.risk{color:var(--risk);background:rgba(190,74,52,.12)}.warn{color:var(--warn);background:rgba(194,106,27,.12)}.ok{color:var(--accent);background:rgba(15,118,110,.12)}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}tr:last-child td{border-bottom:0}
+    .finding-list{display:grid;gap:12px}.finding strong{font-size:16px}.finding p{margin-top:6px;color:var(--muted);font-size:14px;line-height:1.45}
+  </style>
+</head>
+<body>
+  <div class="frame"><div class="report">
+    <section class="top">
+      <div><div class="eyebrow">MongoDB Contract Drift</div><h1>Production Data Contract Change Watch</h1><p class="subhead">A focused drift review that compares live MongoDB shapes against the contracts the current repository actually relies on.</p></div>
+      <aside class="meta"><div><div class="label">Repository</div><div class="value">api-platform</div></div><div><div class="label">Collections reviewed</div><div class="value">8</div></div><div><div class="label">Status</div><div class="value">Ready</div></div></aside>
+    </section>
+    <section class="cards">
+      <div class="card"><div class="label">Ranked findings</div><div class="big">4</div><div class="note">Two confirmed drifts and two compatibility risks.</div></div>
+      <div class="card"><div class="label">Confirmed drift</div><div class="big">2</div><div class="note">Current code expects fields missing in live documents.</div></div>
+      <div class="card"><div class="label">Tolerated legacy</div><div class="big">1</div><div class="note">Mobile rollout fallback still makes one old shape acceptable.</div></div>
+      <div class="card"><div class="label">Top collection</div><div class="big">subscriptions</div><div class="note">Reader paths and worker outputs no longer align cleanly.</div></div>
+    </section>
+    <section class="grid">
+      <div class="panel">
+        <h2>Ranked Drift Findings</h2>
+        <table>
+          <thead><tr><th>Collection</th><th>Classification</th><th>Live evidence</th><th>Affected code paths</th></tr></thead>
+          <tbody>
+            <tr><td>subscriptions</td><td>Confirmed drift</td><td>`billingCycle` missing in 18% of recent docs</td><td>API serializer, invoice scheduler</td></tr>
+            <tr><td>job_runs</td><td>Compatibility risk</td><td>`result.summary` flips object vs array shape</td><td>Worker consumer, dashboard loader</td></tr>
+            <tr><td>users</td><td>Confirmed drift</td><td>`marketingConsent` now null in active write path</td><td>Profile updater, audit exporter</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h2>Top Finding Detail</h2>
+        <div class="finding-list">
+          <div class="finding"><strong>Subscriptions contract split</strong><p>Reader code expects normalized billing cadence fields, but one worker still emits legacy partial documents.</p><span class="chip risk">Confirmed drift</span></div>
+          <div class="finding"><strong>Likely producer</strong><p>`src/jobs/reconcile-subscriptions.ts` still writes the pre-rollout fallback shape.</p><span class="chip warn">Needs test coverage</span></div>
+          <div class="finding"><strong>Best next test</strong><p>Add a contract test that exercises scheduler output through the current API serializer.</p><span class="chip ok">Concrete follow-up</span></div>
+        </div>
+      </div>
+    </section>
+  </div></div>
+</body>
+</html>

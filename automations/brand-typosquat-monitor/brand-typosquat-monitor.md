@@ -36,7 +36,12 @@ Workflow:
 
 1. Run it once with the completed run configuration.
 2. Return the script's Markdown output as the final answer.
-3. Do not manually fan out dozens of `dig`, `whois`, or `curl` calls inside the prompt. The script is the automation.
+3. If the workspace is writable, also create or update:
+   - `.automation-state/brand-typosquat-monitor/reports/<YYYY-MM-DD>.md`
+   - `.automation-state/brand-typosquat-monitor/reports/<YYYY-MM-DD>.html`
+   The HTML file should be a static internal report with summary cards, ranked domains, evidence badges, near misses, and follow-up notes.
+   If artifact writes are unavailable, still return the Markdown brief and note the skipped artifact write in `Coverage Gaps`.
+4. Do not manually fan out dozens of `dig`, `whois`, or `curl` calls inside the prompt. The script is the automation.
 
 ## Guardrails
 
@@ -80,3 +85,4 @@ Status:
 ```
 
 Use `Status: ready`, `partial`, or `blocked`. Include exact domain names and concise evidence. Distinguish direct evidence from inference.
+If artifact persistence succeeds, mention the Markdown and HTML report paths in `Coverage Gaps` or at the end of the brief in one short line.

@@ -4,7 +4,11 @@
 
 `license-compliance-drift-digest` inspects the current repository's dependency and package metadata surface, compares it against the best available baseline and any local license policy, and produces a ranked read-only digest of the changes that are most likely to matter to legal, security, or platform reviewers.
 
-It is intentionally triage-first. The goal is not to fail on every license warning or dump raw scanner noise. The useful output is a short report that distinguishes real review items from routine dependency churn.
+It is intentionally triage-first. The goal is not to fail on every license warning or dump raw scanner noise. The useful output is a short report that distinguishes real review items from routine dependency churn. When the workspace is writable, it can also persist a companion static HTML artifact for reviewer-friendly scanning.
+
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
 
 Use it when you want a recurring answer to a concrete question such as "did anything in this repo's dependency or distribution surface change in a way that needs compliance review?" rather than a generic license inventory export.
 
@@ -92,7 +96,7 @@ The automation still works in repo-only mode when those enrichers are unavailabl
 | Evidence priority | `manifests and lockfiles first, then local tool output, then registry or GitHub enrichment` |
 | Ecosystems | `auto-detect common package-manager and container surfaces` |
 | Ranked review items | `up to 10` |
-| Output | `Markdown digest` |
+| Output | `Markdown digest with optional static HTML artifact` |
 | Writes | `none` |
 
 Additional prompt behavior:

@@ -8,6 +8,10 @@ It is intentionally narrow. This automation is good at portable first-pass monit
 
 This package now uses a bundled Python collector as the execution path. The script handles candidate generation, bounded parallel evidence collection, timeout control, and report artifacts. The prompt is now mostly an execution wrapper around that collector, not the crawler itself.
 
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
+
 Use it when you want a recurring answer to a concrete question such as "did any close typo or impersonation domains around our brand start looking active or risky?" rather than a claim of exhaustive global coverage.
 
 ## How It Works
@@ -115,7 +119,7 @@ python3 automations/brand-typosquat-monitor/run_monitor.py \
 | TLD scope | `canonical TLDs plus com, net, org, io` |
 | Evidence sources | `DNS first, RDAP second, WHOIS secondary when needed, lightweight HTTP or HTTPS after that` |
 | Final findings | `up to 10 ranked domains` |
-| Output | `Markdown risk brief` |
+| Output | `Markdown risk brief with optional static HTML artifact` |
 | Writes | `none` |
 
 Additional prompt behavior:

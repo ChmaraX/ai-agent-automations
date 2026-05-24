@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>License Compliance Drift Digest Preview</title>
+  <style>
+    :root { --bg:#f7f4ef; --panel:rgba(255,255,255,.9); --line:rgba(78,63,45,.12); --ink:#241a14; --muted:#74685c; --accent:#8b5e34; --risk:#b63f36; --watch:#b7791f; --shadow:0 24px 70px rgba(70,55,39,.12); }
+    *{box-sizing:border-box} body{margin:0;font-family:"IBM Plex Sans","Avenir Next","Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at top left, rgba(139,94,52,.12), transparent 28%), linear-gradient(180deg,#fbf8f3,#f1ebe3)}
+    .frame{width:1440px;min-height:980px;margin:0 auto;padding:40px}.report{border:1px solid var(--line);border-radius:30px;padding:32px;background:linear-gradient(160deg, rgba(255,255,255,.96), rgba(252,248,242,.92));box-shadow:var(--shadow)}
+    .top,.cards,.grid{display:grid;gap:16px}.top{grid-template-columns:1.45fr .95fr;margin-bottom:22px}.cards{grid-template-columns:repeat(4,1fr);margin-bottom:20px}.grid{grid-template-columns:1.15fr .85fr}
+    .panel,.card,.meta,.entry{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px}.eyebrow,.chip{display:inline-flex;border-radius:999px;font-size:12px;font-weight:700}.eyebrow{padding:8px 12px;background:rgba(139,94,52,.12);color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+    h1{margin:14px 0 10px;font-size:38px;line-height:1;letter-spacing:-.04em}p{margin:0}.subhead{max-width:760px;color:var(--muted);font-size:16px;line-height:1.55}.label,th{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}.value{margin-top:6px;font-size:18px;font-weight:700}.card .big{margin-top:10px;font-size:30px;font-weight:800;letter-spacing:-.04em}.card .note{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.4}
+    h2{margin:0 0 16px;font-size:19px;letter-spacing:-.03em}.chip{padding:6px 10px;margin-top:10px}.risk{color:var(--risk);background:rgba(182,63,54,.12)}.watch{color:var(--watch);background:rgba(183,121,31,.12)}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}tr:last-child td{border-bottom:0}
+    .entry-list{display:grid;gap:12px}.entry strong{font-size:16px}.entry p{margin-top:6px;color:var(--muted);font-size:14px;line-height:1.45}
+  </style>
+</head>
+<body>
+  <div class="frame"><div class="report">
+    <section class="top">
+      <div><div class="eyebrow">Compliance Drift</div><h1>License Compliance Digest</h1><p class="subhead">A reviewer-friendly weekly drift summary that highlights policy-relevant dependency and packaging changes without flooding the reader with routine churn.</p></div>
+      <aside class="meta"><div><div class="label">Baseline</div><div class="value">Default branch</div></div><div><div class="label">Policy sources</div><div class="value">LICENSE_POLICY.md + deny.toml</div></div><div><div class="label">Coverage</div><div class="value">npm + Docker + vendored assets</div></div></aside>
+    </section>
+    <section class="cards">
+      <div class="card"><div class="label">Ranked review items</div><div class="big">4</div><div class="note">Only material compliance shifts made the shortlist.</div></div>
+      <div class="card"><div class="label">Highest risk</div><div class="big">Copyleft</div><div class="note">One new runtime dependency now needs explicit policy review.</div></div>
+      <div class="card"><div class="label">Routine churn</div><div class="big">11</div><div class="note">Reviewed and intentionally not escalated.</div></div>
+      <div class="card"><div class="label">Gap</div><div class="big">1 vendor dir</div><div class="note">Provenance remains unclear for copied third-party source.</div></div>
+    </section>
+    <section class="grid">
+      <div class="panel">
+        <h2>Ranked Review Items</h2>
+        <table>
+          <thead><tr><th>Package or artifact</th><th>Risk</th><th>Drift</th><th>Affected files</th></tr></thead>
+          <tbody>
+            <tr><td>`enterprise-pdf-kit`</td><td>Review</td><td>New runtime dependency under dual-license ambiguity</td><td>package.json, pnpm-lock.yaml</td></tr>
+            <tr><td>`vendor/legacy-uploader/`</td><td>High</td><td>Copied third-party code with missing source link</td><td>vendor/legacy-uploader/**</td></tr>
+            <tr><td>`base-image:2026.05`</td><td>Review</td><td>Container base changed, license metadata incomplete</td><td>Dockerfile</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h2>Reviewer Notes</h2>
+        <div class="entry-list">
+          <div class="entry"><strong>Dual-license package</strong><p>The package is not automatically disallowed, but the intended licensing path is not visible from repository evidence.</p><span class="chip watch">Needs review</span></div>
+          <div class="entry"><strong>Vendored source gap</strong><p>Copied code without clear provenance outranks normal dependency churn because downstream obligations are harder to trace.</p><span class="chip risk">Highest priority</span></div>
+          <div class="entry"><strong>Routine churn collapsed</strong><p>Permissive patch updates are grouped instead of cluttering the main review list.</p><span class="chip watch">Noise reduction</span></div>
+        </div>
+      </div>
+    </section>
+  </div></div>
+</body>
+</html>

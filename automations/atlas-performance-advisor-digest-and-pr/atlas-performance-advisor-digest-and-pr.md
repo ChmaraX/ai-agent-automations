@@ -129,6 +129,15 @@ Do not open a draft PR unless:
 
 If no safe repo change was made, do not open a PR. Still produce the digest and explain why the run stayed report-only.
 
+If the workspace is writable, also create or update:
+
+- `.automation-state/atlas-performance-advisor-digest-and-pr/reports/<YYYY-MM-DD>.md`
+- `.automation-state/atlas-performance-advisor-digest-and-pr/reports/<YYYY-MM-DD>.html`
+
+The HTML file should be a static internal report, not an app.
+It should include summary cards, the four recommendation buckets, a compact candidate ledger, and the repo-change or PR outcome.
+If artifact writes are unavailable, still return the Markdown digest and note the skipped artifact write in `Coverage Gaps`.
+
 If PR tooling is unavailable, prepare the branch name, commit message, PR title, and PR body, then stop.
 
 If PR tooling is available and the change is still justified:
@@ -219,6 +228,7 @@ Evidence coverage: full | partial | limited
 
 Keep the digest compact. Prefer a short, defensible ranking over exhaustive enumeration.
 Only include PR-related output when the run actually evaluated the PR path. Do not emit a draft migration appendix or sketch in digest-only runs.
+If artifact persistence succeeds, mention the Markdown and HTML report paths in `Coverage Gaps` or at the end of the digest in one short line.
 
 ## PR body
 

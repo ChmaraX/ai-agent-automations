@@ -63,6 +63,13 @@ Default to the current repository only, compare against the best available commi
    Include evidence, affected files, the comparison baseline used, and one concrete next action for each retained item.
    If chat delivery tooling is available, you may prepare a short summary suitable for Slack or an equivalent messaging surface, but do not require delivery to complete the run.
    If no meaningful compliance drift is found, say so directly.
+7. Render the result.
+   The Markdown digest is the canonical automation response.
+   If the workspace is writable, also create or update:
+   - `.automation-state/license-compliance-drift-digest/reports/<YYYY-MM-DD>.md`
+   - `.automation-state/license-compliance-drift-digest/reports/<YYYY-MM-DD>.html`
+   The HTML file should be a static internal report with summary cards, the ranked review table, grouped routine churn, and policy or metadata gaps.
+   If artifact writes are unavailable, still return the Markdown digest and note the skipped artifact write in `Policy Or Metadata Gaps`.
 
 ## Guardrails
 
@@ -109,3 +116,4 @@ Status:
 ```
 
 Use `Status: ready`, `partial`, or `blocked`. Keep the report concise and evidence-first. Distinguish observed repository facts from inference.
+If artifact persistence succeeds, mention the Markdown and HTML report paths in `Policy Or Metadata Gaps` or at the end of the digest in one short line.

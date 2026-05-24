@@ -4,7 +4,11 @@
 
 `gmail-billing-organizer` scans the connected Gmail account by default for invoices, receipts, renewal notices, and payment confirmations, then turns the matches into one clean billing digest plus a ledger-friendly list while also applying simple Gmail labels to confident matches.
 
-Use it when you want your billing email easier to review in Gmail without forwarding messages, renaming files, or introducing heavy mailbox automation. It is aimed at regular users first: personal subscriptions, app-store charges, online purchases, renewal notices, and lightweight expense tracking. The default behavior is digest-first, with narrow Gmail label writes only for confident classifications.
+Use it when you want your billing email easier to review in Gmail without forwarding messages, renaming files, or introducing heavy mailbox automation. It is aimed at regular users first: personal subscriptions, app-store charges, online purchases, renewal notices, and lightweight expense tracking. The default behavior is digest-first, with narrow Gmail label writes only for confident classifications. When the workspace is writable, it can also persist a companion static HTML artifact alongside the Markdown and CSV outputs.
+
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
 
 ## How It Works
 
@@ -61,6 +65,7 @@ If the runtime has workspace write access, the automation can also persist compa
 
 ```text
 .automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.md
+.automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.html
 .automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.csv
 ```
 
@@ -87,8 +92,8 @@ If the runtime has workspace write access, the automation can also persist compa
 | First-pass candidate pool | `up to 60 messages` |
 | Final extracted items | `up to 25 records` |
 | Thread expansion | `latest message plus directly relevant billing context only` |
-| Output | `preview digest plus simple labels, plus optional ledger-friendly markdown table` |
-| File artifacts | `persist Markdown and CSV when writable` |
+| Output | `preview digest plus simple labels, plus optional static HTML artifact and ledger-friendly markdown table` |
+| File artifacts | `persist Markdown, HTML, and CSV when writable` |
 | Gmail labels | `apply one simple label per confident match` |
 | Empty-run behavior | `return a short no-new-billing-items result` |
 

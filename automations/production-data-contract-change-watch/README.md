@@ -2,9 +2,13 @@
 
 ## Overview
 
-`production-data-contract-change-watch` compares live MongoDB document shapes against the contracts implied by the current repository's API handlers, background jobs, and frontend data consumers, then returns one ranked read-only drift report.
+`production-data-contract-change-watch` compares live MongoDB document shapes against the contracts implied by the current repository's API handlers, background jobs, and frontend data consumers, then returns one ranked drift report and, when the fix is unusually narrow, one draft PR.
 
-It is for catching the kinds of failures that often slip past code review and unit tests: brittle migrations, partially rolled out fields, legacy app versions still writing old shapes, and background jobs producing inconsistent records. The useful output is not a raw schema dump. It is a short contract drift report with affected collections, code paths, evidence, and test ideas.
+It is report-first and database-read-only. The useful output is still a short contract drift report with affected collections, code paths, evidence, and test ideas. A draft PR is allowed only for one localized code-side compatibility fix such as parser hardening, validation tightening, or a narrowly targeted regression test. It must never mutate database state, run a backfill, or invent a migration plan. When the workspace is writable, it can also persist a companion static HTML artifact for easier drift review.
+
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
 
 Use it when you want a recurring answer to a concrete question such as "does production data still match what the code now expects?" rather than a generic schema inventory.
 
@@ -15,6 +19,7 @@ Use it when you want a recurring answer to a concrete question such as "does pro
 3. Builds a bounded list of collections worth reviewing first, based on real code usage rather than scanning everything equally.
 4. Uses MongoDB schema inspection or bounded document sampling to compare live shapes against the contracts the code appears to rely on.
 5. Ranks only the mismatches that look materially risky, then returns one concise drift report with evidence, affected code paths, likely producers, and concrete test ideas.
+6. If exactly one finding maps to a narrow code-side fix in the current repository, implements the smallest safe patch, validates it locally, and opens a draft PR.
 
 ```mermaid
 sequenceDiagram
@@ -27,8 +32,8 @@ sequenceDiagram
     Agent->>Mongo: Inspect bounded live schema evidence
     Agent->>Repo: Compare live fields and shapes to code expectations
     Agent->>Tests: Check existing targeted tests when useful
-    Agent-->>Repo: Produce ranked contract drift report
-    Note over Agent: Report-only, no data changes, no PRs by default
+    Agent-->>Repo: Produce ranked drift report and maybe one draft PR
+    Note over Agent: MongoDB stays read-only; repo write path is optional and narrow
 ```
 
 ## When To Use It
@@ -39,12 +44,14 @@ sequenceDiagram
 - a migration was partial, interrupted, or intentionally long-lived
 - API handlers or frontend readers assume fields that production data may not consistently contain
 - you want test ideas grounded in live drift instead of hypothetical edge cases
+- you want one small code-side compatibility or validation fix when the evidence is strong enough
 
 ## Prerequisites
 
 - repository read access and a runtime that can inspect the current repo with `git` and `rg`
 - read-only access to one production or production-like MongoDB database, preferably through MongoDB MCP or a read-only `mongosh` profile
 - optional targeted test commands if you want the automation to strengthen a finding with existing repo validation
+- repository write access plus git and PR tooling if you want draft PR creation
 
 The automation should degrade to `partial` only when some collections or code paths are unreadable. If it cannot identify one trustworthy live data source for the repo, it should stop with `Status: blocked` rather than guessing.
 
@@ -77,7 +84,8 @@ The automation should keep all live reads bounded. It should not run unbounded c
 2. Name your automation and paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
 3. Make sure the runtime can read the current repo and either access MongoDB MCP or execute `mongosh`.
 4. If you want stronger confidence, also make the repository's targeted test commands available in the runtime.
-5. Set the schedule or run manually, then save the automation.
+5. Add git and PR tooling if you want the automation to open a draft PR when one code-side fix is clearly justified.
+6. Set the schedule or run manually, then save the automation.
 
 ## Codex App Usage
 
@@ -86,20 +94,22 @@ The automation should keep all live reads bounded. It should not run unbounded c
 3. Click `Automation` > `New Automation`.
 4. Paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
 5. Optionally allow existing targeted test commands for the repo if you want the run to confirm nearby validation coverage.
-6. Set the schedule or run manually and save the automation.
+6. Add git and PR tooling if you want the narrow repo-fix path.
+7. Set the schedule or run manually and save the automation.
 
 ## Claude Code / Codex CLI / Copilot Usage
 
 1. Start the agent in the repository you want reviewed.
 2. Make one live MongoDB read path available through MongoDB MCP or `mongosh`.
 3. Keep the runtime read-only for database access and bounded for collection inspection.
-4. For repeated checks in an open Claude Code session, use `/loop`, for example:
+4. Add git, targeted validation commands, and PR tooling if you want the automation to open a draft PR when a localized code-side fix qualifies.
+5. For repeated checks in an open Claude Code session, use `/loop`, for example:
 
 ```text
 /loop 1d Follow the instructions in automations/production-data-contract-change-watch/production-data-contract-change-watch.md
 ```
 
-5. For durable Claude-managed automation outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
+6. For durable Claude-managed automation outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 
 ## Recommended Defaults
 
@@ -112,8 +122,8 @@ The automation should keep all live reads bounded. It should not run unbounded c
 | Ranked findings | `up to 10` |
 | Evidence policy | `field names, types, counts, and redacted examples only` |
 | Validation | `existing targeted tests only when clearly relevant` |
-| Writes | `none` |
-| Output | `Markdown contract drift report` |
+| Repo write path | `at most one narrow code-side fix` |
+| Output | `Markdown drift report, optional static HTML artifact, plus optional draft PR` |
 
 Additional prompt behavior:
 
@@ -124,6 +134,7 @@ Additional prompt behavior:
 - Prefer evidence from current code and live data over old migration comments or stale docs.
 - Never include raw full-document dumps, secrets, tokens, email addresses, or long identifiers in the report.
 - If a useful baseline such as an ongoing migration, feature flag, or backward-compatibility shim exists, mention it and lower the risk level when appropriate.
+- Only open a PR for parser, validator, compatibility, or targeted test changes. Never for backfills, migrations, data cleanup, or schema-definition work that depends on production writes.
 
 ## Useful Workspace-Specific Inputs
 
@@ -166,9 +177,16 @@ pnpm --filter worker test -- src/jobs
 pnpm --filter web test -- src/lib/data
 ```
 
+Draft PR example:
+
+```text
+Only open a draft PR when one finding maps to a localized parser, validation, compatibility, or targeted test change inside the current repo.
+Do not open a PR for anything that would require data repair, multi-service rollout, or schema migration planning.
+```
+
 ## Limitations
 
 - This automation is strongest when the repo has explicit validators, parsers, or well-defined persistence boundaries.
 - Bounded sampling can miss extremely rare drift, so absence of findings is not a formal proof of uniform data quality.
 - Intentional multi-version compatibility windows can look risky without operator context, so repo-specific notes improve ranking quality.
-- It can identify likely contract drift and test ideas, but it does not replace migration plans, backfills, or deeper data-quality programs.
+- It can identify likely contract drift and test ideas, and sometimes one narrow code-side fix, but it does not replace migration plans, backfills, or deeper data-quality programs.

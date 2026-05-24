@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gmail Billing Organizer Preview</title>
+  <style>
+    :root { --bg:#f3f7fd; --panel:rgba(255,255,255,.9); --line:rgba(44,70,111,.12); --ink:#18263c; --muted:#63758f; --accent:#2563eb; --warn:#c46b1d; --good:#1f7a63; --shadow:0 24px 70px rgba(36,58,93,.12); }
+    *{box-sizing:border-box} body{margin:0;font-family:"SF Pro Display","Inter",system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 28%), linear-gradient(180deg,#f7faff,#edf3fb)}
+    .frame{width:1440px;min-height:980px;margin:0 auto;padding:40px}.report{border:1px solid var(--line);border-radius:30px;padding:32px;background:linear-gradient(160deg, rgba(255,255,255,.96), rgba(244,248,255,.92));box-shadow:var(--shadow)}
+    .top,.cards,.grid{display:grid;gap:16px}.top{grid-template-columns:1.45fr .95fr;margin-bottom:22px}.cards{grid-template-columns:repeat(4,1fr);margin-bottom:20px}.grid{grid-template-columns:1.15fr .85fr}
+    .panel,.card,.meta,.entry{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px}.eyebrow,.chip{display:inline-flex;border-radius:999px;font-size:12px;font-weight:700}.eyebrow{padding:8px 12px;background:rgba(37,99,235,.12);color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+    h1{margin:14px 0 10px;font-size:38px;line-height:1;letter-spacing:-.04em}p{margin:0}.subhead{max-width:760px;color:var(--muted);font-size:16px;line-height:1.55}.label,th{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}.value{margin-top:6px;font-size:18px;font-weight:700}.card .big{margin-top:10px;font-size:30px;font-weight:800;letter-spacing:-.04em}.card .note{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.4}
+    h2{margin:0 0 16px;font-size:19px;letter-spacing:-.03em}.chip{padding:6px 10px;margin-top:10px}.warn{color:var(--warn);background:rgba(196,107,29,.12)}.good{color:var(--good);background:rgba(31,122,99,.12)}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}tr:last-child td{border-bottom:0}
+    .entry-list{display:grid;gap:12px}.entry strong{font-size:16px}.entry p{margin-top:6px;color:var(--muted);font-size:14px;line-height:1.45}
+  </style>
+</head>
+<body>
+  <div class="frame"><div class="report">
+    <section class="top">
+      <div><div class="eyebrow">Mailbox Billing Review</div><h1>Gmail Billing Organizer</h1><p class="subhead">A compact billing digest that pulls invoices, renewals, receipts, and payment confirmations into a review queue while keeping Gmail changes limited to one simple label per message.</p></div>
+      <aside class="meta"><div><div class="label">Mailbox</div><div class="value">Connected Gmail inbox</div></div><div><div class="label">Window</div><div class="value">Last 7 days</div></div><div><div class="label">Labels applied</div><div class="value">12</div></div></aside>
+    </section>
+    <section class="cards">
+      <div class="card"><div class="label">Billing records</div><div class="big">18</div><div class="note">Invoices, receipts, and renewals extracted from one bounded inbox slice.</div></div>
+      <div class="card"><div class="label">Needs review</div><div class="big">5</div><div class="note">Due soon, ambiguous, or renewal-related items still need attention.</div></div>
+      <div class="card"><div class="label">Completed records</div><div class="big">10</div><div class="note">Receipts and payment confirmations collapsed into the ledger view.</div></div>
+      <div class="card"><div class="label">Recurring focus</div><div class="big">3 renewals</div><div class="note">Subscription-related email remains the highest-value cleanup path.</div></div>
+    </section>
+    <section class="grid">
+      <div class="panel">
+        <h2>Items Needing Review</h2>
+        <table>
+          <thead><tr><th>Vendor</th><th>Type</th><th>Amount</th><th>Due date</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Vercel</td><td>Renewal Notice</td><td>$420</td><td>2026-05-28</td><td>Annual plan renews in 4 days.</td></tr>
+            <tr><td>AWS</td><td>Invoice</td><td>$1,280</td><td>2026-05-31</td><td>Attachment present, billing period clear.</td></tr>
+            <tr><td>Figma</td><td>Needs Review</td><td></td><td></td><td>Amount missing from message body; attachment text blocked.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h2>Ledger Snapshot</h2>
+        <div class="entry-list">
+          <div class="entry"><strong>Renewals surfaced clearly</strong><p>The digest keeps recurring charges visible instead of burying them in completed receipt traffic.</p><span class="chip warn">Review queue</span></div>
+          <div class="entry"><strong>Receipts stay separate</strong><p>Completed records still land in the ledger without cluttering payable items.</p><span class="chip good">Bookkeeping friendly</span></div>
+          <div class="entry"><strong>Attachment gaps are explicit</strong><p>Unreadable PDFs do not turn into guessed amounts or dates.</p><span class="chip warn">Conservative extraction</span></div>
+        </div>
+      </div>
+    </section>
+  </div></div>
+</body>
+</html>

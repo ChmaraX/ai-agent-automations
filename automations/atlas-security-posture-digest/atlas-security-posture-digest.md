@@ -96,6 +96,13 @@ Only `Atlas project` is required. If it is still `REQUIRED_REPLACE_ME`, empty, o
 12. If a required surface is missing or unreadable, continue when a partial report is still honest.
    Use `Status: partial` when the missing surface meaningfully limits the audit.
    Use `Status: blocked` only when the run configuration or project scope is not trustworthy enough to continue.
+13. Render the result.
+    The Markdown report is the canonical automation response.
+    If the workspace is writable, also create or update:
+    - `.automation-state/atlas-security-posture-digest/reports/<YYYY-MM-DD>.md`
+    - `.automation-state/atlas-security-posture-digest/reports/<YYYY-MM-DD>.html`
+    The HTML file should be a static internal report with summary cards, posture category panels, categorized findings, and explicit coverage gaps.
+    If artifact writes are unavailable, still return the Markdown report and note the skipped artifact write in `Coverage Gaps`.
 
 ## Guardrails
 
@@ -190,3 +197,4 @@ Use `Status: ready`, `partial`, or `blocked`.
 Keep the report concise and evidence-first.
 Lead with what matters most for the scoped project, not a full Atlas inventory dump.
 Prefer grouped narrative sections over dense tables unless a small table is clearly the most readable way to present user, role, or allowlist evidence.
+If artifact persistence succeeds, mention the Markdown and HTML report paths in `Coverage Gaps` or at the end of the report in one short line.

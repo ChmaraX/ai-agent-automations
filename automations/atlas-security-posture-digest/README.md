@@ -4,7 +4,11 @@
 
 `atlas-security-posture-digest` runs a read-only recurring audit of one MongoDB Atlas project and returns a compact security posture report that explains which deviations likely matter, which ones may be acceptable with context, and which ones need an explicit owner decision.
 
-It is not a generic settings export. The point of the automation is to interpret Atlas security posture against the expectations for the scoped project, especially around network exposure, database-user hygiene, role breadth, recent access, backup policy, and critical alert coverage.
+It is not a generic settings export. The point of the automation is to interpret Atlas security posture against the expectations for the scoped project, especially around network exposure, database-user hygiene, role breadth, recent access, backup policy, and critical alert coverage. When the workspace is writable, it can also persist a companion static HTML artifact for faster posture review.
+
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
 
 ## How It Works
 
@@ -130,7 +134,7 @@ Relevant official docs:
 | Stale-user threshold | `90 days without observed recent access unless stricter policy is supplied` |
 | Access-history window | `last 7 days when available, otherwise inventory-only with a coverage gap` |
 | Final ranked findings | `up to 10` |
-| Output | `Markdown security posture report` |
+| Output | `Markdown security posture report with optional static HTML artifact` |
 
 Additional prompt behavior:
 

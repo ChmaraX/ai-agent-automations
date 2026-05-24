@@ -86,6 +86,14 @@ Only `Atlas project` is required. If it is still `REQUIRED_REPLACE_ME`, empty, o
 11. Treat operator-supplied context as optional enrichment, not a default requirement.
     If the prompt includes useful notes such as no-touch clusters, known batch windows, or stricter recovery expectations, use them.
     Otherwise proceed with the built-in defaults and clearly label any resulting uncertainty.
+12. Render the result.
+    The Markdown digest is the canonical automation response.
+    If the workspace is writable, also create or update:
+    - `.automation-state/atlas-cost-optimization-digest/reports/<YYYY-MM-DD>.md`
+    - `.automation-state/atlas-cost-optimization-digest/reports/<YYYY-MM-DD>.html`
+    The HTML file should be a static internal report, not an app.
+    It should include an executive summary, summary cards, one cost-concentration panel, the ranked candidates, deferred items, and setup gaps.
+    If artifact writes are unavailable, still return the Markdown digest and note the skipped artifact write in `Setup Gaps`.
 
 ## Interpretation Guidance
 
@@ -155,3 +163,4 @@ Use `Status: ready`, `partial`, or `blocked`.
 Keep the report concise and evidence-first.
 Lead with candidates that combine meaningful savings potential with a realistic human decision path.
 Do not force every finding into the default category labels if a clearer category name would better describe the spend driver.
+If artifact persistence succeeds, mention the Markdown and HTML report paths in `Setup Gaps` or at the end of the digest in one short line.

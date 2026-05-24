@@ -45,6 +45,13 @@ If Stripe is available and tenant or customer matching is reliable, use Stripe o
    Favor watchlist classification over high-risk classification when the evidence is mixed or the account importance cannot be inferred safely.
 10. Produce one compact digest and keep it read-only.
    If no strong candidates qualify, report that no renewal-risk candidates met the threshold.
+11. Render the result.
+    The Markdown digest is the canonical automation response.
+    If the workspace is writable, also create or update:
+    - `.automation-state/plain-renewal-risk-digest/reports/<YYYY-MM-DD>.md`
+    - `.automation-state/plain-renewal-risk-digest/reports/<YYYY-MM-DD>.html`
+    The HTML file should be a static internal watchlist with summary cards, ranked account rows or cards, watchlist items, and follow-up actions.
+    If artifact writes are unavailable, still return the Markdown digest and note the skipped artifact write in `Setup Gaps`.
 
 ## Guardrails
 
@@ -93,5 +100,6 @@ Additional output rules:
 - If Stripe enrichment is available, mention it inline inside `Key Signals` and summarize coverage in `Commercial enrichment`.
 - In `Evidence Notes`, add 1 short bullet per ranked candidate with the most important facts that drove ranking.
 - Keep `Setup Gaps` short. Only include blockers that materially reduced confidence after you attempted available enrichment.
+- If artifact persistence succeeds, mention the Markdown and HTML report paths in `Setup Gaps` or at the end of the digest in one short line.
 
 Be explicit about uncertainty when the evidence is mixed, but do not overfill the report with caveats once a candidate has enough evidence to rank.

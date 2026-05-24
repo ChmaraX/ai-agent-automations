@@ -56,7 +56,10 @@ Scan the connected Gmail account by default for invoices, receipts, renewal noti
    The Markdown digest is the canonical response.
    If the workspace is writable, also create or update:
    - `.automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.md`
+   - `.automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.html`
    - `.automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.csv`
+   The HTML file should be a static internal report, not an app.
+   It should include summary cards, the review queue, renewals or recurring charges, and a compact ledger panel.
    The CSV should contain one row per extracted record with blank fields for unknown values.
    If file writes are unavailable, still return the Markdown digest and note the skipped artifact write.
 9. Return a quiet result when nothing qualifies.
@@ -120,3 +123,4 @@ Output rules:
 - Omit `Skipped This Run` if nothing was skipped.
 - `Labels Applied` should list the Gmail message classification labels added on this run.
 - Use `Setup Gaps` for missing attachment text extraction, blocked label writes, missing permalinks, blocked mailbox access, or skipped artifact writes.
+- If artifact persistence succeeds, mention the Markdown, HTML, and CSV report paths in `Setup Gaps` or at the end of the digest in one short line.

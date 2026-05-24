@@ -4,7 +4,11 @@
 
 `plain-renewal-risk-digest` reviews recent Plain support activity for accounts that may be heading toward renewal friction, churn risk, or executive escalation.
 
-Use it when your Plain workspace carries enough tenant or account context to connect support behavior with renewal-sensitive customers. This automation is intentionally stricter than the customer voice digest because false positives are expensive.
+Use it when your Plain workspace carries enough tenant or account context to connect support behavior with renewal-sensitive customers. This automation is intentionally stricter than the customer voice digest because false positives are expensive. When the workspace is writable, it can also persist a companion static HTML artifact for watchlist review.
+
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
 
 ## How It Works
 
@@ -102,7 +106,7 @@ References:
 | Default scope | `customer-facing tenant-linked activity with obvious noise excluded` |
 | Preferred identity output | `tenant name, customer name, owner, and thread links when available` |
 | Commercial enrichment | `use Stripe only when account matching is reliable` |
-| Delivery mode | `preview output` |
+| Delivery mode | `preview output with optional static HTML artifact` |
 | Write mode | `read-only` |
 
 Additional guidance:

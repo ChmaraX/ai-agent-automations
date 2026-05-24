@@ -4,7 +4,11 @@
 
 `atlas-performance-advisor-digest-and-pr` reads Atlas Performance Advisor signals for one Atlas cluster through the Atlas CLI, cross-checks them against database and repository context, turns that into a ranked performance report, and opens a draft PR only when exactly one additive index change is clearly justified and safe enough to stage for review.
 
-Each run should answer a practical question: which Atlas recommendations look safe enough to try, which ones need benchmarking, which ones are probably noise, and which ones should not be applied yet. Most runs should still stop at the digest. A draft PR is allowed only for one narrow additive index candidate with clear repo ownership, a bounded migration path, and targeted validation.
+Each run should answer a practical question: which Atlas recommendations look safe enough to try, which ones need benchmarking, which ones are probably noise, and which ones should not be applied yet. Most runs should still stop at the digest. A draft PR is allowed only for one narrow additive index candidate with clear repo ownership, a bounded migration path, and targeted validation. When the workspace is writable, it can also persist a companion static HTML artifact for easier recommendation review.
+
+## Preview
+
+![HTML report preview](./assets/html-report-preview.png)
 
 ## How It Works
 
@@ -178,7 +182,7 @@ Relevant official docs:
 | Allowed write paths | `required for PR-capable runs` |
 | First-pass candidate cap | `top 25 recommendations or slow-query shapes` |
 | Final spotlight count | `top 8 candidates across all buckets` |
-| Delivery | `Markdown digest plus optional draft PR` |
+| Delivery | `Markdown digest, optional static HTML artifact, plus optional draft PR` |
 | Mutation mode | `digest-first, one additive index PR max` |
 | PR mode | `draft only` |
 | Branch | `chore/atlas-index-addition-YYYY-MM-DD` |
