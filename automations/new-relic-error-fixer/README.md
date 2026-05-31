@@ -40,7 +40,7 @@ Use a least-privilege New Relic account or API key. The public MCP server is a p
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [new-relic-error-fixer.md](/Users/adamchmara/projects/awesome-agent-automations/automations/new-relic-error-fixer/new-relic-error-fixer.md) as the automation prompt.
+2. Name your automation and paste [new-relic-error-fixer.md](/Users/adamchmara/projects/ai-agent-automations/automations/new-relic-error-fixer/new-relic-error-fixer.md) as the automation prompt.
 3. Add trigger conditions.
 4. Add the New Relic MCP server.
    - US accounts: `https://mcp.newrelic.com/mcp/`
@@ -66,7 +66,7 @@ codex mcp add new-relic-mcp-server --url "https://mcp.newrelic.com/mcp/"
    ```
 3. Run Codex and complete `/mcp` authentication if needed.
 4. Click `Automation` > `New Automation`.
-5. Name your automation and paste [new-relic-error-fixer.md](/Users/adamchmara/projects/awesome-agent-automations/automations/new-relic-error-fixer/new-relic-error-fixer.md) as the automation prompt.
+5. Name your automation and paste [new-relic-error-fixer.md](/Users/adamchmara/projects/ai-agent-automations/automations/new-relic-error-fixer/new-relic-error-fixer.md) as the automation prompt.
 6. Set the schedule or run manually and save the automation.
 7. Add the GitHub plugin to Codex, or let Codex use an existing GitHub CLI or tool in the environment.
 

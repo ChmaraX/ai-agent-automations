@@ -27,7 +27,7 @@ Use it for host-level hardening review. It does not do LAN-wide discovery, packe
 
 ## Setup
 
-Use [local-listening-service-and-firewall-audit.md](/Users/adamchmara/projects/awesome-agent-automations/automations/local-listening-service-and-firewall-audit/local-listening-service-and-firewall-audit.md) as the automation prompt.
+Use [local-listening-service-and-firewall-audit.md](/Users/adamchmara/projects/ai-agent-automations/automations/local-listening-service-and-firewall-audit/local-listening-service-and-firewall-audit.md) as the automation prompt.
 
 ### Cursor Cloud
 

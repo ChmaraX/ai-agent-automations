@@ -51,7 +51,7 @@ Monorepos are supported when one risky change maps cleanly to one workspace or s
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [critical-bug-fix-pr.md](/Users/adamchmara/projects/awesome-agent-automations/automations/critical-bug-fix-pr/critical-bug-fix-pr.md) as the automation prompt.
+2. Name your automation and paste [critical-bug-fix-pr.md](/Users/adamchmara/projects/ai-agent-automations/automations/critical-bug-fix-pr/critical-bug-fix-pr.md) as the automation prompt.
 3. Add the `Open Pull Request` tool, or let the agent use existing PR tooling in the runtime.
 4. Make sure the environment can inspect git history and run the repository's narrowest relevant validation commands.
 5. Click `Create`.
@@ -59,7 +59,7 @@ Monorepos are supported when one risky change maps cleanly to one workspace or s
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [critical-bug-fix-pr.md](/Users/adamchmara/projects/awesome-agent-automations/automations/critical-bug-fix-pr/critical-bug-fix-pr.md) as the automation prompt.
+2. Name your automation and paste [critical-bug-fix-pr.md](/Users/adamchmara/projects/ai-agent-automations/automations/critical-bug-fix-pr/critical-bug-fix-pr.md) as the automation prompt.
 3. Set the schedule or run manually and save the automation.
 4. Add the GitHub plugin to Codex, or let Codex use existing GitHub CLI or PR tooling in the environment.
 5. Make sure the runtime can run the repository's targeted validation commands for the affected area.

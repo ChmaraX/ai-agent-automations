@@ -28,7 +28,7 @@ Use it for recurring maintainability work when you want small automated improvem
 
 ## Setup
 
-Use [sampled-refactor.md](/Users/adamchmara/projects/awesome-agent-automations/automations/sampled-refactor/sampled-refactor.md) as the automation prompt.
+Use [sampled-refactor.md](/Users/adamchmara/projects/ai-agent-automations/automations/sampled-refactor/sampled-refactor.md) as the automation prompt.
 
 ### Cursor Cloud
 

@@ -27,7 +27,7 @@ It is not a generic coverage maximizer. The goal is to cover the important behav
 
 ## Setup
 
-Use [branch-change-test-coverage.md](/Users/adamchmara/projects/awesome-agent-automations/automations/branch-change-test-coverage/branch-change-test-coverage.md) as the automation prompt.
+Use [branch-change-test-coverage.md](/Users/adamchmara/projects/ai-agent-automations/automations/branch-change-test-coverage/branch-change-test-coverage.md) as the automation prompt.
 
 ### Cursor Cloud
 

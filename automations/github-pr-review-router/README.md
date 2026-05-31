@@ -46,7 +46,7 @@ sequenceDiagram
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [github-pr-review-router.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-pr-review-router/github-pr-review-router.md) as the automation prompt.
+2. Name your automation and paste [github-pr-review-router.md](/Users/adamchmara/projects/ai-agent-automations/automations/github-pr-review-router/github-pr-review-router.md) as the automation prompt.
 3. Add GitHub access with read permission for pull requests, reviews, issues, and checks.
 4. Set a schedule or run manually, then create the automation.
 
@@ -54,7 +54,7 @@ sequenceDiagram
 
 1. Add the GitHub plugin to Codex, `gh` CLI, or a GitHub MCP server with read access for pull requests, reviews, checks, and repository search.
 2. Click `Automation` > `New Automation`.
-3. Name your automation and paste [github-pr-review-router.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-pr-review-router/github-pr-review-router.md) as the automation prompt.
+3. Name your automation and paste [github-pr-review-router.md](/Users/adamchmara/projects/ai-agent-automations/automations/github-pr-review-router/github-pr-review-router.md) as the automation prompt.
 4. Set the schedule or run manually and save the automation.
 
 ## Claude Code Usage

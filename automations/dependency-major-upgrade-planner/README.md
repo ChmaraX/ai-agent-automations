@@ -34,7 +34,7 @@ It is planning-focused, not code-changing. Each run stays bounded, prefers offic
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [dependency-major-upgrade-planner.md](/Users/adamchmara/projects/awesome-agent-automations/automations/dependency-major-upgrade-planner/dependency-major-upgrade-planner.md) as the automation prompt.
+2. Name your automation and paste [dependency-major-upgrade-planner.md](/Users/adamchmara/projects/ai-agent-automations/automations/dependency-major-upgrade-planner/dependency-major-upgrade-planner.md) as the automation prompt.
 3. Add repository access for manifest and code inspection.
 4. Add web, GitHub, or equivalent read access so the runner can read official migration guides and release notes.
 5. Add Linear access through the official MCP server or managed connector if you want issue creation.
@@ -49,7 +49,7 @@ It is planning-focused, not code-changing. Each run stays bounded, prefers offic
    codex mcp list
    ```
 2. Click `Automation` > `New Automation`.
-3. Name your automation and paste [dependency-major-upgrade-planner.md](/Users/adamchmara/projects/awesome-agent-automations/automations/dependency-major-upgrade-planner/dependency-major-upgrade-planner.md) as the automation prompt.
+3. Name your automation and paste [dependency-major-upgrade-planner.md](/Users/adamchmara/projects/ai-agent-automations/automations/dependency-major-upgrade-planner/dependency-major-upgrade-planner.md) as the automation prompt.
 4. Make sure the runtime can inspect the repository and read official package docs, release notes, and migration guides.
 5. Add Linear access only if you want the run to create issues instead of producing a report.
 6. Set the schedule or run manually and save the automation.

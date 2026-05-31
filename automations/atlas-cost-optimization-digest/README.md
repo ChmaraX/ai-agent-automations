@@ -48,7 +48,7 @@ sequenceDiagram
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [atlas-cost-optimization-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/atlas-cost-optimization-digest/atlas-cost-optimization-digest.md) as the prompt.
+2. Name your automation and paste [atlas-cost-optimization-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/atlas-cost-optimization-digest/atlas-cost-optimization-digest.md) as the prompt.
 3. Add MongoDB MCP with Atlas API credentials in read-only mode.
 4. If MCP does not expose the backup, archive, billing, or search detail you need, also make the Atlas CLI available.
 5. Set the Atlas project in the prompt, save the automation, and start with a weekly schedule.
@@ -56,7 +56,7 @@ sequenceDiagram
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [atlas-cost-optimization-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/atlas-cost-optimization-digest/atlas-cost-optimization-digest.md) as the prompt.
+2. Name your automation and paste [atlas-cost-optimization-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/atlas-cost-optimization-digest/atlas-cost-optimization-digest.md) as the prompt.
 3. Install the official MongoDB plugin for Codex or configure the MongoDB MCP Server manually.
 4. If you need backup, archive, process-metric, or billing detail beyond MCP coverage, make the Atlas CLI available too.
 5. Set the Atlas project in the prompt and save the automation.

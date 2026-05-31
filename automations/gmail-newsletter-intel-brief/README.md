@@ -40,7 +40,7 @@ It can run with no extra configuration. It works best when you later narrow the 
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [gmail-newsletter-intel-brief.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-newsletter-intel-brief/gmail-newsletter-intel-brief.md) as the automation prompt.
+2. Name your automation and paste [gmail-newsletter-intel-brief.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-newsletter-intel-brief/gmail-newsletter-intel-brief.md) as the automation prompt.
 3. Add Google Workspace access through a Workspace MCP server or the `gws` CLI.
 4. Optionally customize the scope or audience notes near the top of the prompt.
 5. Allow memory so the automation can remember confirmed newsletter senders and recurring non-newsletter senders between runs.
@@ -50,7 +50,7 @@ It can run with no extra configuration. It works best when you later narrow the 
 
 1. Set up Gmail access in Codex using a Google Workspace MCP server or the `gws` CLI.
 2. Click `Automation` > `New Automation`.
-3. Name your automation and paste [gmail-newsletter-intel-brief.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-newsletter-intel-brief/gmail-newsletter-intel-brief.md) as the automation prompt.
+3. Name your automation and paste [gmail-newsletter-intel-brief.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-newsletter-intel-brief/gmail-newsletter-intel-brief.md) as the automation prompt.
 4. Optionally customize the scope or audience notes near the top of the prompt.
 5. Let the automation reuse its persistent `memory.md` between runs for sender allow and ignore hints.
 6. Set schedule or run manually and save the automation.

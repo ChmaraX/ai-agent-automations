@@ -27,7 +27,7 @@ It is meant for safe routing, not broad backlog cleanup. When evidence is weak o
 
 ## Setup
 
-Use [linear-triage-router.md](/Users/adamchmara/projects/awesome-agent-automations/automations/linear-triage-router/linear-triage-router.md) as the automation prompt.
+Use [linear-triage-router.md](/Users/adamchmara/projects/ai-agent-automations/automations/linear-triage-router/linear-triage-router.md) as the automation prompt.
 
 ### Cursor Cloud
 

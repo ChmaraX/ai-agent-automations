@@ -52,7 +52,7 @@ Confirm the chosen account can read Gmail, inspect the primary calendar, and cre
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [gmail-meeting-request-draft-assistant.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-meeting-request-draft-assistant/gmail-meeting-request-draft-assistant.md) as the automation prompt.
+2. Name your automation and paste [gmail-meeting-request-draft-assistant.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-meeting-request-draft-assistant/gmail-meeting-request-draft-assistant.md) as the automation prompt.
 3. Add Google Workspace access through a configured Workspace MCP server when available.
 4. If your Cursor runner does not have a suitable Workspace MCP path, make sure `gws` is installed and authenticated in the runner.
 5. Verify the runtime can read Gmail threads, check primary-calendar availability, and create Gmail drafts.
@@ -63,7 +63,7 @@ Confirm the chosen account can read Gmail, inspect the primary calendar, and cre
 1. Enable `gmail@openai-curated` and `google-calendar@openai-curated` from the `Plugins` UI in Codex.
 2. Authenticate both connectors and verify they can read Gmail and Google Calendar.
 3. Click `Automation` > `New Automation`.
-4. Paste [gmail-meeting-request-draft-assistant.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-meeting-request-draft-assistant/gmail-meeting-request-draft-assistant.md) as the automation prompt.
+4. Paste [gmail-meeting-request-draft-assistant.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-meeting-request-draft-assistant/gmail-meeting-request-draft-assistant.md) as the automation prompt.
 5. Keep the first runs draft-only and review the produced rationale before increasing cadence.
 
 ## Claude Code / Codex CLI / Copilot Usage

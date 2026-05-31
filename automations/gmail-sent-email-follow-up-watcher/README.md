@@ -42,7 +42,7 @@ This automation works best when the Gmail scope is explicit and stable, for exam
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [gmail-sent-email-follow-up-watcher.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-sent-email-follow-up-watcher/gmail-sent-email-follow-up-watcher.md) as the automation prompt.
+2. Name your automation and paste [gmail-sent-email-follow-up-watcher.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-sent-email-follow-up-watcher/gmail-sent-email-follow-up-watcher.md) as the automation prompt.
 3. Add Gmail access through a Google Workspace MCP server when available.
 4. If your Cursor runner prefers CLI access, make sure `gws` is installed and authenticated for Gmail reads and Gmail draft creation.
 5. Replace the placeholder values in the smaller required run-configuration block before saving the automation.
@@ -53,7 +53,7 @@ This automation works best when the Gmail scope is explicit and stable, for exam
 1. Enable `gmail@openai-curated` from the `Plugins` UI in Codex, or configure a Google Workspace MCP server with Gmail access.
 2. Authenticate Gmail access and verify the runtime can read sent messages, read threads, and create Gmail drafts.
 3. Click `Automation` > `New Automation`.
-4. Paste [gmail-sent-email-follow-up-watcher.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-sent-email-follow-up-watcher/gmail-sent-email-follow-up-watcher.md) as the automation prompt.
+4. Paste [gmail-sent-email-follow-up-watcher.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-sent-email-follow-up-watcher/gmail-sent-email-follow-up-watcher.md) as the automation prompt.
 5. Replace the placeholder values in the smaller required run-configuration block before saving the automation.
 6. Keep the first runs draft-only and review the produced queue before increasing cadence.
 

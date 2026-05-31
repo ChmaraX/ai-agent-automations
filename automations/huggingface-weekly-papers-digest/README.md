@@ -43,7 +43,7 @@ hf auth login
 
 ## Setup
 
-Use [huggingface-weekly-papers-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/huggingface-weekly-papers-digest/huggingface-weekly-papers-digest.md) as the automation prompt.
+Use [huggingface-weekly-papers-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/huggingface-weekly-papers-digest/huggingface-weekly-papers-digest.md) as the automation prompt.
 
 ### Cursor Cloud
 

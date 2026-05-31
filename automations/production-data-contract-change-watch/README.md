@@ -55,7 +55,7 @@ Keep live reads bounded. If the automation cannot identify one trustworthy live 
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
+2. Name your automation and paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/ai-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
 3. Make sure the runtime can read the current repo and either access MongoDB MCP or execute `mongosh`.
 4. Add targeted test commands only if you want extra validation.
 5. Add git and PR tooling only if you want the optional draft PR path.
@@ -66,7 +66,7 @@ Keep live reads bounded. If the automation cannot identify one trustworthy live 
 1. Make the current repo available in the Codex run environment.
 2. Add MongoDB MCP with read-only access to the production or production-like database you want reviewed, or provide `mongosh` in the environment.
 3. Click `Automation` > `New Automation`.
-4. Paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
+4. Paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/ai-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
 5. Optionally allow targeted test commands if you want the run to confirm nearby validation coverage.
 6. Add git and PR tooling only if you want the narrow repo-fix path.
 7. Set the schedule or run manually and save the automation.

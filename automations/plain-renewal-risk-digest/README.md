@@ -46,7 +46,7 @@ sequenceDiagram
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [plain-renewal-risk-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/plain-renewal-risk-digest/plain-renewal-risk-digest.md) as the automation prompt.
+2. Name your automation and paste [plain-renewal-risk-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/plain-renewal-risk-digest/plain-renewal-risk-digest.md) as the automation prompt.
 3. Add the Plain MCP server at `https://mcp.plain.com/mcp` and complete the OAuth flow.
 4. Optionally add a short workspace note if you want to narrow scope to enterprise, strategic, or renewal-sensitive tenants.
 5. Save the automation.
@@ -60,7 +60,7 @@ sequenceDiagram
   ```
 2. If Stripe is available in your Codex environment, leave it connected so the automation can enrich support-driven risk with subscription and billing context when matching is reliable.
 3. Click `Automation` > `New Automation`.
-4. Name your automation and paste [plain-renewal-risk-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/plain-renewal-risk-digest/plain-renewal-risk-digest.md) as the automation prompt.
+4. Name your automation and paste [plain-renewal-risk-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/plain-renewal-risk-digest/plain-renewal-risk-digest.md) as the automation prompt.
 5. Optionally add a short workspace note if you want to narrow scope to enterprise, strategic, or renewal-sensitive tenants.
 6. Set the schedule or run manually and save the automation.
 

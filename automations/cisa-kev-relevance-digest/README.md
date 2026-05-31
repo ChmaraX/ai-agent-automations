@@ -47,14 +47,14 @@ If the runtime cannot fetch a trustworthy official KEV source, the automation sh
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [cisa-kev-relevance-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/cisa-kev-relevance-digest/cisa-kev-relevance-digest.md) as the automation prompt.
+2. Name your automation and paste [cisa-kev-relevance-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/cisa-kev-relevance-digest/cisa-kev-relevance-digest.md) as the automation prompt.
 3. Make sure the runtime can execute `curl`, `jq`, and `rg`.
 4. Set the schedule or run manually, then save the automation.
 
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [cisa-kev-relevance-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/cisa-kev-relevance-digest/cisa-kev-relevance-digest.md) as the automation prompt.
+2. Name your automation and paste [cisa-kev-relevance-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/cisa-kev-relevance-digest/cisa-kev-relevance-digest.md) as the automation prompt.
 3. Make sure the runtime can execute `curl`, `jq`, and `rg`.
 4. Set the schedule or run manually and save the automation.
 

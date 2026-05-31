@@ -50,7 +50,7 @@ sequenceDiagram
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [atlas-security-posture-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/atlas-security-posture-digest/atlas-security-posture-digest.md) as the automation prompt.
+2. Name your automation and paste [atlas-security-posture-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/atlas-security-posture-digest/atlas-security-posture-digest.md) as the automation prompt.
 3. Add MongoDB MCP with Atlas API credentials in read-only mode.
 4. If MCP does not expose every required surface, also make the Atlas CLI available.
 5. Set the Atlas project in the prompt, save the automation, and run it on a schedule.
@@ -58,7 +58,7 @@ sequenceDiagram
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [atlas-security-posture-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/atlas-security-posture-digest/atlas-security-posture-digest.md) as the automation prompt.
+2. Name your automation and paste [atlas-security-posture-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/atlas-security-posture-digest/atlas-security-posture-digest.md) as the automation prompt.
 3. Install or configure MongoDB MCP with Atlas API credentials in read-only mode.
 4. If you need backup, private-endpoint, or access-history coverage beyond MCP, make the Atlas CLI available too.
 5. Set the Atlas project name in the prompt and save the automation.

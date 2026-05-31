@@ -28,7 +28,7 @@ It looks at a bounded recent window, shortlists only a few notable models, and r
 
 ## Setup
 
-Use [huggingface-model-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/huggingface-model-digest/huggingface-model-digest.md) as the automation prompt.
+Use [huggingface-model-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/huggingface-model-digest/huggingface-model-digest.md) as the automation prompt.
 
 ### Cursor Cloud
 

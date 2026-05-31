@@ -27,7 +27,7 @@ It uses LaunchDarkly to identify cleanup candidates and confirm the served flag 
 
 ## Setup
 
-Use [launchdarkly-feature-flag-cleanup.md](/Users/adamchmara/projects/awesome-agent-automations/automations/launchdarkly-feature-flag-cleanup/launchdarkly-feature-flag-cleanup.md) as the automation prompt.
+Use [launchdarkly-feature-flag-cleanup.md](/Users/adamchmara/projects/ai-agent-automations/automations/launchdarkly-feature-flag-cleanup/launchdarkly-feature-flag-cleanup.md) as the automation prompt.
 
 ### Cursor Cloud
 

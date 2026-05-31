@@ -38,7 +38,7 @@ sequenceDiagram
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [sentry-slack-triage-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/sentry-slack-triage-digest/sentry-slack-triage-digest.md) as the automation prompt.
+2. Name your automation and paste [sentry-slack-triage-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/sentry-slack-triage-digest/sentry-slack-triage-digest.md) as the automation prompt.
 3. Add trigger conditions.
 4. Click `Add tools or MCP` > `MCP server`.
 5. Add the hosted Sentry MCP server at `https://mcp.sentry.dev/mcp` and complete the connection flow.
@@ -56,7 +56,7 @@ sequenceDiagram
   ```
   - CLI alternative: use [`sentry-cli`](#cli-alternative) in the agent environment instead of MCP.
 2. Click `Automation` > `New Automation`.
-3. Name your automation and paste [sentry-slack-triage-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/sentry-slack-triage-digest/sentry-slack-triage-digest.md) as the automation prompt.
+3. Name your automation and paste [sentry-slack-triage-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/sentry-slack-triage-digest/sentry-slack-triage-digest.md) as the automation prompt.
 4. Add Slack posting capability through a connector, Slack tool, bot token, or incoming webhook.
 5. Set schedule or run manually and save the automation.
 

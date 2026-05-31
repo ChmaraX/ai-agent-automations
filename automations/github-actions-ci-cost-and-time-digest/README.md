@@ -30,7 +30,7 @@ It is read-only. Each run shows where CI time is going now, what got slower rece
 
 ## Setup
 
-Use [github-actions-ci-cost-and-time-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-actions-ci-cost-and-time-digest/github-actions-ci-cost-and-time-digest.md) as the automation prompt.
+Use [github-actions-ci-cost-and-time-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/github-actions-ci-cost-and-time-digest/github-actions-ci-cost-and-time-digest.md) as the automation prompt.
 
 ### Cursor Cloud
 

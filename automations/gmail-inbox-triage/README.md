@@ -48,7 +48,7 @@ The automation prefers existing matching Gmail labels when they already fit. Oth
 
 ## Setup
 
-Use [gmail-inbox-triage.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-inbox-triage/gmail-inbox-triage.md) as the automation prompt and enable Gmail plus memory.
+Use [gmail-inbox-triage.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-inbox-triage/gmail-inbox-triage.md) as the automation prompt and enable Gmail plus memory.
 
 ## Useful Inputs
 

@@ -57,7 +57,7 @@ If `dig` is unavailable, the collector should stop instead of guessing.
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [brand-typosquat-monitor.md](/Users/adamchmara/projects/awesome-agent-automations/automations/brand-typosquat-monitor/brand-typosquat-monitor.md) as the automation prompt.
+2. Name your automation and paste [brand-typosquat-monitor.md](/Users/adamchmara/projects/ai-agent-automations/automations/brand-typosquat-monitor/brand-typosquat-monitor.md) as the automation prompt.
 3. Make sure the runtime can execute `python3` and `dig`, and can reach public HTTPS endpoints. `whois` is optional.
 4. Replace the required run-configuration block inside the prompt with the protected brand and canonical domains before saving the automation.
 5. Set the schedule or run manually, then save the automation.
@@ -65,7 +65,7 @@ If `dig` is unavailable, the collector should stop instead of guessing.
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [brand-typosquat-monitor.md](/Users/adamchmara/projects/awesome-agent-automations/automations/brand-typosquat-monitor/brand-typosquat-monitor.md) as the automation prompt.
+2. Name your automation and paste [brand-typosquat-monitor.md](/Users/adamchmara/projects/ai-agent-automations/automations/brand-typosquat-monitor/brand-typosquat-monitor.md) as the automation prompt.
 3. Make sure the runtime can execute `python3` and `dig`, and can reach public HTTPS endpoints. `whois` is optional.
 4. Replace the required run-configuration block inside the prompt before saving the automation.
 5. Set the schedule or run manually and save the automation.
@@ -129,9 +129,9 @@ Keep `Optional high-risk terms` short so the candidate set stays bounded. Add in
 
 ## Files
 
-- Entrypoint: [run_monitor.py](/Users/adamchmara/projects/awesome-agent-automations/automations/brand-typosquat-monitor/run_monitor.py)
-- Collector package: [brand_monitor](/Users/adamchmara/projects/awesome-agent-automations/automations/brand-typosquat-monitor/brand_monitor)
-- Prompt wrapper: [brand-typosquat-monitor.md](/Users/adamchmara/projects/awesome-agent-automations/automations/brand-typosquat-monitor/brand-typosquat-monitor.md)
+- Entrypoint: [run_monitor.py](/Users/adamchmara/projects/ai-agent-automations/automations/brand-typosquat-monitor/run_monitor.py)
+- Collector package: [brand_monitor](/Users/adamchmara/projects/ai-agent-automations/automations/brand-typosquat-monitor/brand_monitor)
+- Prompt wrapper: [brand-typosquat-monitor.md](/Users/adamchmara/projects/ai-agent-automations/automations/brand-typosquat-monitor/brand-typosquat-monitor.md)
 
 ## Docs
 

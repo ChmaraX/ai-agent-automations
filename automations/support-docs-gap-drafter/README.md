@@ -50,7 +50,7 @@ If the support source or docs source is vague, the run should stop instead of gu
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [support-docs-gap-drafter.md](/Users/adamchmara/projects/awesome-agent-automations/automations/support-docs-gap-drafter/support-docs-gap-drafter.md) as the automation prompt.
+2. Name your automation and paste [support-docs-gap-drafter.md](/Users/adamchmara/projects/ai-agent-automations/automations/support-docs-gap-drafter/support-docs-gap-drafter.md) as the automation prompt.
 3. Add the support system you actually use through MCP, a connector, or an approved workspace integration.
 4. Add docs access through the current repo, a connected GitHub or GitLab integration, or a readable published docs site. If site inspection matters, also allow browser or search access.
 5. Replace the required run-configuration block near the top of the prompt before saving the automation.
@@ -61,7 +61,7 @@ If the support source or docs source is vague, the run should stop instead of gu
 1. Connect the support source you actually use.
 2. Make the docs source readable in the runtime through the current repo, a docs repo, or a published docs site.
 3. Click `Automation` > `New Automation`.
-4. Paste [support-docs-gap-drafter.md](/Users/adamchmara/projects/awesome-agent-automations/automations/support-docs-gap-drafter/support-docs-gap-drafter.md) as the automation prompt.
+4. Paste [support-docs-gap-drafter.md](/Users/adamchmara/projects/ai-agent-automations/automations/support-docs-gap-drafter/support-docs-gap-drafter.md) as the automation prompt.
 5. Replace the required run-configuration block before saving the automation.
 6. Keep the first runs in `preview_only` mode. Only switch to `draft_pr_if_writable` after confirming the repo path and voice are correct.
 

@@ -53,7 +53,7 @@ The automation still works in repo-only mode. It should degrade to a narrower re
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [license-compliance-drift-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/license-compliance-drift-digest/license-compliance-drift-digest.md) as the automation prompt.
+2. Name your automation and paste [license-compliance-drift-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/license-compliance-drift-digest/license-compliance-drift-digest.md) as the automation prompt.
 3. Make sure the runtime can read the repository and execute `git` and `rg`.
 4. Optionally provide package-manager, license-tool, GitHub, or Slack access if you want richer evidence or delivery.
 5. Set the schedule or run manually, then save the automation.
@@ -61,7 +61,7 @@ The automation still works in repo-only mode. It should degrade to a narrower re
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [license-compliance-drift-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/license-compliance-drift-digest/license-compliance-drift-digest.md) as the automation prompt.
+2. Name your automation and paste [license-compliance-drift-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/license-compliance-drift-digest/license-compliance-drift-digest.md) as the automation prompt.
 3. Make sure the runtime can inspect the repository and run `git` and `rg`.
 4. Optionally add the GitHub plugin or allow existing package-manager and license tooling in the environment for stronger evidence.
 5. Set the schedule or run manually and save the automation.

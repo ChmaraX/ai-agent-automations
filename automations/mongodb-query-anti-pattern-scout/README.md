@@ -51,7 +51,7 @@ sequenceDiagram
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [mongodb-query-anti-pattern-scout.md](/Users/adamchmara/projects/awesome-agent-automations/automations/mongodb-query-anti-pattern-scout/mongodb-query-anti-pattern-scout.md) as the automation prompt.
+2. Name your automation and paste [mongodb-query-anti-pattern-scout.md](/Users/adamchmara/projects/ai-agent-automations/automations/mongodb-query-anti-pattern-scout/mongodb-query-anti-pattern-scout.md) as the automation prompt.
 3. Add the MongoDB MCP server, or make the Atlas CLI and `mongosh` available in the runtime.
 4. Make sure the runtime can read the current repository or otherwise search the relevant GitHub code.
 5. Fill in the Atlas project and cluster in the prompt, then set the schedule or run manually and save the automation.
@@ -59,7 +59,7 @@ sequenceDiagram
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [mongodb-query-anti-pattern-scout.md](/Users/adamchmara/projects/awesome-agent-automations/automations/mongodb-query-anti-pattern-scout/mongodb-query-anti-pattern-scout.md) as the automation prompt.
+2. Name your automation and paste [mongodb-query-anti-pattern-scout.md](/Users/adamchmara/projects/ai-agent-automations/automations/mongodb-query-anti-pattern-scout/mongodb-query-anti-pattern-scout.md) as the automation prompt.
 3. Install the MongoDB MCP server, or make `atlas` and `mongosh` available in the runtime.
 4. Make sure the environment can read the current repository, or provide GitHub search access if the repo is not present locally.
 5. Fill in the Atlas project and cluster in the prompt, set the schedule or run manually, and save the automation.

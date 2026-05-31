@@ -26,7 +26,7 @@ It summarizes each repo from its description and README intro without adding a c
 
 ## Setup
 
-Use [github-trending-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-trending-digest/github-trending-digest.md) as the automation prompt.
+Use [github-trending-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/github-trending-digest/github-trending-digest.md) as the automation prompt.
 
 ### Cursor Cloud
 

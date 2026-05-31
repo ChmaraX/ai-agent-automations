@@ -49,7 +49,7 @@ Use restricted credentials where possible and keep the workflow read-only.
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [stripe-failed-payment-risk-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/stripe-failed-payment-risk-digest/stripe-failed-payment-risk-digest.md) as the automation prompt.
+2. Name your automation and paste [stripe-failed-payment-risk-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/stripe-failed-payment-risk-digest/stripe-failed-payment-risk-digest.md) as the automation prompt.
 3. Add the official Stripe plugin from the Cursor marketplace and complete the connection flow there.
 4. If you prefer CLI access instead of the plugin, make sure authenticated Stripe CLI reads are available.
 5. Add Slack, GitHub, or email delivery only if you want the digest posted somewhere else.
@@ -67,7 +67,7 @@ codex mcp list
 
 2. If you prefer a key-based local runtime instead of hosted OAuth, run the local Stripe MCP server with a restricted key and add that server to Codex instead of the hosted URL.
 3. Click `Automation` > `New Automation`.
-4. Name your automation and paste [stripe-failed-payment-risk-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/stripe-failed-payment-risk-digest/stripe-failed-payment-risk-digest.md) as the automation prompt.
+4. Name your automation and paste [stripe-failed-payment-risk-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/stripe-failed-payment-risk-digest/stripe-failed-payment-risk-digest.md) as the automation prompt.
 5. Optionally add Slack, GitHub, or email delivery tools, but keep them separate from Stripe auth and start in preview mode.
 6. Set a schedule or run manually and save the automation.
 

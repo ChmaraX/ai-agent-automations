@@ -30,7 +30,7 @@ It is meant for recurring support insight: repeated pain points, confusing workf
 
 ## Setup
 
-Use [plain-customer-voice-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/plain-customer-voice-digest/plain-customer-voice-digest.md) as the automation prompt.
+Use [plain-customer-voice-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/plain-customer-voice-digest/plain-customer-voice-digest.md) as the automation prompt.
 
 ### Cursor Cloud
 

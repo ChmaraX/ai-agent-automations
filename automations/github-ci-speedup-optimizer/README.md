@@ -28,7 +28,7 @@ Each run is intentionally narrow: either a validated improvement, an inconclusiv
 
 ## Setup
 
-Use [github-ci-speedup-optimizer.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-ci-speedup-optimizer/github-ci-speedup-optimizer.md) as the automation prompt.
+Use [github-ci-speedup-optimizer.md](/Users/adamchmara/projects/ai-agent-automations/automations/github-ci-speedup-optimizer/github-ci-speedup-optimizer.md) as the automation prompt.
 
 ### Cursor Cloud
 

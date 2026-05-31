@@ -27,7 +27,7 @@ It prefers real release and PR context over raw commit lists, keeps the output d
 
 ## Setup
 
-Use [github-product-post-drafts.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-product-post-drafts/github-product-post-drafts.md) as the automation prompt.
+Use [github-product-post-drafts.md](/Users/adamchmara/projects/ai-agent-automations/automations/github-product-post-drafts/github-product-post-drafts.md) as the automation prompt.
 
 ### Cursor Cloud
 

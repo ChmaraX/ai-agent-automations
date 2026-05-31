@@ -48,7 +48,7 @@ Use a least-privilege New Relic account or API key. The public MCP server is a p
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [new-relic-cost-and-ingest-hygiene-audit.md](/Users/adamchmara/projects/awesome-agent-automations/automations/new-relic-cost-and-ingest-hygiene-audit/new-relic-cost-and-ingest-hygiene-audit.md) as the automation prompt.
+2. Name your automation and paste [new-relic-cost-and-ingest-hygiene-audit.md](/Users/adamchmara/projects/ai-agent-automations/automations/new-relic-cost-and-ingest-hygiene-audit/new-relic-cost-and-ingest-hygiene-audit.md) as the automation prompt.
 3. Add the New Relic MCP server.
    - US accounts: `https://mcp.newrelic.com/mcp/`
    - EU accounts: `https://mcp.eu.newrelic.com/mcp/`
@@ -58,7 +58,7 @@ Use a least-privilege New Relic account or API key. The public MCP server is a p
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [new-relic-cost-and-ingest-hygiene-audit.md](/Users/adamchmara/projects/awesome-agent-automations/automations/new-relic-cost-and-ingest-hygiene-audit/new-relic-cost-and-ingest-hygiene-audit.md) as the automation prompt.
+2. Name your automation and paste [new-relic-cost-and-ingest-hygiene-audit.md](/Users/adamchmara/projects/ai-agent-automations/automations/new-relic-cost-and-ingest-hygiene-audit/new-relic-cost-and-ingest-hygiene-audit.md) as the automation prompt.
 3. Install the New Relic MCP server or make the official New Relic CLI available in the runtime.
 4. Set the schedule or run manually and save the automation.
 

@@ -29,7 +29,7 @@ Use it when important engineering discussion starts in Slack but the source of t
 
 ## Setup
 
-Use [slack-engineering-signal-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/slack-engineering-signal-digest/slack-engineering-signal-digest.md) as the automation prompt.
+Use [slack-engineering-signal-digest.md](/Users/adamchmara/projects/ai-agent-automations/automations/slack-engineering-signal-digest/slack-engineering-signal-digest.md) as the automation prompt.
 
 ### Cursor Cloud
 

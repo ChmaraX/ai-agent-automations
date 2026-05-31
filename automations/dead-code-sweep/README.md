@@ -71,7 +71,7 @@ For ephemeral runners this is often better than a global install.
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [dead-code-sweep.md](/Users/adamchmara/projects/awesome-agent-automations/automations/dead-code-sweep/dead-code-sweep.md) as the automation prompt.
+2. Name your automation and paste [dead-code-sweep.md](/Users/adamchmara/projects/ai-agent-automations/automations/dead-code-sweep/dead-code-sweep.md) as the automation prompt.
 3. Add trigger conditions.
 4. Add the `Open Pull Request` tool, or let the agent use an existing GitHub CLI or plugin in the environment.
 5. Make sure the runtime can execute `pnpm knip` or your chosen Knip fallback and the validation commands you expect.
@@ -80,7 +80,7 @@ For ephemeral runners this is often better than a global install.
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [dead-code-sweep.md](/Users/adamchmara/projects/awesome-agent-automations/automations/dead-code-sweep/dead-code-sweep.md) as the automation prompt.
+2. Name your automation and paste [dead-code-sweep.md](/Users/adamchmara/projects/ai-agent-automations/automations/dead-code-sweep/dead-code-sweep.md) as the automation prompt.
 3. Set schedule or run manually and save the automation.
 4. Add the GitHub plugin to Codex, or let Codex use an existing GitHub CLI/tool in the agent environment.
 5. Make sure the environment can run `pnpm knip` or your chosen Knip fallback and the validation commands relevant to your repo.

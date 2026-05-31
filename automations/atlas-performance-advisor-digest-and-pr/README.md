@@ -54,7 +54,7 @@ sequenceDiagram
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [atlas-performance-advisor-digest-and-pr.md](/Users/adamchmara/projects/awesome-agent-automations/automations/atlas-performance-advisor-digest-and-pr/atlas-performance-advisor-digest-and-pr.md) as the automation prompt.
+2. Name your automation and paste [atlas-performance-advisor-digest-and-pr.md](/Users/adamchmara/projects/ai-agent-automations/automations/atlas-performance-advisor-digest-and-pr/atlas-performance-advisor-digest-and-pr.md) as the automation prompt.
 3. Make the Atlas CLI available and authenticate it.
 4. Add repository or GitHub search access if you want code correlation.
 5. Add draft PR capability only if you want the write path.
@@ -65,7 +65,7 @@ sequenceDiagram
 1. Make the Atlas CLI available and authenticate it.
 2. Optional: add MongoDB MCP or `mongosh` for database-side corroboration.
 3. Click `Automation` > `New Automation`.
-4. Paste [atlas-performance-advisor-digest-and-pr.md](/Users/adamchmara/projects/awesome-agent-automations/automations/atlas-performance-advisor-digest-and-pr/atlas-performance-advisor-digest-and-pr.md) as the prompt.
+4. Paste [atlas-performance-advisor-digest-and-pr.md](/Users/adamchmara/projects/ai-agent-automations/automations/atlas-performance-advisor-digest-and-pr/atlas-performance-advisor-digest-and-pr.md) as the prompt.
 5. Add GitHub or equivalent PR tooling only if you want the draft PR path.
 6. Complete the run configuration, set the schedule, and save.
 

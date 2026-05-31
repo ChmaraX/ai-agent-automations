@@ -60,7 +60,7 @@ Keep the workflow read-only and use restricted credentials where possible.
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [stripe-cancel-at-period-end-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/stripe-cancel-at-period-end-watch/stripe-cancel-at-period-end-watch.md) as the automation prompt.
+2. Name your automation and paste [stripe-cancel-at-period-end-watch.md](/Users/adamchmara/projects/ai-agent-automations/automations/stripe-cancel-at-period-end-watch/stripe-cancel-at-period-end-watch.md) as the automation prompt.
 3. Make sure Stripe CLI is installed in the runner and authenticated to the intended account before the automation starts.
 4. Add Slack, GitHub, or email delivery only if you want the digest posted somewhere else.
 5. Start with preview-only delivery, then add a daily or twice-weekly schedule.
@@ -77,7 +77,7 @@ stripe get /v1/account
 ```
 
 3. Click `Automation` > `New Automation`.
-4. Paste [stripe-cancel-at-period-end-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/stripe-cancel-at-period-end-watch/stripe-cancel-at-period-end-watch.md) as the automation prompt.
+4. Paste [stripe-cancel-at-period-end-watch.md](/Users/adamchmara/projects/ai-agent-automations/automations/stripe-cancel-at-period-end-watch/stripe-cancel-at-period-end-watch.md) as the automation prompt.
 5. Add delivery tools only if needed, keep them separate from Stripe CLI auth, and start in preview mode.
 6. Set a schedule or run manually.
 

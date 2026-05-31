@@ -69,7 +69,7 @@ Use restricted credentials where possible and keep the workflow read-only.
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [stripe-webhook-health-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/stripe-webhook-health-watch/stripe-webhook-health-watch.md) as the automation prompt.
+2. Name your automation and paste [stripe-webhook-health-watch.md](/Users/adamchmara/projects/ai-agent-automations/automations/stripe-webhook-health-watch/stripe-webhook-health-watch.md) as the automation prompt.
 3. Make sure Stripe CLI is installed in the runner and authenticated for live-mode reads before the automation starts.
 4. Add Slack, GitHub, or email delivery only if you want the digest posted somewhere other than the run output.
 5. Start with preview-only delivery, then move to an hourly, every-6-hours, or daily schedule based on webhook volume.
@@ -86,7 +86,7 @@ stripe events list --live --limit=1
 ```
 
 3. Click `Automation` > `New Automation`.
-4. Paste [stripe-webhook-health-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/stripe-webhook-health-watch/stripe-webhook-health-watch.md) as the automation prompt.
+4. Paste [stripe-webhook-health-watch.md](/Users/adamchmara/projects/ai-agent-automations/automations/stripe-webhook-health-watch/stripe-webhook-health-watch.md) as the automation prompt.
 5. Add delivery tools only if needed, keep them separate from Stripe CLI auth, and start in preview mode.
 6. Set a schedule or run manually.
 

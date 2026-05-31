@@ -30,7 +30,7 @@ Use it when you want TODO comments to become either finished work or clearly tra
 
 ## Setup
 
-Use [todo-linear-sync-and-fix.md](/Users/adamchmara/projects/awesome-agent-automations/automations/todo-linear-sync-and-fix/todo-linear-sync-and-fix.md) as the automation prompt.
+Use [todo-linear-sync-and-fix.md](/Users/adamchmara/projects/ai-agent-automations/automations/todo-linear-sync-and-fix/todo-linear-sync-and-fix.md) as the automation prompt.
 
 ### Cursor Cloud
 

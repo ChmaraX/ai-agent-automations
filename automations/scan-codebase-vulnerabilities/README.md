@@ -22,7 +22,7 @@ It is for exploitable code-path review, not dependency version remediation. If y
 
 ## Setup
 
-Use [scan-codebase-vulnerabilities.md](/Users/adamchmara/projects/awesome-agent-automations/automations/scan-codebase-vulnerabilities/scan-codebase-vulnerabilities.md) as the automation prompt.
+Use [scan-codebase-vulnerabilities.md](/Users/adamchmara/projects/ai-agent-automations/automations/scan-codebase-vulnerabilities/scan-codebase-vulnerabilities.md) as the automation prompt.
 
 ### Cursor Cloud
 

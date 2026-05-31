@@ -46,7 +46,7 @@ The automation works out of the box against the connected Gmail account with bui
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [gmail-billing-organizer.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-billing-organizer/gmail-billing-organizer.md) as the automation prompt.
+2. Name your automation and paste [gmail-billing-organizer.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-billing-organizer/gmail-billing-organizer.md) as the automation prompt.
 3. Add Gmail access for the account you want to scan.
 4. Use the prompt as-is for the connected Gmail inbox.
 5. Start in preview-only mode until the query is reliably catching the right billing mail.
@@ -56,7 +56,7 @@ The automation works out of the box against the connected Gmail account with bui
 
 1. Make sure Codex has access to the target Gmail account through an installed Gmail connector.
 2. Click `Automation` > `New Automation`.
-3. Name your automation and paste [gmail-billing-organizer.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-billing-organizer/gmail-billing-organizer.md) as the automation prompt.
+3. Name your automation and paste [gmail-billing-organizer.md](/Users/adamchmara/projects/ai-agent-automations/automations/gmail-billing-organizer/gmail-billing-organizer.md) as the automation prompt.
 4. Use the prompt as-is for the connected Gmail inbox.
 5. Keep the first runs under review so you can confirm the label choices match what you want in Gmail.
 6. Set the schedule or run manually and save the automation.
