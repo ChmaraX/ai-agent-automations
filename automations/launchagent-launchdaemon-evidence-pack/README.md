@@ -4,9 +4,7 @@
 
 `launchagent-launchdaemon-evidence-pack` inspects readable `launchd` persistence surfaces on one macOS host and produces a concise evidence pack of LaunchAgents and LaunchDaemons that look most worth human review.
 
-It is intentionally narrow and macOS-specific. This automation does not try to perform full host forensics, prove malware, or clean up persistence automatically. It focuses on one useful triage question: "which `launchd` items on this machine deserve a closer look, and why?"
-
-Use it when you want a recurring or on-demand review of macOS persistence artifacts without expanding into a broader local-security audit.
+It is intentionally narrow and macOS-specific. It does not try to perform full host forensics, prove malware, or clean up persistence automatically. Use it when you want a recurring or on-demand review of macOS persistence artifacts without expanding into a broader local-security audit.
 
 ## How It Works
 
@@ -29,30 +27,20 @@ sequenceDiagram
 
 ## When To Use It
 
-Use it when:
+- you want a focused macOS persistence review rather than a full host audit
+- you suspect unusual LaunchAgents or LaunchDaemons and want a compact evidence pack
+- you want a recurring triage pass on one laptop, workstation, or server
 
-- you want a focused macOS persistence review rather than a full host audit;
-- you suspect unusual LaunchAgents or LaunchDaemons and want a compact evidence pack;
-- you want a recurring triage pass on one laptop, workstation, or server.
-
-Do not use it when:
-
-- you need Linux or cross-platform persistence coverage;
-- you need full filesystem triage, incident reconstruction, or malware attribution;
-- you want automatic unloading or cleanup of launchd items.
+Do not use it for Linux coverage, full incident reconstruction, or automatic cleanup of `launchd` items.
 
 ## Prerequisites
 
-- The automation must run on the macOS machine being inspected, or in an environment that can execute local shell commands on that machine.
-- The runtime needs read access to launchd plist paths and readable `launchctl` state.
-- `plutil`, `stat`, `file`, and `strings` are recommended for compact evidence building.
+- The automation must run on the macOS machine being inspected, or in an environment that can execute local shell commands on that machine
+- Read access to launchd plist paths and readable `launchctl` state
+- `plutil`, `stat`, `file`, and `strings` for compact evidence building
+- Optional `osquery` if it is already installed
 
-Optional but useful:
-
-- `osquery` for more structured inventory when it is already installed.
-- readable user-home LaunchAgents directories if user-level persistence matters in your environment.
-
-If the host is not macOS, the automation should stop with a blocked result rather than pretending a cross-platform equivalent exists.
+If the host is not macOS, the automation should stop instead of pretending a cross-platform equivalent exists.
 
 ## Cursor Cloud Usage
 
@@ -95,46 +83,18 @@ If the host is not macOS, the automation should stop with a blocked result rathe
 | Mutation policy | `report only` |
 | Output | `Markdown evidence pack` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer compact metadata and exact file paths over long plist dumps, rank path/ownership/arguments anomalies over generic suspicion, suppress routine Apple and enterprise-agent noise, and treat suspicious persistence as a review signal rather than proof.
 
-- Prefer compact metadata and exact file paths over long plist dumps.
-- Prefer path, ownership, arguments, and load-state anomalies over generic suspicion.
-- Suppress routine Apple and enterprise-agent noise unless a concrete anomaly exists.
-- Treat suspicious persistence as a review signal, not proof of compromise.
-- Stop with a partial or blocked report when the host is not macOS or the core launchd surfaces are unreadable.
+## Prompt Inputs
 
-## Useful Host-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the current host snapshot alone.
-
-Expected agents example:
+Add context only when the host has expected background agents or special review priorities, for example:
 
 ```text
 Expected user and system launch items include Tailscale, corporate endpoint tooling, Docker Desktop, and standard vendor updaters.
-Do not rank them unless the executable path, ownership, or arguments look unusual.
-```
-
-Review focus example:
-
-```text
 Prioritize user-level LaunchAgents, recently changed items, and jobs that execute from user-writable paths.
-```
-
-Noise-control example:
-
-```text
-Do not rank standard Apple launchd entries under /System/Library unless the target file is missing, the load state conflicts with the plist, or another concrete anomaly exists.
-```
-
-Escalation example:
-
-```text
 If you find a suspicious LaunchAgent or LaunchDaemon, include one concrete follow-up file path or launchctl command to inspect next.
 ```
 
-## Limitations
+## Docs
 
-- This automation is limited to macOS `launchd` persistence surfaces.
-- A suspicious plist or target path does not prove execution or malicious intent by itself.
-- Coverage may be partial when user-home directories, target executables, or launchctl state are unreadable.
-- For broader host review, pair it with `local-security-monitor` or a wider persistence-and-privilege workflow.
+- [Codex Automations](https://openai.com/academy/codex-automations)

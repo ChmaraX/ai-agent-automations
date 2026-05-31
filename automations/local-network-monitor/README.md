@@ -28,13 +28,13 @@ sequenceDiagram
 
 ## Prerequisites
 
-- The automation must run on the machine being inspected, or in an environment that can execute local shell commands on that machine.
-- The runtime needs read access to network state and recent system logs.
-- `osquery` is optional but recommended for more consistent cross-platform output, especially for socket, listener, and startup-item views.
+- The automation must run on the machine being inspected, or in an environment that can execute local shell commands on that machine
+- Read access to network state and recent system logs
+- Optional `osquery` for more consistent cross-platform output
 
-### Recommended Host Tooling
+## Optional Host Tooling
 
-For the higher-signal mode of this automation, install `osquery` on the target host.
+Install `osquery` on the target host if you want stronger socket, listener, and startup-item coverage.
 
 macOS example:
 
@@ -50,7 +50,7 @@ sudo apt-get install osquery
 osqueryi --json "select * from os_version;"
 ```
 
-If `osquery` is unavailable, the automation still works, but listener, socket, and startup-context coverage is weaker and more parser-dependent.
+If `osquery` is unavailable, the automation still works, but listener, socket, and startup-context coverage is weaker.
 
 ## Cursor Cloud Usage
 
@@ -81,14 +81,6 @@ If `osquery` is unavailable, the automation still works, but listener, socket, a
 4. For durable Claude-managed automation, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 5. In Codex CLI or Copilot coding-agent environments, schedule this only if the runtime stays attached to the target host between runs.
 
-References:
-
-- [Cursor Automations](https://cursor.com/blog/automations)
-- [Codex Automations](https://openai.com/academy/codex-automations)
-- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-usage)
-- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
-- [Automate work with routines](https://code.claude.com/docs/en/web-scheduled-tasks)
-
 ## Recommended Defaults
 
 | Setting | Default |
@@ -103,44 +95,19 @@ References:
 | Baseline mode | `none unless explicitly provided` |
 | Output | `Markdown report` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer `osquery` when available, do not query logs by default, call out firewall or log visibility gaps explicitly, and keep common developer listeners or routine tunnel churn out of ranked findings unless stronger evidence supports them.
 
-- Prefer `osquery` when available, but do not fail just because it is missing.
-- On macOS, Application Firewall state and `pf` state are different surfaces. If `pfctl` is unreadable without admin or root, return Application Firewall results plus an explicit coverage gap instead of implying full firewall visibility.
-- Do not query logs by default. Only run a tightly targeted log query when a current-state finding already suggests a concrete issue.
-- Every log query should be narrow in both time and intent: a short window, a specific process, subsystem, regex, or error pattern, and a very small candidate set.
-- If firewall state or recent logs are unreadable, return a partial report and call out the coverage gap.
-- Keep common developer listeners, common Apple service listeners, `utun*` tunnel churn, and routine `mDNSResponder` log volume out of ranked findings unless they are new, unexpected, tied to risky ports, or supported by stronger evidence.
-- Keep hardening suggestions tied to observed evidence rather than generic best-practice lists.
+## Prompt Inputs
 
-## Useful Host-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the host snapshot alone.
-
-Scope example:
+Add context only when the host baseline is not obvious, for example:
 
 ```text
 Focus on en0, utun*, and the default route. Treat Docker bridge interfaces as low priority unless they show repeated errors or unexpected listeners.
-```
-
-Baseline example:
-
-```text
 Expected listeners: ssh on 22, Tailscale on 41641/udp, local Postgres on 5432 bound to loopback only.
-Expected wildcard or non-loopback listeners: node on 4000 during development, Docker backend on 8123 and 9000, Spotify local-control ports when Spotify is running.
-Expected remote destinations: github.com, api.github.com, corp VPN gateways, and internal package mirrors.
-Expected tunnel interfaces: utun0-utun7 may appear when VPN, Tailscale, iPhone mirroring, or other network extensions are active.
-```
-
-Noise-control example:
-
-```text
 Do not rank browser or package-manager egress unless it is long-lived, repeatedly failing, or connecting to unexpected countries or networks.
-Do not query logs unless the snapshot shows a concrete issue first. If you do query logs, keep the window to about 10 minutes and inspect at most 10-20 matching lines.
+If you find a new non-loopback listener or repeated connection failures, include one concrete follow-up command to run manually before any system changes.
 ```
 
-Escalation example:
+## Docs
 
-```text
-If you find a new non-loopback listener or repeated connection failures, include one concrete follow-up command to run manually before making any system changes.
-```
+- [Codex Automations](https://openai.com/academy/codex-automations)

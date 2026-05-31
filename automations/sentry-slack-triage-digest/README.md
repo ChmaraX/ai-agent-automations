@@ -46,11 +46,6 @@ sequenceDiagram
 6. Add Slack posting capability through a Slack tool, bot token, or incoming webhook secret.
 7. Click `Create`.
 
-References:
-
-- [Cursor Automations](https://cursor.com/blog/automations)
-- [Sentry MCP](https://mcp.sentry.dev)
-
 ## Codex App Usage
 
 1. Install the hosted Sentry MCP server in Codex:
@@ -64,11 +59,6 @@ References:
 3. Name your automation and paste [sentry-slack-triage-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/sentry-slack-triage-digest/sentry-slack-triage-digest.md) as the automation prompt.
 4. Add Slack posting capability through a connector, Slack tool, bot token, or incoming webhook.
 5. Set schedule or run manually and save the automation.
-
-References:
-
-- [Codex Automations](https://openai.com/academy/codex-automations)
-- [Sentry MCP](https://mcp.sentry.dev)
 
 ## Claude Code Usage
 
@@ -89,19 +79,6 @@ References:
 
 5. For durable Claude-managed automation that survives outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 
-Claude-native automation options:
-
-- `/loop` for repeated runs in the current session
-- `/schedule` for scheduled routines managed by Claude
-- Routines in `claude.ai/code/routines` for durable cloud-hosted automation
-
-References:
-
-- [Claude Code MCP](https://code.claude.com/docs/en/mcp)
-- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-usage)
-- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
-- [Automate work with routines](https://code.claude.com/docs/en/web-scheduled-tasks)
-
 ## CLI Alternative
 
 If you prefer not to use MCP, `sentry-cli` is a strong portable fallback for this automation.
@@ -112,11 +89,6 @@ Install and authenticate it first:
 brew install getsentry/tools/sentry-cli
 sentry-cli login
 ```
-
-If you are not using Homebrew, use the official install guide instead. The generic installer and platform-specific options are documented here:
-
-- [Sentry CLI Installation](https://docs.sentry.dev/cli/installation/)
-- [Sentry CLI Configuration and Authentication](https://docs.sentry.dev/cli/configuration/)
 
 Useful examples:
 
@@ -140,39 +112,22 @@ If you use this path, make sure the agent runtime can authenticate with `sentry-
 | Empty digest mode | `no-post` |
 | Cooldown | `24h per unchanged issue` |
 
-Additional prompt behavior:
+Keep the run conservative: start with preview-only until the Slack destination is trusted, surface existing Linear/Jira/PR links when they exist, and keep the digest short enough to scan in-channel.
 
-- Start with preview-only until the Slack destination is trusted.
-- Prefer linking to existing Linear, Jira, or PR work rather than implying new tickets should be created.
-- Keep the digest short enough to scan in-channel. Link out to Sentry for deeper debugging context.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot reliably infer from Sentry alone.
-
-Scope example:
+Add context only when Sentry state alone is not enough, for example:
 
 ```text
 Organization: acme
 Projects: api, web
 Environments: production
 Channel: #eng-sentry-triage
+If a Sentry issue already links to Linear, Jira, or a GitHub PR, surface that link and treat it as tracked work.
 ```
 
-Redaction example:
+## Docs
 
-```text
-Do not include emails, account IDs, tenant IDs, auth headers, cookies, request bodies, or any tag values that identify a customer. It is safe to include project, release, environment, transaction name, and sanitized URL path.
-```
-
-Existing work example:
-
-```text
-If a Sentry issue already links to Linear, Jira, or a GitHub PR, surface that link in the digest and treat it as tracked work rather than a new backlog candidate.
-```
-
-Priority policy example:
-
-```text
-Rank regressions and escalating production issues above all other signals. If two issues are similar, prefer the one with higher affected-user count over the one with only high event volume.
-```
+- [Sentry MCP](https://mcp.sentry.dev)
+- [Sentry CLI Installation](https://docs.sentry.dev/cli/installation/)
+- [Codex Automations](https://openai.com/academy/codex-automations)

@@ -30,13 +30,13 @@ sequenceDiagram
 
 ## Prerequisites
 
-- The automation must run on the machine being inspected, or in an environment that can execute local shell commands on that machine.
-- The runtime needs read access to local security posture sources, readable config files, and recent system logs.
-- `osquery` is optional but recommended for more consistent cross-platform reads of startup items, scheduled tasks, SSH config, and privileged binaries.
+- The automation must run on the machine being inspected, or in an environment that can execute local shell commands on that machine
+- Read access to local security posture sources, readable config files, and recent system logs
+- Optional `osquery` for more consistent cross-platform reads of startup items, scheduled tasks, SSH config, and privileged binaries
 
-### Recommended Host Tooling
+## Optional Host Tooling
 
-For the higher-signal mode of this automation, install `osquery` on the target host.
+Install `osquery` on the target host if you want stronger surface coverage.
 
 macOS example:
 
@@ -52,7 +52,7 @@ sudo apt-get install osquery
 osqueryi --json "select * from os_version;"
 ```
 
-If `osquery` is unavailable, the automation still works with native commands. Optional local tools such as `lynis` may add supporting evidence, but they are not required and should not replace direct host evidence.
+If `osquery` is unavailable, the automation still works with native commands.
 
 ## Cursor Cloud Usage
 
@@ -83,14 +83,6 @@ If `osquery` is unavailable, the automation still works with native commands. Op
 4. For durable Claude-managed automation, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 5. In Codex CLI or Copilot coding-agent environments, schedule this only if the runtime stays attached to the target host between runs.
 
-References:
-
-- [Cursor Automations](https://cursor.com/blog/automations)
-- [Codex Automations](https://openai.com/academy/codex-automations)
-- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-usage)
-- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
-- [Automate work with routines](https://code.claude.com/docs/en/web-scheduled-tasks)
-
 ## Recommended Defaults
 
 | Setting | Default |
@@ -104,51 +96,19 @@ References:
 | Mutation policy | `report only` |
 | Output | `Markdown report` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer native OS signals over generic checklists, treat `osquery` as optional, keep the ranked findings list short, and call out unreadable core sources as explicit coverage gaps.
 
-- Prefer native OS security signals over generic checklist advice.
-- On macOS, distinguish FileVault state from broader hardware-encryption context when the host exposes both.
-- On Linux, distinguish pending security updates from general outdated packages whenever distro tooling supports that split.
-- Treat `osquery` as an optional normalization layer and `lynis` as optional secondary evidence.
-- Do not expand the default run into SCAP, AIDE, or package-autofix workflows.
-- Keep the ranked findings list short. Prefer at most 5 ranked findings and move routine or expected items into lower-priority observations.
-- Suppress routine macOS Continuity, AirDrop, Spotify, updater, and common enterprise-agent noise unless it is unexpected for the host or clearly actionable.
-- Do not treat a system plist alone as proof that a remote-access service is enabled.
-- Do not claim strong firewall protection unless the host evidence actually covers the relevant firewall state and exceptions.
-- If a core source is unreadable, return a partial report and label the missing visibility explicitly.
-- Keep hardening suggestions tied to observed evidence rather than generic best-practice lists.
+## Prompt Inputs
 
-## Useful Host-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the current host snapshot alone.
-
-Expected-remote-access example:
+Add context only when the host baseline is not obvious, for example:
 
 ```text
 Expected remote-access surfaces: ssh on 22/tcp for this host, no screen sharing, no remote desktop, no AirPlay receiver.
-```
-
-Baseline example:
-
-```text
 Expected startup items include Tailscale, a corporate endpoint agent, and Docker Desktop.
-Expected privileged binaries include standard OS packages only. Flag anything outside /usr, /bin, /sbin, /usr/local, or the package manager's normal install roots.
-```
-
-Package-scope example:
-
-```text
-For Linux update posture, focus on distro-native security updates only. Do not include Homebrew, npm, pip, or language-level package drift in this run.
-```
-
-Noise-control example:
-
-```text
-Treat failed ssh logins from localhost during local testing as low priority unless they are repeated or tied to an unexpected process or service.
-```
-
-Escalation example:
-
-```text
+For Linux update posture, focus on distro-native security updates only.
 If you find a new remote-access service, writable privileged file, or disabled firewall, include one concrete manual verification command before suggesting a hardening step.
 ```
+
+## Docs
+
+- [Codex Automations](https://openai.com/academy/codex-automations)

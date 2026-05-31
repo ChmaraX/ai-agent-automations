@@ -47,11 +47,6 @@ sequenceDiagram
 7. Make sure the runtime can execute the validation commands required for the mapped repository.
 8. Click `Create`.
 
-References:
-
-- [Cursor Automations](https://cursor.com/blog/automations)
-- [Sentry MCP](https://mcp.sentry.dev)
-
 ## Codex App Usage
 
 1. Install the hosted Sentry MCP server in Codex:
@@ -65,11 +60,6 @@ References:
 3. Name your automation and paste [sentry-triage-and-fix.md](/Users/adamchmara/projects/awesome-agent-automations/automations/sentry-triage-and-fix/sentry-triage-and-fix.md) as the automation prompt.
 4. Set schedule or run manually and save the automation.
 5. Add the GitHub plugin to Codex, or let Codex use an existing GitHub CLI/tool in the agent environment.
-
-References:
-
-- [Codex Automations](https://openai.com/academy/codex-automations)
-- [Sentry MCP](https://mcp.sentry.dev)
 
 ## Claude Code Usage
 
@@ -91,19 +81,6 @@ References:
 5. For durable Claude-managed automation that survives outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 6. Make sure the runtime has repository write access and PR creation access if you want automatic draft PRs.
 
-Claude-native automation options:
-
-- `/loop` for repeated runs in the current session
-- `/schedule` for scheduled routines managed by Claude
-- Routines in `claude.ai/code/routines` for durable cloud-hosted automation
-
-References:
-
-- [Claude Code MCP](https://code.claude.com/docs/en/mcp)
-- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-usage)
-- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
-- [Automate work with routines](https://code.claude.com/docs/en/web-scheduled-tasks)
-
 ## CLI Alternative
 
 If you prefer not to use MCP, `sentry-cli` is a strong portable fallback for this automation.
@@ -114,11 +91,6 @@ Install and authenticate it first:
 brew install getsentry/tools/sentry-cli
 sentry-cli login
 ```
-
-If you are not using Homebrew, use the official install guide instead. The generic installer and platform-specific options are documented here:
-
-- [Sentry CLI Installation](https://docs.sentry.dev/cli/installation/)
-- [Sentry CLI Configuration and Authentication](https://docs.sentry.dev/cli/configuration/)
 
 Useful examples:
 
@@ -142,44 +114,22 @@ If you use this path, make sure the agent runtime can authenticate with `sentry-
 | Branch | `fix/sentry-triage-and-fix-YYYY-MM-DD` |
 | Commit message | `fix: address mapped Sentry issue` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer a local evidence-backed fix over speculative cleanup, stop when repository mapping or validation is unclear, and keep every PR as a draft.
 
-- Prefer a local evidence-backed fix over speculative cleanup or broad refactors.
-- Stop when repository mapping, root cause, or validation commands are unclear.
-- Keep the PR draft until a human reviews it.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot reliably infer from Sentry alone.
-
-Scope example:
+Add context only when Sentry state alone is not enough, for example:
 
 ```text
 Organization: acme
 Projects: api, web
 Environments: production
-```
-
-Repository mapping example:
-
-```text
 Map Sentry project `api` to `/workspace/services/api` and project `web` to `/workspace/apps/web`.
+Do not touch auth, billing, migrations, data backfills, or infrastructure code.
 ```
 
-Validation example:
+## Docs
 
-```text
-For api changes run:
-pnpm --filter api test -- --runInBand
-pnpm --filter api exec tsc --noEmit
-
-For web changes run:
-pnpm --filter web test -- --runInBand
-pnpm --filter web exec tsc --noEmit
-```
-
-Guardrails example:
-
-```text
-Do not touch auth, billing, migrations, data backfills, or infrastructure code in this automation. Skip any candidate that requires cross-repository changes.
-```
+- [Sentry MCP](https://mcp.sentry.dev)
+- [Sentry CLI Installation](https://docs.sentry.dev/cli/installation/)
+- [Codex Automations](https://openai.com/academy/codex-automations)

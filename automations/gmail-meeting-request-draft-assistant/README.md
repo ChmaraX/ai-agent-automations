@@ -4,7 +4,7 @@
 
 `gmail-meeting-request-draft-assistant` reviews a bounded set of recent inbound Gmail threads that appear to ask for a meeting, a meeting move, or a meeting confirmation, checks availability on the user's primary Google Calendar by default, and prepares a reply draft.
 
-It is intentionally draft-first. The automation never sends email, never creates or edits calendar events, and never searches an entire mailbox or all calendars without bounds. When the requested time is workable, it drafts a confirmation or acceptance reply. When it is not, it proposes one or more realistic alternatives and explains the constraint briefly.
+It is draft-first. The automation never sends email, never creates or edits calendar events, and never searches an entire mailbox or all calendars without bounds. When the requested time is workable, it drafts a confirmation or acceptance reply. When it is not, it proposes realistic alternatives and explains the constraint briefly.
 
 Use it when you want a scheduling assistant that works with minimal setup and without giving the agent permission to commit to meetings on its own.
 
@@ -40,26 +40,7 @@ sequenceDiagram
 - Gmail and Google Calendar access.
 - Permission to create Gmail drafts if you want the run to write back into Gmail. If draft creation is unavailable, the automation should return prepared reply text in markdown instead.
 
-Use the simplest path for your runner:
-
-### Codex App Or Codex CLI
-
-- Enable the OpenAI-curated `gmail@openai-curated` and `google-calendar@openai-curated` plugins from the Plugins directory.
-- Authenticate both connectors.
-- Verify the runtime can:
-  - search and read Gmail threads
-  - check Google Calendar availability
-  - create a Gmail draft without sending it
-
-In the Codex app, use the `Plugins` UI.
-In Codex CLI, start `codex` and open `/plugins`.
-
-### Cursor, Claude Code, Or Copilot
-
-- Use a Google Workspace MCP server if your runner supports one well.
-- Otherwise use the `gws` CLI as the portable fallback.
-
-If you use `gws`, install and authenticate it before the automation runs:
+Use a Google Workspace MCP server when available, or `gws` as the fallback. If you use `gws`, verify it before the automation runs:
 
 ```bash
 gws version
@@ -112,12 +93,8 @@ Confirm the chosen account can read Gmail, inspect the primary calendar, and cre
 | Default duration | `30 minutes when the thread does not state one` |
 | Writes | `Gmail draft only` |
 
-Additional prompt behavior:
+Keep the run conservative: use recent inbound inbox mail rather than broad mailbox search, check only the primary calendar, use the thread itself as the source of truth for context, and prefer blocking over guessing when timezone evidence is unclear.
 
-- Start from the built-in bounded defaults.
-- Use recent inbound inbox mail rather than broad mailbox search.
-- Check only the primary calendar.
-- Use the thread itself as the source of truth for attendees and meeting context. Do not search unrelated mail or documents for enrichment.
-- If timezone evidence conflicts or is missing, prefer a blocked or prepared result over a confident-sounding guess.
-- If the requested slot conflicts, propose nearby free blocks that respect the configured working-hours policy.
-- If draft creation is unavailable, still return the exact reply body in markdown so a human can review and paste it.
+## Docs
+
+- [Codex Automations](https://openai.com/academy/codex-automations)

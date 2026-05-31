@@ -41,11 +41,7 @@ sequenceDiagram
 - validation commands for the affected app, package, or service
 - GitHub or equivalent PR tooling if you want automatic draft PR creation
 
-Important New Relic constraints:
-
-- Use a least-privilege New Relic account or API key for this automation.
-- New Relic documents its MCP server as a preview feature.
-- New Relic states that the public preview MCP server must not be used for FedRAMP- or HIPAA-regulated accounts.
+Use a least-privilege New Relic account or API key. The public MCP server is a preview feature and should not be used for FedRAMP- or HIPAA-regulated accounts.
 
 ## Cursor Cloud Usage
 
@@ -57,23 +53,12 @@ Important New Relic constraints:
 4. Complete the OAuth flow or configure your environment for the official CLI alternative.
 5. Set the schedule or run manually, then save the automation.
 
-References:
-
-- [Cursor Automations](https://cursor.com/blog/automations)
-- [Set up New Relic MCP](https://docs.newrelic.com/docs/agentic-ai/mcp/setup/)
-- [New Relic MCP tool reference](https://docs.newrelic.com/docs/agentic-ai/mcp/tool-reference/)
-
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
 2. Name your automation and paste [new-relic-latency-hotspot-fixer.md](/Users/adamchmara/projects/awesome-agent-automations/automations/new-relic-latency-hotspot-fixer/new-relic-latency-hotspot-fixer.md) as the automation prompt.
 3. Install the New Relic MCP server or make the official New Relic CLI available in the runtime.
 4. Set the schedule or run manually and save the automation.
-
-References:
-
-- [Set up New Relic MCP](https://docs.newrelic.com/docs/agentic-ai/mcp/setup/)
-- [Codex Automations](https://openai.com/academy/codex-automations)
 
 ## Claude Code / Codex CLI / Copilot Usage
 
@@ -87,22 +72,12 @@ References:
 
 4. For durable Claude-managed automation, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 
-## CLI Alternative
-
-If you prefer not to use MCP, the official New Relic CLI is a credible alternative for this automation.
-
-Install and authenticate it first:
+## CLI Setup
 
 ```bash
 brew install newrelic-cli
 newrelic profile add
 ```
-
-Relevant official docs:
-
-- [Get started with the New Relic CLI](https://docs.newrelic.com/docs/new-relic-solutions/tutorials/new-relic-cli/)
-- [New Relic CLI reference](https://docs.newrelic.com/docs/new-relic-solutions/build-nr-ui/newrelic-cli/)
-- [New Relic CLI repository](https://github.com/newrelic/newrelic-cli)
 
 ## Recommended Defaults
 
@@ -114,26 +89,11 @@ Relevant official docs:
 | Preferred signal | `p95 or p99 latency with throughput context` |
 | Delivery | `draft PR for high-confidence app-side fixes, otherwise Markdown investigation` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer latency percentiles over averages, stop if the scope is ambiguous, open a draft PR only for localized app-side fixes with clear evidence, and keep instrumentation-only changes report-only unless explicitly allowed.
 
-- Prefer latency percentiles over averages when possible.
-- Stop if the scope is missing, still template-like, or ambiguous.
-- Open a draft PR only for localized app-side fixes with clear evidence and validation.
-- Treat instrumentation-only changes as report-only unless the run configuration explicitly allows them.
-- Prefer current meaningful hotspots over generic performance commentary.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot reliably infer.
-
-Scope example:
-
-```text
-Only inspect the checkout-api service and its POST /v1/checkout transaction group in production.
-If evidence points to any other service, stop and report a scope mismatch.
-```
-
-Strict scope example:
+Add context only when the scope or interpretation policy is not obvious, for example:
 
 ```text
 Allowed New Relic account(s): platform-production
@@ -142,26 +102,10 @@ Environment: production
 Current hotspot window: last 24 hours
 Comparison window: preceding 7 days
 Allow instrumentation-only PRs when no direct fix is justified: no
-
-Do not continue if this run-configuration block is missing or still contains template/example text.
 ```
 
-Priority example:
+## Docs
 
-```text
-Treat user-facing request latency above internal maintenance endpoints when choosing the strongest regression.
-```
-
-Interpretation example:
-
-```text
-If the database and app code both look slow, prefer whichever surface explains the larger share of p95 movement and label the result mixed if the split is unclear.
-```
-
-Observability example:
-
-```text
-Allow instrumentation-only PRs when no direct fix is justified: yes
-
-Only use this when lightweight tracing or segment additions are acceptable review output for the team.
-```
+- [Set up New Relic MCP](https://docs.newrelic.com/docs/agentic-ai/mcp/setup/)
+- [New Relic CLI](https://docs.newrelic.com/docs/new-relic-solutions/tutorials/new-relic-cli/)
+- [Codex Automations](https://openai.com/academy/codex-automations)

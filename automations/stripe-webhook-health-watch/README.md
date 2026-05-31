@@ -6,7 +6,7 @@
 
 Use it when you want a bounded operational report that surfaces production delivery failures, live-mode misconfiguration, and anomaly patterns that suggest Stripe events are being dropped or routed to the wrong destination.
 
-It is intentionally report-only. It does not update webhook endpoints, resend events, or mutate Stripe state. It also avoids noisy inventory output for disabled test tunnels or staging endpoints unless they are actually wired into live traffic.
+It is report-only. It does not update webhook endpoints, resend events, or mutate Stripe state. It also avoids noisy inventory output for test, staging, and local endpoints unless they are part of live traffic.
 
 ## Preview
 
@@ -38,19 +38,13 @@ sequenceDiagram
 
 ## When To Use It
 
-Use it when you want early warning that billing, checkout, entitlement, or dispute workflows may be missing live Stripe events because one or more production webhook consumers are unhealthy or misconfigured.
-
-This automation is a strong fit when:
-
 - Stripe webhooks feed production systems such as fulfillment, billing sync, or entitlement sync
-- the runtime can access live-mode Stripe data cleanly through Stripe CLI
-- your team wants one concise internal health digest rather than raw event inspection
-
-This automation is strongest when you want signal over exhaustiveness. Healthy runs should stay short. Repeated low-severity hygiene issues should be grouped rather than expanded into one incident block per endpoint.
+- you want early warning that live events may be missing or routed incorrectly
+- your team wants one concise health digest rather than raw event inspection
 
 ## Prerequisites
 
-- Stripe CLI must be installed and authenticated against the target account before the automation runs.
+- Stripe CLI installed and authenticated for live-mode reads
 - Verify the runtime with:
 
 ```bash
@@ -59,32 +53,16 @@ stripe webhook_endpoints list --live --limit=1
 stripe events list --live --limit=1
 ```
 
-- If those live-mode read commands succeed, the CLI is authenticated enough for this automation.
-- This automation is intentionally live-only. It should stop instead of falling back to test mode.
-- If Stripe CLI is missing or unauthenticated, the automation should stop and report instead of falling back to MCP, plugins, or ad hoc API calls.
-- Optional separate Slack, GitHub, or email credentials if you want the digest delivered somewhere other than the run output.
+- Optional delivery tooling if you want the digest posted somewhere other than the run output
 
-### Install And Authenticate Stripe CLI
+This automation is intentionally live-only. It should stop instead of falling back to test mode.
 
-Install the CLI with Homebrew:
+## CLI Setup
 
 ```bash
 brew install stripe/stripe-cli/stripe
-```
-
-Authenticate with a browser login:
-
-```bash
 stripe login
 ```
-
-Or configure a specific key for the environment:
-
-```bash
-stripe config --set api-key=<key>
-```
-
-For stricter read-only operation, create a restricted key in the Stripe Dashboard with only the live read permissions this workflow needs and use that key for the CLI environment.
 
 Use restricted credentials where possible and keep the workflow read-only.
 
@@ -136,49 +114,20 @@ stripe events list --live --limit=1
 | Output mode | `internal report-only / preview-first` |
 | Endpoint attribution | `direct when available, otherwise clearly labeled inference` |
 
-Additional prompt behavior:
+Keep the run conservative: stay live-only, ignore non-production endpoints unless they affect live traffic, treat live endpoints that point to staging or localhost as urgent misconfiguration, and never turn this into a resend or endpoint-editing workflow.
 
-- Use Stripe CLI as the only Stripe read surface for this automation.
-- If live-mode access is missing or ambiguous, stop and report instead of dropping into test mode.
-- Do not rely on a `stripe account` command. Verify access with the same read commands the automation actually needs.
-- Ignore disabled local tunnels, dev targets, and staging endpoints unless they are clearly part of live traffic.
-- Treat enabled live endpoints that point to staging, dev, test, localhost, or temporary tunnels as urgent misconfiguration.
-- If endpoint attribution is not directly available from Stripe CLI output, infer cautiously from endpoint subscriptions and keep unresolved patterns at the account level when needed.
-- Group repeated LOW-risk findings such as shared stale API versions into one hygiene finding instead of one row per endpoint.
-- Check production endpoints for config drift, especially mismatched subscribed events, mismatched API version strategy, or one production endpoint receiving a critical event type that peers do not.
-- Keep stale API versions as low-severity hygiene findings unless they overlap with active failures on a production endpoint.
-- Never turn this into a resend, replay, or endpoint-editing workflow.
+## Prompt Inputs
 
-## Useful Stripe-Specific Inputs
-
-Tell the runner anything it cannot safely infer from Stripe alone.
-
-Criticality example:
+Add context only when the automation needs help distinguishing production targets or event criticality, for example:
 
 ```text
-Treat checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.updated, and charge.dispute.created as operationally critical for this account.
+Treat checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.updated, and charge.dispute.created as operationally critical.
+Treat only api.novu.co and eu.api.novu.co as production webhook targets.
+Post only CRITICAL and HIGH findings to Slack.
 ```
 
-Production-domain example:
+## Docs
 
-```text
-Treat only api.novu.co and eu.api.novu.co as production webhook targets. Ignore localhost, ngrok, staging, dev, preview, and sandbox hosts unless they are enabled in live mode.
-```
-
-Delivery example:
-
-```text
-Post only CRITICAL and HIGH findings to Slack. Keep the full endpoint inventory in the run output.
-```
-
-Healthy-run example:
-
-```text
-If there are no delivery failures and only grouped LOW-risk hygiene notes, keep the digest short and lead with one sentence saying that no active production webhook delivery issues were detected.
-```
-
-Redaction example:
-
-```text
-It is safe to include endpoint URLs, event types, Stripe object IDs, account ID, timestamps, and API versions in approved internal delivery. Do not include payment method details, event payload bodies, or full street addresses.
-```
+- [Stripe CLI](https://docs.stripe.com/stripe-cli)
+- [Stripe Webhooks](https://docs.stripe.com/webhooks)
+- [Codex Automations](https://openai.com/academy/codex-automations)

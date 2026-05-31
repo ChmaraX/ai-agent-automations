@@ -4,9 +4,7 @@
 
 `gmail-sent-email-follow-up-watcher` finds sent Gmail threads that still appear unreplied after a configured waiting period, ranks the strongest follow-up candidates, and produces one reviewable queue with optional Gmail draft nudges.
 
-It is intentionally draft-first and mailbox-scoped. The automation never sends email, never scans an entire Google Workspace tenant, and never guesses that a thread is unreplied when the thread evidence is incomplete.
-
-Use it when you want a practical answer to "which sent emails probably need a follow-up now?" without handing autonomous outreach to the automation.
+It is draft-first and mailbox-scoped. The automation never sends email, never scans an entire Google Workspace tenant, and never guesses that a thread is unreplied when the evidence is incomplete. Use it when you want a practical answer to "which sent emails probably need a follow-up now?" without handing autonomous outreach to the automation.
 
 ## How It Works
 
@@ -63,7 +61,7 @@ This automation works best when the Gmail scope is explicit and stable, for exam
 
 1. In Codex CLI, enable `gmail@openai-curated` from `/plugins`, or make a Google Workspace MCP server available.
 2. In Claude Code or Copilot coding-agent environments, prefer a Google Workspace MCP server when available, or `gws` otherwise.
-3. Replace the required run-configuration values at the top of the prompt before using `/loop` or `/schedule`. The automation uses built-in defaults of `5 days` for follow-up delay and a simple importance heuristic that favors concrete asks, external recipients, and older threads. For example:
+3. Replace the required run-configuration values at the top of the prompt before using `/loop` or `/schedule`. The built-in defaults are `5 days` for follow-up delay and a simple importance heuristic that favors concrete asks, external recipients, and older threads. For example:
 
 ```text
 Gmail sent-mail scope: in:sent newer_than:21d -label:automated-followups
@@ -90,38 +88,19 @@ Cooldown and sensitivity rules: no repeated draft if I already followed up in th
 | Output | `Markdown follow-up queue with optional Gmail drafts` |
 | Delivery mode | `draft-first and preview-first` |
 
-Additional prompt behavior:
+Keep the run conservative: start from the explicit sent-mail scope, use Gmail thread evidence as the source of truth for reply detection, prefer fewer higher-confidence queue items, and stop if the Gmail scope is vague or still placeholder text.
 
-- Start from the required configuration block, not from broad inbox search.
-- Use Gmail thread evidence as the source of truth for reply detection.
-- Use a built-in follow-up delay of `5 days` unless the run context already provides a better bounded policy.
-- Use a built-in importance heuristic that favors concrete asks, external recipients, and older threads.
-- Treat a thread as replied only when someone other than the mailbox owner sent a later message in the thread after the outbound email.
-- Prefer fewer, higher-confidence queue items over a noisy long list.
-- If draft creation is unavailable, still return ready-to-review draft text in markdown.
-- If the Gmail scope is vague, too broad, or still placeholder text, stop with a blocked result instead of guessing.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Replace the required run-configuration block in the prompt with content like this before scheduling runs.
-
-Founder or exec scope example:
+Replace the run-configuration block with something like:
 
 ```text
 Gmail sent-mail scope: in:sent newer_than:21d -category:promotions -label:newsletters
 Cooldown and sensitivity rules: skip recruiting, legal, HR, and threads with any follow-up already sent in the last 5 days
 ```
 
-Sales or customer scope example:
+Add policy only when needed, for example: queue only threads with a concrete ask, decision request, deadline, or scheduling prompt.
 
-```text
-Gmail sent-mail scope: in:sent label:customer-outreach newer_than:30d
-Cooldown and sensitivity rules: no draft if the thread already has a newer manual follow-up from me or if the account is marked sensitive
-```
+## Docs
 
-Strict queue example:
-
-```text
-Only queue a thread when the original email contains a concrete ask, decision request, deadline, or scheduling prompt.
-If a thread is merely conversational and low-stakes, skip it instead of forcing a follow-up.
-```
+- [Codex Automations](https://openai.com/academy/codex-automations)

@@ -2,11 +2,9 @@
 
 ## Overview
 
-`gmail-inbox-triage` is a short Gmail cleanup automation with a fixed opinionated policy.
+`gmail-inbox-triage` is a short Gmail cleanup automation with a fixed policy.
 
-It looks only at new unread inbox mail, assigns one semantic label, archives low-value categories by default, keeps high-risk categories in inbox, and returns a short summary only for messages that still need attention.
-
-This is not a reply bot and not a delete workflow.
+It looks only at new unread inbox mail, assigns one semantic label, archives low-value categories by default, keeps high-risk categories in the inbox, and returns a short summary only for messages that still need attention.
 
 ## Policy
 
@@ -29,7 +27,7 @@ Default archive behavior:
 - conditional archive: `Shipment`, `Event`, some low-value `Account` or `Work` notifications
 - keep by default: `Security`, `Invoice`, `Personal`, `Other`
 
-The automation prefers existing matching Gmail labels when they already fit. Otherwise it creates only from the fixed set above.
+The automation prefers existing matching Gmail labels when they already fit. Otherwise it creates labels only from the fixed set above.
 
 ## How It Works
 
@@ -44,29 +42,25 @@ The automation prefers existing matching Gmail labels when they already fit. Oth
 
 ## Prerequisites
 
-- Gmail access through a supported connector, a Google Workspace MCP server, or the `gws` CLI.
-- Permission to apply labels, archive messages, and optionally mark archived messages read.
+- Gmail access through a supported connector, Google Workspace MCP server, or the `gws` CLI
+- Permission to apply labels and archive messages
+- Optional memory support for better run-to-run continuity
 
-Memory is optional but strongly recommended.
+## Setup
 
-## Codex / Cursor / CLI Usage
+Use [gmail-inbox-triage.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-inbox-triage/gmail-inbox-triage.md) as the automation prompt and enable Gmail plus memory.
 
-Use [gmail-inbox-triage.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-inbox-triage/gmail-inbox-triage.md) as the automation prompt and enable Gmail plus Memory.
+## Useful Inputs
 
-Useful overrides:
+Example scope override:
 
 ```text
 Gmail scope override: label:inbox is:unread newer_than:14d -category:promotions
+```
+
+Example protected labels:
+
+```text
 Protected labels or senders: VIP, Important, customer, finance, family
 Mark archived messages read: false
 ```
-
-## Why This Shape
-
-This automation is intentionally opinionated:
-
-- labels describe what the email is
-- actions decide what to do with it
-- archive is native Gmail archive, not a label
-- only low-value categories are auto-archived
-- the report is short and focused on exceptions

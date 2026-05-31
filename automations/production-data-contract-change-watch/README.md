@@ -2,24 +2,24 @@
 
 ## Overview
 
-`production-data-contract-change-watch` compares live MongoDB document shapes against the contracts implied by the current repository's API handlers, background jobs, and frontend data consumers, then returns one ranked drift report and, when the fix is unusually narrow, one draft PR.
+`production-data-contract-change-watch` compares live MongoDB document shapes against the contracts implied by the current repository and returns a ranked drift report. If one fix is unusually narrow and clearly code-side, it can also open one draft PR.
 
-It is report-first and database-read-only. The useful output is still a short contract drift report with affected collections, code paths, evidence, and test ideas. A draft PR is allowed only for one localized code-side compatibility fix such as parser hardening, validation tightening, or a narrowly targeted regression test. It must never mutate database state, run a backfill, or invent a migration plan. When the workspace is writable, it can also persist a companion static HTML artifact for easier drift review.
+It is report-first and database-read-only. The output should highlight affected collections, code paths, evidence, and test ideas, not become a full schema inventory. It must never mutate database state, run a backfill, or invent a migration plan. When the workspace is writable, it can also save a static HTML report.
 
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)
 
-Use it when you want a recurring answer to a concrete question such as "does production data still match what the code now expects?" rather than a generic schema inventory.
+Use it when you want a recurring answer to "does production data still match what the code expects?" rather than a generic schema dump.
 
 ## How It Works
 
 1. Resolves the current repository and one production or production-like MongoDB data source.
-2. Searches the repo for contract surfaces tied to persistence boundaries such as validators, model definitions, parsers, serializers, and code paths that read or write Mongo-backed documents.
-3. Builds a bounded list of collections worth reviewing first, based on real code usage rather than scanning everything equally.
-4. Uses MongoDB schema inspection or bounded document sampling to compare live shapes against the contracts the code appears to rely on.
-5. Ranks only the mismatches that look materially risky, then returns one concise drift report with evidence, affected code paths, likely producers, and concrete test ideas.
-6. If exactly one finding maps to a narrow code-side fix in the current repository, implements the smallest safe patch, validates it locally, and opens a draft PR.
+2. Searches the repo for contract surfaces such as validators, parsers, serializers, model definitions, and data-access boundaries.
+3. Prioritizes collections that matter to current code paths instead of scanning everything equally.
+4. Uses bounded schema inspection or sampling to compare live shapes against code expectations.
+5. Ranks only the mismatches that look materially risky and returns affected code paths, likely producers, and test ideas.
+6. Opens a draft PR only if one finding maps to a narrow code-side compatibility or validation fix.
 
 ```mermaid
 sequenceDiagram
@@ -38,53 +38,27 @@ sequenceDiagram
 
 ## When To Use It
 
-- schema-affecting changes have landed and you want a production-reality check
-- mobile, desktop, or old web clients may still write legacy document shapes
-- background jobs or integrations may be producing inconsistent records
-- a migration was partial, interrupted, or intentionally long-lived
-- API handlers or frontend readers assume fields that production data may not consistently contain
-- you want test ideas grounded in live drift instead of hypothetical edge cases
-- you want one small code-side compatibility or validation fix when the evidence is strong enough
+- schema-affecting changes landed and you want a production-reality check
+- legacy clients, jobs, or integrations may still write older shapes
+- readers or validators may assume fields that production data does not always contain
+- you want test ideas or one small code-side fix grounded in live drift evidence
 
 ## Prerequisites
 
-- repository read access and a runtime that can inspect the current repo with `git` and `rg`
-- read-only access to one production or production-like MongoDB database, preferably through MongoDB MCP or a read-only `mongosh` profile
-- optional targeted test commands if you want the automation to strengthen a finding with existing repo validation
-- repository write access plus git and PR tooling if you want draft PR creation
+- Repository read access and a runtime that can inspect the current repo with `git` and `rg`
+- Read-only access to one production or production-like MongoDB database through MongoDB MCP or `mongosh`
+- Optional targeted test commands if you want the run to confirm a finding with existing validation
+- Repository write access plus git and PR tooling if you want the optional draft PR path
 
-The automation should degrade to `partial` only when some collections or code paths are unreadable. If it cannot identify one trustworthy live data source for the repo, it should stop with `Status: blocked` rather than guessing.
-
-### MongoDB Setup
-
-Preferred setup for repeated runs:
-
-1. Connect MongoDB MCP to the cluster or replica set you want inspected.
-2. Use read-only credentials scoped to the target database.
-3. Prefer a replica, analytics node, or other approved read path when production policy requires it.
-4. Make sure the runtime can inspect collections, read bounded schema statistics, and run small read-only sample queries.
-
-True CLI alternative:
-
-1. Install `mongosh` in the runner environment.
-2. Provide a read-only connection string or profile.
-3. Verify that the runner can connect and read metadata before scheduling the automation.
-
-Example connectivity check:
-
-```bash
-mongosh "$MONGODB_URI" --eval 'db.runCommand({ ping: 1 })'
-```
-
-The automation should keep all live reads bounded. It should not run unbounded collection scans or export whole documents into the model context.
+Keep live reads bounded. If the automation cannot identify one trustworthy live data source for the repo, it should stop instead of guessing.
 
 ## Cursor Cloud Usage
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
 2. Name your automation and paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
 3. Make sure the runtime can read the current repo and either access MongoDB MCP or execute `mongosh`.
-4. If you want stronger confidence, also make the repository's targeted test commands available in the runtime.
-5. Add git and PR tooling if you want the automation to open a draft PR when one code-side fix is clearly justified.
+4. Add targeted test commands only if you want extra validation.
+5. Add git and PR tooling only if you want the optional draft PR path.
 6. Set the schedule or run manually, then save the automation.
 
 ## Codex App Usage
@@ -93,8 +67,8 @@ The automation should keep all live reads bounded. It should not run unbounded c
 2. Add MongoDB MCP with read-only access to the production or production-like database you want reviewed, or provide `mongosh` in the environment.
 3. Click `Automation` > `New Automation`.
 4. Paste [production-data-contract-change-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/production-data-contract-change-watch/production-data-contract-change-watch.md) as the automation prompt.
-5. Optionally allow existing targeted test commands for the repo if you want the run to confirm nearby validation coverage.
-6. Add git and PR tooling if you want the narrow repo-fix path.
+5. Optionally allow targeted test commands if you want the run to confirm nearby validation coverage.
+6. Add git and PR tooling only if you want the narrow repo-fix path.
 7. Set the schedule or run manually and save the automation.
 
 ## Claude Code / Codex CLI / Copilot Usage
@@ -102,7 +76,7 @@ The automation should keep all live reads bounded. It should not run unbounded c
 1. Start the agent in the repository you want reviewed.
 2. Make one live MongoDB read path available through MongoDB MCP or `mongosh`.
 3. Keep the runtime read-only for database access and bounded for collection inspection.
-4. Add git, targeted validation commands, and PR tooling if you want the automation to open a draft PR when a localized code-side fix qualifies.
+4. Add git, targeted validation commands, and PR tooling only if you want the draft PR path.
 5. For repeated checks in an open Claude Code session, use `/loop`, for example:
 
 ```text
@@ -125,68 +99,21 @@ The automation should keep all live reads bounded. It should not run unbounded c
 | Repo write path | `at most one narrow code-side fix` |
 | Output | `Markdown drift report, optional static HTML artifact, plus optional draft PR` |
 
-Additional prompt behavior:
+Keep the interpretation conservative: prefer validators and real parser code over loose type hints, separate confirmed drift from tolerated legacy shapes, and never include full-document dumps or secrets in the report.
 
-- Prefer collections that are touched by current handlers, jobs, and frontend readers over audit, event-log, cache, and session collections.
-- Treat runtime validators and explicit parser code as stronger contract signals than loose TypeScript interfaces alone.
-- Separate `confirmed drift` from `compatibility risk`, `tolerated legacy shape`, and `unknown due to limited evidence`.
-- Down-rank one-off anomalies unless even a single bad document would break a critical path.
-- Prefer evidence from current code and live data over old migration comments or stale docs.
-- Never include raw full-document dumps, secrets, tokens, email addresses, or long identifiers in the report.
-- If a useful baseline such as an ongoing migration, feature flag, or backward-compatibility shim exists, mention it and lower the risk level when appropriate.
-- Only open a PR for parser, validator, compatibility, or targeted test changes. Never for backfills, migrations, data cleanup, or schema-definition work that depends on production writes.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the repo and live data alone.
-
-Database scope example:
+Add context only when the repo or data source has non-obvious boundaries, for example:
 
 ```text
 Use the app-prod cluster and the app database only.
-If both primary and analytics replicas are visible, prefer analytics for read-only inspection.
-```
-
-Collection priority example:
-
-```text
 Prioritize users, organizations, subscriptions, invoices, and job_runs.
-Ignore analytics events, session stores, audit trails, and cache collections unless current code changes directly touched them.
-```
-
-Contract-authority example:
-
-```text
-Treat src/contracts/, src/routes/, and shared zod schemas as authoritative over older interface-only types.
-Treat frontend fallback rendering as weaker evidence than API request and response validation.
-```
-
-Legacy-shape example:
-
-```text
-The legacy field customerIdString is tolerated during the mobile 4.x rollout.
-Do not rank it unless current server code has already removed that compatibility path.
-```
-
-Validation example:
-
-```text
-If a finding maps cleanly to an existing test target, prefer:
-pnpm --filter api test -- src/contracts
-pnpm --filter worker test -- src/jobs
-pnpm --filter web test -- src/lib/data
-```
-
-Draft PR example:
-
-```text
-Only open a draft PR when one finding maps to a localized parser, validation, compatibility, or targeted test change inside the current repo.
+Treat src/contracts/, src/routes/, and shared zod schemas as more authoritative than older interface-only types.
 Do not open a PR for anything that would require data repair, multi-service rollout, or schema migration planning.
 ```
 
-## Limitations
+## Docs
 
-- This automation is strongest when the repo has explicit validators, parsers, or well-defined persistence boundaries.
-- Bounded sampling can miss extremely rare drift, so absence of findings is not a formal proof of uniform data quality.
-- Intentional multi-version compatibility windows can look risky without operator context, so repo-specific notes improve ranking quality.
-- It can identify likely contract drift and test ideas, and sometimes one narrow code-side fix, but it does not replace migration plans, backfills, or deeper data-quality programs.
+- [MongoDB MCP Server](https://www.mongodb.com/docs/mcp-server/)
+- [mongosh](https://www.mongodb.com/docs/mongodb-shell/)
+- [Codex Automations](https://openai.com/academy/codex-automations)

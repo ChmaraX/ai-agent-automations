@@ -2,15 +2,15 @@
 
 ## Overview
 
-`license-compliance-drift-digest` inspects the current repository's dependency and package metadata surface, compares it against the best available baseline and any local license policy, and produces a ranked read-only digest of the changes that are most likely to matter to legal, security, or platform reviewers.
+`license-compliance-drift-digest` inspects the current repository's dependency and package metadata surface, compares it against the best available baseline and any local license policy, and produces a ranked read-only digest of the changes most likely to matter.
 
-It is intentionally triage-first. The goal is not to fail on every license warning or dump raw scanner noise. The useful output is a short report that distinguishes real review items from routine dependency churn. When the workspace is writable, it can also persist a companion static HTML artifact for reviewer-friendly scanning.
+It is triage-first. The goal is not to fail on every license warning or dump raw scanner noise. The useful output is a short report that distinguishes real review items from routine dependency churn. When the workspace is writable, it can also save a static HTML report.
 
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)
 
-Use it when you want a recurring answer to a concrete question such as "did anything in this repo's dependency or distribution surface change in a way that needs compliance review?" rather than a generic license inventory export.
+Use it when you want a recurring answer to "did anything in this repo's dependency or distribution surface change in a way that needs compliance review?" rather than a generic license inventory.
 
 ## How It Works
 
@@ -37,27 +37,18 @@ sequenceDiagram
 
 ## When To Use It
 
-Use it when:
-
-- you want a weekly or release-adjacent compliance digest for the current repository;
-- you want dependency and license changes ranked by business relevance, not just listed;
-- you want the runner to use repository evidence such as manifests, lockfiles, Dockerfiles, or policy files before escalating a change;
-- you want a safer first pass than a hard-fail gate on every unknown or copyleft string.
+- you want a weekly or release-adjacent compliance digest for the current repository
+- you want dependency and license changes ranked by business relevance, not just listed
+- you want repository evidence used before escalating a change
+- you want a safer first pass than a hard-fail gate on every unknown or copyleft string
 
 ## Prerequisites
 
-- The runtime should have repository read access and `git` available for baseline comparison.
-- `rg` is strongly recommended for bounded repository inspection.
-- Package-manager or license-tool access is optional but useful for stronger inventory quality.
+- Repository read access with `git` available for baseline comparison
+- `rg` for bounded repository inspection
+- Optional package-manager, license-tool, or GitHub access if you want stronger inventory quality
 
-Helpful optional tools include:
-
-- package-manager CLIs such as `npm`, `pnpm`, `yarn`, `pip`, `poetry`, `uv`, `go`, `cargo`, `mvn`, `gradle`, `bundle`, or `docker`
-- license and dependency tools such as `license-checker`, `licensee`, `pip-licenses`, `cargo-deny`, `go-licenses`, `syft`, or `scancode-toolkit`
-- GitHub access through the GitHub plugin or `gh` for dependency graph or metadata enrichment
-- Slack or an equivalent messaging connector if you want to forward the digest after the run
-
-The automation still works in repo-only mode when those enrichers are unavailable. It should degrade to a narrower report rather than guessing.
+The automation still works in repo-only mode. It should degrade to a narrower report rather than guessing.
 
 ## Cursor Cloud Usage
 
@@ -99,56 +90,19 @@ The automation still works in repo-only mode when those enrichers are unavailabl
 | Output | `Markdown digest with optional static HTML artifact` |
 | Writes | `none` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer direct dependency and runtime-path changes over dev-only churn, treat unknown license signals as review items rather than automatic violations, and say clearly when the run is baseline-limited.
 
-- Prefer direct dependency and runtime-path changes over dev-only churn.
-- Prefer clear evidence from lockfiles, manifests, and repository packaging surfaces over registry-only guesses.
-- Treat unknown or missing license signals as review items, not automatic violations.
-- Treat dual-license ambiguity as a review item only when the repository evidence suggests real usage or distribution relevance.
-- Use repository evidence to infer whether the software is distributed, containerized, published as a library, or likely internal-only, and say when that inference is uncertain.
-- If a trustworthy comparison baseline is unavailable, still produce a current-state digest and say that the run is baseline-limited.
-- If no meaningful compliance drift is found, return a short no-material-drift summary rather than padding the report.
+## Prompt Inputs
 
-## Useful Repo-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the repository alone.
-
-Policy example:
+Add context only when policy or scope cannot be inferred cleanly from the repo, for example:
 
 ```text
-Use LICENSE_POLICY.md and .github/dependency-review-config.yml as the authoritative allow or deny policy.
-Treat permissive licenses as normally allowed, weak copyleft as review, and strong copyleft as escalation unless already approved.
-```
-
-Scope example:
-
-```text
+Use LICENSE_POLICY.md and .github/dependency-review-config.yml as the authoritative policy.
 Focus on production services and publishable packages.
-Ignore docs examples, internal playgrounds, sample apps, generated lockfiles under fixtures, and archived packages.
-```
-
-Distribution-context example:
-
-```text
+Ignore docs examples, internal playgrounds, sample apps, fixture lockfiles, and archived packages.
 Treat this repository as distributed customer software, not an internal-only service.
-Container images, desktop bundles, and shipped SDKs should outrank internal CI tooling.
 ```
 
-Vendored-code example:
+## Docs
 
-```text
-Flag vendored directories, copied third-party source, or embedded assets only when provenance, license text, or upstream source links are unclear.
-```
-
-Notification example:
-
-```text
-If a chat connector is available, prepare a short summary suitable for Slack after the full report, but keep the main output as the detailed Markdown digest.
-```
-
-## Limitations
-
-- This automation is not a substitute for formal legal review, full SBOM governance, or organization-wide compliance tooling.
-- It is weaker when the repository lacks lockfiles, clear manifests, or an internal license policy.
-- Package registry metadata can be incomplete or inconsistent across ecosystems, so repository evidence should stay primary.
-- It can rank likely review items, but it cannot by itself determine final distribution obligations, exception approvals, or contractual licensing constraints.
+- [Codex Automations](https://openai.com/academy/codex-automations)

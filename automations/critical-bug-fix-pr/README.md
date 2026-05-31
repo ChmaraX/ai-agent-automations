@@ -4,7 +4,7 @@
 
 `critical-bug-fix-pr` reviews a bounded set of recent high-risk code changes in the current repository, proves at most one critical correctness bug, implements the smallest safe fix, validates it locally, and opens a draft PR only when the result is narrow and trustworthy.
 
-It is intentionally not a generic code-review bot. The automation is for catching severe regressions that should result in real code changes, not for producing broad speculative findings or noisy low-severity fixes.
+It is not a generic code-review bot. The automation is for catching severe regressions that should result in real code changes, not for producing broad speculative findings or noisy low-severity fixes.
 
 ## How It Works
 
@@ -35,14 +35,9 @@ sequenceDiagram
 
 ## When To Use It
 
-Use it when you want one small draft PR that addresses a severe bug introduced by a recent meaningful code change.
-
-This automation works best when the repository already has:
-
-- a clear default branch and readable git history
-- established test or validation conventions
-- narrow validation commands for the affected package, service, or app
-- GitHub or equivalent PR tooling for draft PR creation
+- you want one small draft PR that addresses a severe bug introduced by a recent meaningful code change
+- the repository has a clear default branch and readable git history
+- the repository has narrow validation commands for the affected area
 
 ## Prerequisites
 
@@ -50,16 +45,6 @@ This automation works best when the repository already has:
 - repository write access if you want the automation to apply a fix
 - GitHub or equivalent PR tooling if you want automatic draft PR creation
 - runnable validation commands for the affected surface
-
-## Good Repository Fit
-
-The strongest fit is a repo where the automation can infer:
-
-- the default branch
-- recent production-code changes
-- production-code include and exclude paths, or clear workspace boundaries
-- nearby test conventions
-- a narrow validation path for the changed area
 
 Monorepos are supported when one risky change maps cleanly to one workspace or service. If a candidate fix would require broad multi-workspace coordination, cross-repository edits, migrations, or production data repair, the automation should stop instead of guessing.
 
@@ -91,12 +76,6 @@ Monorepos are supported when one risky change maps cleanly to one workspace or s
 
 4. For durable Claude-managed automation that survives outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 
-Claude-native automation options:
-
-- `/loop` for repeated runs in the current session
-- `/schedule` for scheduled routines managed by Claude
-- Routines in `claude.ai/code/routines` for durable cloud-hosted automation
-
 ## Recommended Defaults
 
 | Setting | Default |
@@ -109,72 +88,22 @@ Claude-native automation options:
 | Branch | `fix/critical-bug-fix-pr-YYYY-MM-DD` |
 | Commit message | `fix: patch critical regression` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer no PR over a speculative fix, prefer one narrow fix over broader cleanup, skip candidates that already have an obvious fix in flight, and keep every PR as a draft.
 
-- Prefer no PR over a speculative or weakly validated fix.
-- Prefer one narrow fix over broader cleanup.
-- Prefer default-branch merged changes over branch-local in-flight work.
-- Skip candidates that already appear to have an obvious fix in flight.
-- Stop when the impact is not truly critical, the trigger scenario is unclear, or the fix requires risky coordination.
-- Keep the PR draft until a human reviews it.
+## Prompt Inputs
 
-## Suggested Scheduling
-
-The safest starting pattern is:
-
-- manual runs after risky merges
-- daily weekday schedule on the default branch
-- strict draft-only PR policy
-
-If you run it on a schedule, keep repo instructions explicit about the validation commands and sensitive areas the automation must skip so it does not guess across the whole codebase.
-
-## Useful Repo-Specific Inputs
-
-Tell the runner anything it cannot reliably infer from the repo.
-
-Validation example:
+Add context only when the repo conventions are not obvious, for example:
 
 ```text
 For validation, prefer:
 pnpm --filter api test -- src/auth/session.test.ts
 pnpm --filter worker test -- src/jobs/retry-queue.test.ts
 pytest tests/billing/test_invoice_write_path.py
-```
 
-Guardrails example:
-
-```text
-Do not touch billing, auth, migrations, infrastructure, or data-repair scripts in this automation.
+Do not touch billing, auth, migrations, infrastructure, or data-repair scripts.
 Skip any candidate that requires more than one service or workspace to validate.
-Skip fixes that require new dependencies or schema changes.
 ```
 
-Priority example:
+## Docs
 
-```text
-Prioritize write paths, permission checks, background jobs, parsing, serialization, and shared API handlers.
-Prefer recent bug-fix or refactor commits over routine dependency or formatting changes.
-```
-
-Production scope example:
-
-```text
-Treat these as production code:
-apps/api/src/**
-apps/web/src/**
-packages/domain/**
-
-Ignore by default:
-**/*.test.*
-docs/**
-scripts/**
-fixtures/**
-generated/**
-infra/**
-```
-
-Notification example:
-
-```text
-If a chat connector is available, send a short message after opening the draft PR with the bug fixed, the affected area, validation result, and the PR link.
-```
+- [Codex Automations](https://openai.com/academy/codex-automations)

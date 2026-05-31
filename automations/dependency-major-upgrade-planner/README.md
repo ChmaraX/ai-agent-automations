@@ -19,10 +19,7 @@ It is planning-focused, not code-changing. Each run stays bounded, prefers offic
 
 ## When To Use It
 
-Use it when you want a recurring shortlist of major dependency upgrades that are worth planning, not a bot that edits manifests or opens dependency PRs automatically.
-
-It works best when:
-
+- you want a recurring shortlist of major dependency upgrades that are worth planning
 - the repository has standard manifests and lockfiles
 - the dependencies in scope publish usable migration docs or release notes
 - the team tracks upgrade work in Linear
@@ -88,62 +85,20 @@ It works best when:
 | Duplicate handling | `search Linear first using title pattern, dedupe key, and label; skip equivalent open work` |
 | Fallback mode | `report-only when evidence or writes are blocked` |
 
-Additional guidance:
+Keep the run conservative: prefer framework, runtime, and build-critical packages over low-impact tooling, use official migration docs to justify the work, and keep created Linear issues concrete and dedupe-friendly.
 
-- Prefer framework, runtime, and build-critical packages over low-impact tooling when choosing the final shortlist.
-- Use package-manager or registry data only to discover candidates. Use official migration docs to justify the work.
-- Keep Linear issues concrete. The useful output is a migration plan with named repo surfaces and validation ideas, not a vague reminder that a package is outdated.
-- Use a stable issue title and body identity so repeated runs can detect existing work reliably.
-- If the repository is a monorepo, keep the analysis bounded to the active workspaces and the most central shared dependencies instead of scanning every package exhaustively.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot reliably infer from the repository alone.
-
-Priority example:
+Add context only when priority or scope cannot be inferred cleanly, for example:
 
 ```text
 Prioritize framework, runtime, database, auth, API client, and build-tool majors ahead of testing or lint-only packages.
-Ignore dev-only packages unless they block the current upgrade roadmap.
-```
-
-Scope example:
-
-```text
 Focus on the web and api workspaces.
 Ignore internal playgrounds, example apps, and archived packages.
+Create Linear issues only when official migration guidance exists and at least two repo-specific action items can be named.
 ```
 
-Linear issue policy example:
+## Docs
 
-```text
-Create Linear issues only when the package has official migration guidance and at least two repo-specific action items can be named from local evidence.
-If a package is clearly important but the migration path is still ambiguous, keep it in Prepared But Not Created.
-Before creating a new issue, search for an open issue with the same package, target major, or dedupe key.
-```
-
-Issue body example:
-
-```text
-Use this structure in the Linear issue body:
-- Repository: <repo or workspace scope>
-- Workspace: <workspace name or none>
-- Package: <dependency name>
-- Current version: <current version>
-- Target version: <target version>
-- Dedupe key: <repo-or-workspace-scope>::<package>::<target-major>
-- Current -> target version
-- Why now
-- Likely affected repo surfaces
-- Concrete migration steps
-- Validation plan
-- Risks and blockers
-- Official source links
-```
-
-Issue naming and labels example:
-
-```text
-Title: Major upgrade: react 18 -> 19
-Label: dependency-major-upgrade
-```
+- [Linear MCP](https://mcp.linear.app/mcp)
+- [Codex Automations](https://openai.com/academy/codex-automations)

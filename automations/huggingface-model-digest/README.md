@@ -4,67 +4,55 @@
 
 `huggingface-model-digest` turns recent public Hugging Face activity into one short Markdown digest.
 
-It looks at a bounded recent window, shortlists only a few notable models, and reads model-card intro context before summarizing.
-
-Use it when you want signal from the Hugging Face ecosystem without turning the Hub into a raw newest-upload feed.
+It looks at a bounded recent window, shortlists only a few notable models, and reads model-card intro context before summarizing. The goal is signal, not a raw newest-upload feed.
 
 ## How It Works
 
-1. Search a recent Hugging Face window.
-2. Build a bounded candidate pool of recent or newly-rising models.
-3. Use lightweight signals such as recency, likes, downloads, and card completeness to decide which items are worth deeper review.
-4. Read each shortlisted model card or `README.md` intro before writing a summary.
-5. Return one concise digest with short human-readable writeups, plus compact supporting signals and confidence.
+1. Searches a recent Hugging Face window.
+2. Builds a bounded candidate pool of recent or newly-rising models.
+3. Uses lightweight signals such as recency, likes, downloads, and card completeness to shortlist candidates.
+4. Reads each shortlisted model card or `README.md` intro before writing the digest.
+5. Returns concise per-model summaries with compact supporting signals and confidence.
 
-```mermaid
-sequenceDiagram
-    participant Agent
-    participant HF as Hugging Face Hub
+## When To Use It
 
-    Agent->>HF: Search recent public models
-    HF-->>Agent: Candidate models and metadata
-    Agent->>HF: Read shortlisted model cards
-    HF-->>Agent: Model card intro context
-    Note over Agent: Report-only, no downloads, no Hub writes
-```
+- You want a quick digest of notable recent models on the Hub.
+- You want model-card-backed summaries rather than a popularity list.
+- You want a compact report, not a broad ecosystem scan.
 
 ## Prerequisites
 
-- Access to public Hugging Face Hub metadata through the official MCP server or the official `hf` CLI
+- Access to public Hugging Face metadata through MCP or the `hf` CLI
 - Ability to read model-card intro text or repository `README.md`
+- Optional authentication if your environment needs higher limits
 
-Public discovery can work without authentication. If your environment needs higher rate limits or private access later, authenticate with Hugging Face first.
+## Setup
 
-## Cursor Cloud Usage
+Use [huggingface-model-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/huggingface-model-digest/huggingface-model-digest.md) as the automation prompt.
+
+### Cursor Cloud
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [huggingface-model-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/huggingface-model-digest/huggingface-model-digest.md) as the automation prompt.
-3. Add Hugging Face access through one of these paths:
-   - MCP: connect the official Hugging Face MCP server in the automation runtime.
-   - CLI: make sure the runtime has `hf` available, for example by installing `huggingface_hub`, and authenticate with `hf auth login` if needed.
-4. Make sure the runtime can read public Hugging Face pages for model cards.
-5. Set the schedule or run manually, then save the automation.
+2. Create a new automation and paste the prompt.
+3. Add Hugging Face access through MCP or make `hf` available.
+4. Authenticate if needed and save the automation.
 
-## Codex App Usage
+### Codex App
 
-1. Set up Hugging Face access in Codex using one of these paths:
-   - MCP: add the official Hugging Face MCP server to Codex and complete authentication if your setup requires it.
-   - CLI: make sure `hf` is installed in the runtime, for example with `python -m pip install -U huggingface_hub`, then run `hf auth login` if you need authenticated access.
-2. Click `Automation` > `New Automation`.
-3. Name your automation and paste [huggingface-model-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/huggingface-model-digest/huggingface-model-digest.md) as the automation prompt.
-4. Set schedule or run manually and save the automation.
+1. Make sure the runtime has Hugging Face access through MCP or `hf`.
+2. Click `Automation` > `New Automation` and paste the prompt.
+3. Authenticate if needed and save the automation.
 
-## Claude Code Usage
+### Claude Code
 
-1. Add the official Hugging Face MCP server to Claude Code if you want MCP-backed runs, or make `hf` available in the runtime with `python -m pip install -U huggingface_hub`.
-2. Authenticate with Hugging Face if you need higher-rate or private access. Public discovery can stay unauthenticated.
-3. For repeated checks in an open Claude Code session, use `/loop`, for example:
+1. Add Hugging Face MCP or make `hf` available.
+2. For repeated runs in one session, use:
 
 ```text
 /loop mondays at 9am Follow the instructions in automations/huggingface-model-digest/huggingface-model-digest.md
 ```
 
-4. For durable Claude-managed automation outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
+3. For durable automation, use `/schedule` or a Routine.
 
 ## Recommended Defaults
 
@@ -77,31 +65,23 @@ Public discovery can work without authentication. If your environment needs high
 | Output | `Markdown digest` |
 | Delivery mode | `report-only` |
 
-Additional prompt behavior:
+Prefer fewer well-supported picks over padded coverage, treat likes and downloads as ranking clues rather than proof, and skip items with thin or unreadable cards.
 
-- Prefer fewer well-supported picks over padded coverage.
-- Use model-card intros as the descriptive source of truth.
-- Treat likes, downloads, and recency as ranking clues, not as a substitute for reading the cards.
-- Skip or downgrade items with empty, unreadable, or obviously thin cards.
-- Write short per-model paragraphs that lead with what the model is and what is distinctive, then tuck metadata into compact support lines.
+## Useful Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the public Hub alone.
-
-Scope example:
+Example scope:
 
 ```text
 Keep the default weekly window, but limit discovery to multimodal and agents-related models.
 ```
 
-Audience example:
+Example audience:
 
 ```text
 Write the digest for product-minded engineers. Keep it concrete and explain why each model matters in practice.
 ```
 
-Noise control example:
+Example noise control:
 
 ```text
 Down-rank obvious repackagings, mirrors, and quantization-only reposts unless the model card explains a meaningful new use case.

@@ -2,9 +2,9 @@
 
 ## Overview
 
-`gmail-billing-organizer` scans the connected Gmail account by default for invoices, receipts, renewal notices, and payment confirmations, then turns the matches into one clean billing digest plus a ledger-friendly list while also applying simple Gmail labels to confident matches.
+`gmail-billing-organizer` scans the connected Gmail account for invoices, receipts, renewal notices, and payment confirmations, then turns the matches into one clean billing digest plus a ledger-friendly list while applying simple Gmail labels to confident matches.
 
-Use it when you want your billing email easier to review in Gmail without forwarding messages, renaming files, or introducing heavy mailbox automation. It is aimed at regular users first: personal subscriptions, app-store charges, online purchases, renewal notices, and lightweight expense tracking. The default behavior is digest-first, with narrow Gmail label writes only for confident classifications. When the workspace is writable, it can also persist a companion static HTML artifact alongside the Markdown and CSV outputs.
+Use it when you want billing email easier to review in Gmail without forwarding messages, renaming files, or building heavier mailbox automation. The default behavior is digest-first, with narrow Gmail label writes only for confident classifications. When the workspace is writable, it can also save HTML, Markdown, and CSV artifacts.
 
 ## Preview
 
@@ -38,7 +38,7 @@ sequenceDiagram
 
 - Gmail access through a supported connector in the automation runner.
 - Permission to read message metadata, body text, and attachment presence in the connected Gmail account.
-- Read access to message metadata, body text, and attachment presence. Text extraction from PDFs is helpful but not required.
+- Text extraction from PDFs is helpful but not required.
 - Approval to surface vendor names, invoice amounts, due dates, and similar billing metadata in the chosen output destination.
 
 The automation works out of the box against the connected Gmail account with built-in search defaults and simple Gmail labels.
@@ -60,14 +60,6 @@ The automation works out of the box against the connected Gmail account with bui
 4. Use the prompt as-is for the connected Gmail inbox.
 5. Keep the first runs under review so you can confirm the label choices match what you want in Gmail.
 6. Set the schedule or run manually and save the automation.
-
-If the runtime has workspace write access, the automation can also persist companion artifacts under:
-
-```text
-.automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.md
-.automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.html
-.automation-state/gmail-billing-organizer/reports/<YYYY-MM-DD>.csv
-```
 
 ## Claude Code / Codex CLI / Copilot Usage
 
@@ -97,52 +89,19 @@ If the runtime has workspace write access, the automation can also persist compa
 | Gmail labels | `apply one simple label per confident match` |
 | Empty-run behavior | `return a short no-new-billing-items result` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer Gmail-native search over broad crawling, create labels only from the built-in set, leave ambiguous fields blank instead of guessing, and use `Needs Review` when classification is materially uncertain.
 
-- Prefer Gmail-native search over broad mailbox crawling.
-- Create missing Gmail labels if needed, but only from the built-in set: `Invoice`, `Receipt`, `Renewal Notice`, `Payment Confirmation`, `Needs Review`.
-- Surface renewals and recurring charges clearly because they are often the highest-value items for personal Gmail cleanup.
-- Treat payment confirmations and finalized receipts differently from invoices that still need review or payment.
-- If an amount, due date, or billing period is ambiguous, leave the field blank and note the uncertainty instead of guessing.
-- Prefer attachment-backed evidence over subject-line inference when they conflict.
-- Apply `Needs Review` instead of a stronger label when classification is materially ambiguous.
-- Skip image-only or password-protected attachments if the runner cannot read them, and report that limitation explicitly.
-- Keep the final output small enough for human triage, not as a full mailbox export.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot safely infer from Gmail content alone.
-
-Mailbox scope example:
+Add context only when the mailbox scope or output policy should be narrower, for example:
 
 ```text
 Use the connected Gmail account, but only review messages in the AP label and inbox.
 Do not search sent mail, drafts, spam, trash, or personal labels.
-```
-
-Query policy example:
-
-```text
-Keep the default 7-day window, but prioritize Gmail results that mention invoice, receipt, renewal, statement, payment confirmation, or attached PDF.
-Exclude newsletters, marketing promotions, travel itineraries, and internal notifications unless they include a real payable document.
-```
-
-Deduplication example:
-
-```text
-If the same vendor sends a reminder for an invoice already captured in the current window, keep the newest message and preserve the original due date when visible.
-```
-
-Redaction example:
-
-```text
-It is safe to include vendor name, invoice number, amount, currency, due date, billing period, payment status, and message permalink in the output.
-Do not include full card numbers, bank account numbers, tax IDs, mailing addresses, or employee personal email content.
-```
-
-CSV example:
-
-```text
+Exclude newsletters, promotions, itineraries, and internal notifications unless they include a real payable document.
 Prefer one row per bill or receipt.
-Use blank values instead of guessed values for missing amount, due date, or billing period fields.
 ```
+
+## Docs
+
+- [Codex Automations](https://openai.com/academy/codex-automations)

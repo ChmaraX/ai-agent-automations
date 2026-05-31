@@ -2,50 +2,55 @@
 
 ## Overview
 
-`github-trending-digest` looks at the GitHub Trending page, reads the top repositories, and turns them into a short digest.
+`github-trending-digest` reads the GitHub Trending page, keeps GitHub's ranking as-is, and turns the top repositories into a short digest.
 
-It keeps GitHub's ranking as-is, then reads each repo's description and README intro to write a short summary.
+It summarizes each repo from its description and README intro without adding a custom ranking layer.
 
 ## How It Works
 
-1. Open the GitHub Trending page for the period you want, usually `weekly`.
-2. Take the top repositories in the order GitHub shows them.
-3. Visit each repo and read the description plus the start of the README.
-4. Write one short TL;DR for each repo.
-5. Return the result as a simple Markdown digest.
+1. Opens the GitHub Trending page for the selected period.
+2. Takes the top repositories in GitHub's order.
+3. Reads each repo description plus the start of the README.
+4. Writes one short TL;DR for each repo.
+5. Returns a simple Markdown digest.
 
 ## When To Use It
 
-Use it when:
+- You want a daily or weekly digest of GitHub Trending.
+- You want short summaries, not just repo names and star counts.
+- You do not want custom ranking or filtering layered on top.
 
-- you want a weekly or daily digest of native GitHub Trending repositories;
-- you want short summaries, not just repo names and star counts;
-- you do not want custom ranking or filtering on top of GitHub Trending.
+## Prerequisites
 
-## Cursor Cloud Usage
+- A runtime that can execute `curl` and reach public GitHub pages
+
+## Setup
+
+Use [github-trending-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-trending-digest/github-trending-digest.md) as the automation prompt.
+
+### Cursor Cloud
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [github-trending-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-trending-digest/github-trending-digest.md) as the automation prompt.
+2. Create a new automation and paste the prompt.
 3. Make sure the runtime can execute `curl`.
-4. Set the schedule or run manually, then save the automation.
+4. Save and schedule the automation.
 
-## Codex App Usage
+### Codex App
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [github-trending-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/github-trending-digest/github-trending-digest.md) as the automation prompt.
-3. Make sure the runtime can execute `curl` to read public GitHub pages.
-4. Set the schedule or run manually and save the automation.
+2. Paste the prompt and make sure the runtime can execute `curl`.
+3. Save the automation.
 
-## Claude Code Usage
+### Claude Code
 
 1. Make sure the runtime can execute `curl` and reach public GitHub pages.
-2. For repeated checks in an open Claude Code session, use `/loop`, for example:
+2. For repeated runs in one session, use:
 
 ```text
 /loop mondays at 9am Follow the instructions in automations/github-trending-digest/github-trending-digest.md
 ```
 
-3. For durable Claude-managed automation that survives outside the current session, use `/schedule` or create a Routine in `claude.ai/code/routines`.
+3. For durable automation, use `/schedule` or a Routine.
 
 ## Recommended Defaults
 
@@ -56,33 +61,19 @@ Use it when:
 | Digest size | `top 10 repositories` |
 | Discovery source | `native GitHub Trending only` |
 | Delivery | `Markdown report` |
-| Browser fallback | `none` |
 
-Additional prompt behavior:
-
-- Keep the ranking exactly as the Trending page presents it.
-- Read repository intro content only as deep as needed to summarize safely.
-- Keep the writing short and direct.
-- Stop with a blocked report if Trending cannot be parsed reliably.
+Keep the ranking exactly as Trending presents it, read only as deep as needed to summarize safely, and stop with a blocked report if Trending cannot be parsed reliably.
 
 ## Useful Inputs
 
-Tell the runner anything it should override from the default weekly all-language slice.
-
-Scope example:
+Example scope:
 
 ```text
 Use the weekly Trending page and limit the digest to the top 8 repositories.
 ```
 
-Language example:
+Example language rule:
 
 ```text
 Use the Rust Trending page for the monthly slice and keep the digest to 12 repositories.
-```
-
-Tone example:
-
-```text
-Write TL;DRs for senior engineers. Keep them neutral, concrete, and free of hype.
 ```

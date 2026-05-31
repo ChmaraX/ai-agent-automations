@@ -4,7 +4,7 @@
 
 `gmail-newsletter-intel-brief` turns recent newsletter-like Gmail messages into one concise periodic intelligence brief.
 
-It is built for newsletter-like Gmail reads, not for broad inbox summarization. By default it first discovers recurring newsletter senders from a bounded recent Gmail window, then reads the current issues from those detected senders, clusters overlapping items into a few themes such as market moves, competitors, product launches, or tooling, removes repetition, and keeps only the highest-signal items with source links.
+It is built for newsletter-like Gmail reads, not for broad inbox summarization. By default it discovers recurring newsletter senders from a bounded recent Gmail window, reads the current issues from those senders, clusters overlapping items into a few themes, removes repetition, and keeps only the highest-signal items with source links.
 
 Use it when you already receive useful newsletters but want one reviewable brief instead of reading each issue separately.
 
@@ -41,18 +41,14 @@ It can run with no extra configuration. It works best when you later narrow the 
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
 2. Name your automation and paste [gmail-newsletter-intel-brief.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-newsletter-intel-brief/gmail-newsletter-intel-brief.md) as the automation prompt.
-3. Add Google Workspace access through one of these paths:
-   - MCP: connect a Google Workspace MCP server that can read Gmail messages and metadata.
-   - CLI: make sure the runtime has `gws` available and authenticated for Gmail reads.
+3. Add Google Workspace access through a Workspace MCP server or the `gws` CLI.
 4. Optionally customize the scope or audience notes near the top of the prompt.
 5. Allow memory so the automation can remember confirmed newsletter senders and recurring non-newsletter senders between runs.
 6. Set the schedule or run manually, then save the automation.
 
 ## Codex App Usage
 
-1. Set up Gmail access in Codex using one of these paths:
-   - MCP: add a Google Workspace MCP server with Gmail read capability.
-   - CLI: make sure `gws` is installed and authenticated in the runtime.
+1. Set up Gmail access in Codex using a Google Workspace MCP server or the `gws` CLI.
 2. Click `Automation` > `New Automation`.
 3. Name your automation and paste [gmail-newsletter-intel-brief.md](/Users/adamchmara/projects/awesome-agent-automations/automations/gmail-newsletter-intel-brief/gmail-newsletter-intel-brief.md) as the automation prompt.
 4. Optionally customize the scope or audience notes near the top of the prompt.
@@ -88,22 +84,11 @@ Output emphasis: keep only items that are new, repeated across sources, or mater
 | Output | `Markdown intelligence brief` |
 | Delivery mode | `report-only` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer recurring-sender detection over one-pass category sampling, use memory to reduce false positives, prefer deduplicated themes over sender-by-sender summaries, and narrow scope rather than expanding into the full inbox when discovery is noisy.
 
-- Start from built-in sender discovery instead of requiring operator setup.
-- Prefer recurring-sender detection over one-pass category sampling.
-- Use the automation memory file to improve future coverage and reduce repeated false positives.
-- Prefer deduplicated themes over newsletter-by-newsletter summaries.
-- Preserve the clearest source links for each kept item.
-- Treat repeated coverage across independent newsletters as a relevance clue, not as proof.
-- If discovery is still too noisy, narrow the scope to a label or sender set rather than expanding into the full inbox.
-- If linked article access is partial, rely on the newsletter text and clearly label the weaker evidence.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-You can run the automation without these inputs. Add them only when you want tighter scope or a different audience.
-
-Scope example:
+Add context only when you want tighter scope or a different audience, for example:
 
 ```text
 Newsletter Gmail scope: label:market-newsletters newer_than:7d
@@ -112,23 +97,6 @@ Audience: founder and product leads
 Output emphasis: prefer concrete launches, funding moves, pricing changes, and tooling announcements
 ```
 
-Sender example:
+## Docs
 
-```text
-Newsletter Gmail scope: from:(ben@example.com or updates@producthunt.com or news@hackernewsletter.com) newer_than:7d
-Topic priorities: developer tools, AI agents, competitor mentions
-Audience: strategy and GTM
-Output emphasis: strip repetition aggressively and keep only links worth opening
-```
-
-Strictness example:
-
-```text
-If multiple newsletters repeat the same story, keep the best source link and mention the repetition only as a supporting signal.
-```
-
-No-signal example:
-
-```text
-If the window has mostly repeated or low-signal items, return a short brief that says so directly instead of padding the output.
-```
+- [Codex Automations](https://openai.com/academy/codex-automations)

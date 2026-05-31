@@ -4,9 +4,7 @@
 
 `shell-history-anomaly-digest` inspects a bounded recent slice of readable shell history on one local machine and produces a concise, evidence-backed digest of unusual or security-relevant command patterns.
 
-It is intentionally narrow. This automation does not try to prove compromise, reconstruct a full incident timeline, or replace broader host forensics. It uses shell history as a triage surface: a fast way to surface suspicious command sequences, history-tampering signals, risky remote-execution flows, or credential-access patterns that deserve a human review.
-
-Use it when you want a recurring answer to a concrete question such as "did anything recently happen in shell history that looks unusual enough to investigate?" rather than a full host security audit.
+It is intentionally narrow. It does not try to prove compromise, reconstruct a full incident timeline, or replace broader host forensics. Use it when you want a recurring answer to "did anything recently happen in shell history that looks unusual enough to investigate?" rather than a full host security audit.
 
 ## How It Works
 
@@ -29,30 +27,20 @@ sequenceDiagram
 
 ## When To Use It
 
-Use it when:
+- you want a daily or on-demand review of recent shell activity on one host
+- you want fast triage for suspicious command patterns without broader host scanning
+- you want the report to distinguish routine admin or developer work from higher-priority review items
 
-- you want a daily or on-demand review of recent shell activity on one host;
-- you want fast triage for suspicious command patterns without broader host scanning;
-- you want the report to distinguish routine admin or developer work from higher-priority review items.
-
-Do not use it when:
-
-- you need a full incident-response timeline;
-- you need filesystem, process, persistence, or network forensics beyond shell history;
-- you want to mutate or clean shell history automatically.
+Do not use it for full incident response, broader host forensics, or automatic history cleanup.
 
 ## Prerequisites
 
-- The automation must run on the machine being inspected, or in an environment that can read that machine's shell history files.
-- The runtime needs read access to local shell history files.
-- Standard shell tools such as `rg`, `awk`, `sed`, and `stat` are useful for bounded parsing and evidence handling. `perl` or `python` fallbacks are also acceptable when shell-tool behavior differs across hosts.
+- The automation must run on the machine being inspected, or in an environment that can read that machine's shell history files
+- Read access to local shell history files
+- Standard shell tools such as `rg`, `awk`, `sed`, and `stat`
+- Optional timestamp-preserving history formats such as extended `zsh` history
 
-Optional but useful:
-
-- `osquery` or other host context tools if you plan to pair this automation with broader local-host review.
-- shell history formats that preserve timestamps, such as extended `zsh` history.
-
-If no readable shell history source exists, the automation should stop with a blocked result rather than guessing from unrelated logs or shell configuration files.
+If no readable shell history source exists, the automation should stop instead of guessing from unrelated logs or config files.
 
 ## Cursor Cloud Usage
 
@@ -95,55 +83,18 @@ If no readable shell history source exists, the automation should stop with a bl
 | Mutation policy | `report only` |
 | Output | `Markdown report` |
 
-Additional prompt behavior:
+Keep the run conservative: prefer sequence-level context over isolated fragments, prefer timestamped history when available, suppress routine admin and developer workflows, and redact obvious secrets or long encoded blobs in the final report.
 
-- Prefer sequence-level context over isolated command fragments.
-- Prefer timestamped history over untimestamped history when both exist.
-- Suppress routine admin and developer workflows unless they participate in a suspicious sequence.
-- Treat history as one signal, not proof of compromise.
-- If no finding is retained, say so directly rather than fabricating a placeholder anomaly.
-- Redact obvious secrets and long encoded blobs in the final report.
-- Stop with a partial or blocked report when readable history is missing or too incomplete to support a trustworthy result.
+## Prompt Inputs
 
-Confidence guidance:
-
-- `high`: timestamped, exact command evidence with sequence context and no major visibility gap
-- `medium`: exact command evidence is present, but timestamps, adjacency, or source coverage are partial
-- `low`: isolated fragment or sparse history visibility makes interpretation uncertain
-
-## Useful Host-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the host snapshot alone.
-
-Expected activity example:
+Add context only when the host’s normal activity would otherwise look suspicious, for example:
 
 ```text
-Expected shell activity includes Docker, kubectl, Terraform, AWS CLI, and SSH administration for this host.
-Treat those as routine unless the sequence includes credential dumping, history tampering, or suspicious download-and-execute behavior.
-```
-
-Lab context example:
-
-```text
-This machine is used for security testing and malware analysis.
-Lower the priority of reverse-shell labs, base64 decoding, and packet-tool commands unless they target unusual local paths or persistence surfaces.
-```
-
-Developer context example:
-
-```text
+Expected shell activity includes Docker, kubectl, Terraform, AWS CLI, and SSH administration.
 This is a development laptop. Routine package-manager, git, build, test, and local database commands should not become ranked findings by themselves.
+If you find history-clearing commands, suspicious SSH key edits, or download-and-execute chains, include one concrete manual follow-up command or file path.
 ```
 
-Escalation example:
+## Docs
 
-```text
-If you find history-clearing commands, suspicious SSH key edits, or remote-execution download chains, include one concrete manual follow-up command or file path to inspect next.
-```
-
-## Limitations
-
-- Shell history is often incomplete, editable, or missing timestamps.
-- A suspicious command in history does not prove it succeeded, and a clean history does not prove the host is clean.
-- This automation is intentionally weaker when commands are truncated, shell history is disabled, or sensitive work happened in subshells, scripts, or other non-history paths.
-- For broader host review, pair it with `local-security-monitor` or a more focused persistence, network, or filesystem workflow.
+- [Codex Automations](https://openai.com/academy/codex-automations)

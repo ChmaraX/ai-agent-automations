@@ -4,138 +4,98 @@
 
 `plain-customer-voice-digest` reviews a bounded set of recent Plain support threads and turns them into one evidence-backed customer voice summary.
 
-Use it when you want a weekly or twice-weekly readout of what customers are actually saying: recurring pain points, bug language, confusing workflows, repeated objections, and the wording worth preserving for product, support, or marketing work.
+It is meant for recurring support insight: repeated pain points, confusing workflows, common objections, and customer phrasing worth preserving.
 
 ## How It Works
 
 1. Reads a bounded slice of recent support threads from Plain.
 2. Expands only the thread and tenant context needed to understand repeated themes.
-3. Clusters the strongest signals into a small number of themes and keeps the output simple enough to scan quickly.
-4. If durable automation memory is available, compares current themes against `memory.md` to mark them as new, recurring, persistent, escalating, or cooling.
-5. Selects representative examples and useful customer phrasing.
-6. Produces one compact digest. If delivery tools are unavailable, it returns the digest as preview output.
-
-```mermaid
-sequenceDiagram
-    participant Agent
-    participant Plain
-
-    Agent->>Plain: Query bounded recent threads
-    Plain-->>Agent: Thread details, labels, tenant context
-    Agent->>Agent: Cluster themes and extract phrasing
-    Note over Agent: Read-only workflow with bounded scope
-```
+3. Clusters the strongest signals into a small number of themes.
+4. If persistent memory is available, compares themes against `memory.md` to mark them as new, recurring, persistent, escalating, or cooling.
+5. Produces one compact digest with representative examples and useful wording.
 
 ## When To Use It
 
-- weekly support insight review
-- product feedback review grounded in real threads
-- support-manager summaries
-- customer-language mining for docs or messaging
+- You want a weekly or twice-weekly support insight summary.
+- Product feedback is scattered across many support threads.
+- You want repeated signals, not one-off anecdotes.
+- You want customer language captured in a form product, support, or marketing can reuse.
 
 ## Prerequisites
 
 - Plain access through the official MCP server
-- A workspace with enough thread volume to produce repeated signals
-- Optional durable automation memory if you want cross-run trend detection
-- Optional Slack or docs tooling only if you want the digest delivered somewhere else
+- Enough thread volume to produce repeated signals
+- Optional persistent memory if you want cross-run trend detection
+- Optional delivery tooling if you want the digest posted elsewhere
 
-## Cursor Cloud Usage
+## Setup
+
+Use [plain-customer-voice-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/plain-customer-voice-digest/plain-customer-voice-digest.md) as the automation prompt.
+
+### Cursor Cloud
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [plain-customer-voice-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/plain-customer-voice-digest/plain-customer-voice-digest.md) as the automation prompt.
-3. Add the Plain MCP server at `https://mcp.plain.com/mcp` and complete the OAuth flow.
-4. Add optional delivery tooling only if you want the digest posted outside the run output.
-5. If the platform supports persistent automation memory, allow the run to reuse `memory.md`.
-6. Save the automation.
+2. Create a new automation and paste the prompt.
+3. Add Plain MCP at `https://mcp.plain.com/mcp` and authenticate.
+4. Optional: add delivery tools or persistent memory support.
+5. Save and schedule the automation.
 
-References:
+### Codex App
 
-- [Plain MCP Server](https://help.plain.com/article/mcp-server)
+1. Add Plain MCP access.
+2. Click `Automation` > `New Automation` and paste the prompt.
+3. Optional: add delivery tools or persistent memory support.
+4. Save the automation.
 
-## Codex App Usage
+### Claude Code
 
-1. Install the Plain MCP server in Codex:
-  ```bash
-  codex mcp add plain -- npx -y mcp-remote https://mcp.plain.com/mcp
-  codex mcp list
-  ```
-  This wrapper matters for Codex runs that use `codex exec` or automations. In testing, the direct streamable HTTP setup with `codex mcp add plain --url https://mcp.plain.com/mcp` did not expose Plain as a callable tool source inside the automation runner, while the `mcp-remote` stdio wrapper did.
-2. Click `Automation` > `New Automation`.
-3. Name your automation and paste [plain-customer-voice-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/plain-customer-voice-digest/plain-customer-voice-digest.md) as the automation prompt.
-4. Add optional delivery tools only if you want the digest sent elsewhere.
-5. If supported by the automation runner, let the automation reuse persistent `memory.md` between runs for trend detection.
-6. Set the schedule or run manually and save the automation.
-
-References:
-
-- [Plain MCP Server](https://help.plain.com/article/mcp-server)
-- [Codex Automations](https://openai.com/academy/codex-automations)
-
-## Claude Code Usage
-
-1. Add the Plain MCP server in Claude Code:
-  ```bash
-  claude mcp add --transport http plain https://mcp.plain.com/mcp
-  claude mcp list
-  ```
-2. Open Claude Code and run `/mcp` to authenticate with Plain.
-3. For repeated checks in an open Claude Code session, use `/loop`, for example:
+1. Add and authenticate Plain MCP.
+2. For repeated runs in one session, use:
 
 ```text
 /loop 1w Follow the instructions in automations/plain-customer-voice-digest/plain-customer-voice-digest.md
 ```
 
-4. For durable Claude-managed automation, use `/schedule` or create a Routine in `claude.ai/code/routines`.
-5. If the runner supports persistent memory files, allow reuse of `memory.md` between runs; otherwise the automation stays stateless and avoids trend claims.
-
-References:
-
-- [Plain MCP Server](https://help.plain.com/article/mcp-server)
-- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
+3. For durable automation, use `/schedule` or a Routine.
 
 ## Recommended Defaults
 
 | Setting | Default |
 | --- | --- |
 | Time window | `last 7 days` |
-| First-pass candidate pool | `up to 50 threads` |
-| Representative examples per theme | `1 to 3` |
+| Candidate pool | `up to 50 threads` |
 | Final theme count | `3 to 5` |
-| Signal status | `new/recurring/persistent/escalating/cooling when memory exists; current-window otherwise` |
-| Empty-run behavior | `report that no repeated themes qualified` |
+| Examples per theme | `1 to 3` |
+| Trend labels | `use memory when available; otherwise current-window only` |
 | Delivery mode | `preview output` |
+| Empty-run behavior | `report that no repeated themes qualified` |
 
-Additional guidance:
+Favor repeated evidence over loud anecdotes, keep excerpts short, and keep `memory.md` limited to compact theme fingerprints rather than raw customer transcripts.
 
-- Favor repeated evidence over one loud anecdote.
-- Prefer themes that imply action, confusion, or risk.
-- Preserve customer wording only in short excerpts.
-- Keep classification logic richer than the visible report. The output should stay readable.
-- Use `memory.md` only for compact theme fingerprints and trend hints, not raw customer transcripts.
-- Keep the digest compact enough for a product or support lead to scan quickly.
+## Useful Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot infer reliably from Plain alone.
-
-Scope example:
+Example scope:
 
 ```text
 Focus on external customer threads only.
 Exclude spam, test tenants, internal dogfooding, and hiring or partnership conversations.
 ```
 
-Theme policy example:
+Example theme policy:
 
 ```text
 Prioritize bugs, confusing setup flows, pricing objections, onboarding friction, and repeated feature gaps.
 Treat one-off billing edge cases as lower priority unless they recur across multiple tenants.
 ```
 
-Delivery example:
+Example delivery rule:
 
 ```text
 If Slack is connected, post the final digest to #support-insights.
 If Slack is not connected, keep the digest in preview output only.
 ```
+
+## Docs
+
+- [Plain MCP Server](https://help.plain.com/article/mcp-server)
+- [Codex Automations](https://openai.com/academy/codex-automations)

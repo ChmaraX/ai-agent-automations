@@ -13,12 +13,12 @@ Use it when you want an operational churn watchlist ranked by period-end urgency
 ## How It Works
 
 1. Verifies Stripe CLI is installed and authenticated against the intended account.
-2. Uses `stripe whoami` plus a scoped `stripe get /v1/account` read to confirm account identity and the intended live or test mode before collecting data.
-3. Uses a supported Stripe CLI list query for subscriptions whose `current_period_end` falls within the next 30 days, then filters `cancel_at_period_end=true` locally.
-4. Pages through that 30-day window when needed, with a conservative page cap so the run stays bounded.
-5. Enriches up to 10 of the highest-priority candidates with recent invoice history so the watchlist can distinguish billing-stress churn from cleaner voluntary churn.
-6. Produces one concise internal digest with ranked accounts, high-value upcoming cancellations, billing-stress cancellations, likely save opportunities, skipped items, and setup gaps.
-7. When the runtime can write files, also maintains a static HTML companion report alongside a Markdown snapshot for visual review.
+2. Confirms account identity and the intended live or test mode with `stripe whoami` and `stripe get /v1/account`.
+3. Lists subscriptions whose `current_period_end` falls within the next 30 days, then filters `cancel_at_period_end=true` locally.
+4. Pages through that window conservatively so the run stays bounded.
+5. Enriches the highest-priority candidates with recent invoice history to separate billing-stress churn from cleaner voluntary churn.
+6. Produces one concise internal digest with ranked accounts, likely save opportunities, skipped items, and setup gaps.
+7. When the runtime can write files, it can also save a static HTML companion report.
 
 ```mermaid
 sequenceDiagram
@@ -37,7 +37,7 @@ sequenceDiagram
 
 ## Prerequisites
 
-- Stripe CLI must be installed and authenticated against the target account before the automation runs.
+- Stripe CLI installed and authenticated against the target account
 - Verify the runtime with:
 
 ```bash
@@ -45,31 +45,14 @@ stripe --version
 stripe whoami
 ```
 
-- Record the account name and ID from `stripe whoami`.
-- If exactly one of `Test mode key` or `Live mode key` is available, use that mode.
-- If both are available, require the run to specify the intended mode instead of guessing.
-- Validate the chosen mode with `stripe get /v1/account` for test or `stripe get /v1/account --live` for live.
-- If Stripe CLI is missing or unauthenticated, the automation should stop and report instead of falling back to MCP or plugin tools.
-- Optional separate Slack, GitHub, or email credentials if you want the digest delivered somewhere other than the run output.
+- One explicit Stripe mode per run if both live and test credentials are available
+- Optional delivery tooling if you want the digest posted somewhere other than the run output
 
-### Install And Authenticate Stripe CLI
-
-Install the CLI with Homebrew:
+## CLI Setup
 
 ```bash
 brew install stripe/stripe-cli/stripe
-```
-
-Authenticate with a browser-based login:
-
-```bash
 stripe login
-```
-
-Or configure a specific key for the environment:
-
-```bash
-stripe config --set api-key=<key>
 ```
 
 Keep the workflow read-only and use restricted credentials where possible.
@@ -79,17 +62,8 @@ Keep the workflow read-only and use restricted credentials where possible.
 1. Open [Cursor Automations](https://cursor.com/automations/new).
 2. Name your automation and paste [stripe-cancel-at-period-end-watch.md](/Users/adamchmara/projects/awesome-agent-automations/automations/stripe-cancel-at-period-end-watch/stripe-cancel-at-period-end-watch.md) as the automation prompt.
 3. Make sure Stripe CLI is installed in the runner and authenticated to the intended account before the automation starts.
-4. Add Slack, GitHub, or email delivery only if you want the digest posted somewhere other than the run output.
+4. Add Slack, GitHub, or email delivery only if you want the digest posted somewhere else.
 5. Start with preview-only delivery, then add a daily or twice-weekly schedule.
-
-Cursor Cloud Automations support `Memory`. You can use it for light continuity across runs, for example to remember which accounts were surfaced recently, whether a cancellation risk is getting stronger, or whether an operator already noted a save opportunity. Treat Memory as optional enrichment, not as required state or a source of truth.
-
-If the runtime has workspace write access, the automation can also persist companion artifacts under:
-
-```text
-.automation-state/stripe-cancel-at-period-end-watch/reports/<YYYY-MM-DD>.md
-.automation-state/stripe-cancel-at-period-end-watch/reports/<YYYY-MM-DD>.html
-```
 
 ## Codex App Usage
 
@@ -119,8 +93,6 @@ stripe get /v1/account
 
 4. If you add Slack or GitHub delivery, start with preview output.
 
-If durable file writes are available, keep the Markdown watchlist as the canonical response and treat the HTML file as a richer internal review artifact.
-
 ## Recommended Defaults
 
 | Setting | Default |
@@ -135,57 +107,20 @@ If durable file writes are available, keep the Markdown watchlist as the canonic
 | Output mode | `internal report-only / preview-first, with optional HTML artifact when writable` |
 | Customer identifiers | `customer name and email allowed for approved internal delivery` |
 
-Additional prompt behavior:
+Keep the run conservative: require one explicit mode per run, filter `cancel_at_period_end=true` locally after the supported period-end query, treat open invoice balance as billing-stress churn, and never turn this into a customer-message or reactivation workflow.
 
-- Use Stripe CLI as the only Stripe read surface for this automation.
-- Use `stripe whoami` as the primary auth and account-identity check.
-- Use `stripe get /v1/account` or `stripe get /v1/account --live` to validate the chosen mode before any subscription or invoice reads.
-- If both test and live keys are present and the run does not explicitly declare the intended mode, stop and report instead of guessing.
-- Do not rely on `--cancel-at-period-end` or subscription search for this field. Stripe does not expose `cancel_at_period_end` as a supported list flag or subscription-search field in this CLI surface.
-- Query the next 30 days of `current_period_end` with supported interval parameters, then filter `cancel_at_period_end=true` locally.
-- If the 30-day window requires more than 10 pages of 100 subscriptions each, stop paging, mark the run partial, and record the truncation.
-- Treat open invoice balance alongside a scheduled cancellation as billing-stress churn, not clean voluntary churn.
-- Use summed `amount_remaining` from invoices as the real balance signal whenever invoice data is available.
-- Keep ARR language explicit when it is only a proxy derived from flat plan amount.
-- If artifact writes are possible, keep Markdown canonical and generate a static HTML companion report rather than a mini web app.
-- Never turn this into a reactivation, discounting, or customer-message automation.
+## Prompt Inputs
 
-## Useful Stripe-Specific Inputs
-
-Tell the runner anything it cannot safely infer from Stripe alone.
-
-No-save example:
+Add context only when the automation should treat some accounts or churn types differently, for example:
 
 ```text
-Do not flag sandbox customers, internal accounts, or legacy low-touch plans as likely save opportunities even if they are scheduled to cancel.
+Do not flag sandbox customers, internal accounts, or legacy low-touch plans as likely save opportunities.
+If a scheduled cancellation also has open invoices, classify it as billing-stress churn.
+If an open invoice materially exceeds prior paid invoices, flag it as a usage spike.
 ```
 
-Billing-stress example:
+## Docs
 
-```text
-If a scheduled cancellation also has one or more open invoices with amount_remaining > 0, classify it as billing-stress churn and prioritize recovery action over generic save outreach.
-```
-
-Usage-spike example:
-
-```text
-If an open invoice materially exceeds prior paid invoices for the same customer, flag it as a usage spike and suggest pricing or integration review.
-```
-
-Redaction example:
-
-```text
-It is safe to include customer name, customer email, country, plan tier, ARR proxy, invoice amounts, and Stripe object IDs in approved internal delivery. Do not include payment method details or full street addresses.
-```
-
-## HTML Report
-
-When artifact writes are available, the HTML file should stay intentionally simple and static. The highest-value additions over Markdown are:
-
-- summary cards for high-value upcoming cancellations, billing-stress churn, and likely save opportunities
-- a clearer visual separation of accounts by days left and churn type
-- a stronger watchlist scanning experience for ARR proxy, plan tier, and cancellation urgency
-- a compact embedded Markdown copy for auditability
-
-The HTML report should not become a client-side dashboard or require extra runtime services.
-The HTML artifact is optional. One practical use is to treat it as a visual companion for downstream delivery, for example by opening it with a browser-capable tool, taking a screenshot, and posting that image to Slack or another internal channel while keeping the Markdown watchlist as the canonical record.
+- [Stripe CLI](https://docs.stripe.com/stripe-cli)
+- [Stripe Subscriptions](https://docs.stripe.com/billing/subscriptions/overview)
+- [Codex Automations](https://openai.com/academy/codex-automations)

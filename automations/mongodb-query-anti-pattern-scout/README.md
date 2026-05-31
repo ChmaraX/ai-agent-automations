@@ -4,7 +4,7 @@
 
 `mongodb-query-anti-pattern-scout` looks for risky MongoDB query usage by combining Atlas performance evidence with repository-level code search.
 
-It is report-first. Each run should tell you which MongoDB query patterns are most likely hurting performance or scalability, which ones are strongly supported by Atlas evidence, and whether exactly one small, behavior-preserving query-code fix in the current repository is safe enough for a draft PR. It never creates indexes, changes Atlas configuration, or edits schema or migration files.
+It is report-first. Each run should tell you which query patterns are most likely hurting performance or scalability, which ones are strongly supported by Atlas evidence, and whether one small behavior-preserving query-code fix is safe enough for a draft PR. It never creates indexes, changes Atlas configuration, or edits schema or migration files.
 
 ## How It Works
 
@@ -56,12 +56,6 @@ sequenceDiagram
 4. Make sure the runtime can read the current repository or otherwise search the relevant GitHub code.
 5. Fill in the Atlas project and cluster in the prompt, then set the schedule or run manually and save the automation.
 
-References:
-
-- [MongoDB MCP Server Overview](https://www.mongodb.com/docs/mcp-server/overview/)
-- [MongoDB MCP Server Tools](https://www.mongodb.com/docs/mcp-server/tools/)
-- [Atlas Performance Advisor](https://www.mongodb.com/docs/atlas/performance-advisor/)
-
 ## Codex App Usage
 
 1. Click `Automation` > `New Automation`.
@@ -69,11 +63,6 @@ References:
 3. Install the MongoDB MCP server, or make `atlas` and `mongosh` available in the runtime.
 4. Make sure the environment can read the current repository, or provide GitHub search access if the repo is not present locally.
 5. Fill in the Atlas project and cluster in the prompt, set the schedule or run manually, and save the automation.
-
-References:
-
-- [Codex Automations](https://openai.com/academy/codex-automations)
-- [MongoDB MCP Server Prerequisites](https://www.mongodb.com/docs/mcp-server/prerequisites/)
 
 ## Claude Code / Codex CLI / Copilot Usage
 
@@ -88,42 +77,13 @@ References:
 
 5. For durable Claude-managed automation, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 
-## CLI Alternative
-
-If you prefer not to use MCP, the official Atlas CLI plus `mongosh` is a credible alternative for this automation.
-
-Install and authenticate them first:
+## CLI Setup
 
 ```bash
 brew install mongodb-atlas-cli
 brew install mongosh
 atlas auth login
 ```
-
-Relevant Atlas CLI command families:
-
-```bash
-atlas performanceAdvisor suggestedIndexes list
-atlas performanceAdvisor slowQueryLogs list
-atlas api performanceAdvisor listDropIndexSuggestions
-atlas api performanceAdvisor listSchemaAdvice
-```
-
-Useful `mongosh` checks:
-
-```javascript
-db.collection.getIndexes()
-db.collection.aggregate([{ $indexStats: {} }])
-db.collection.explain("executionStats").find({...})
-db.collection.explain("executionStats").aggregate([...])
-```
-
-Relevant official docs:
-
-- [Install or Update the Atlas CLI](https://www.mongodb.com/docs/atlas/cli/current/install-atlas-cli/)
-- [atlas auth login](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-auth-login/)
-- [atlas performanceAdvisor](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-performanceAdvisor/)
-- [Install mongosh](https://www.mongodb.com/docs/mongodb-shell/install/)
 
 ## Recommended Defaults
 
@@ -140,59 +100,22 @@ Relevant official docs:
 | Mutation mode | `report-only by default` |
 | PR behavior | `report-only unless the operator explicitly allows draft PRs` |
 
-Additional prompt behavior:
+Keep the run conservative: treat Atlas as evidence of database stress rather than proof of one code cause, downgrade confidence when query fields are redacted or repo ownership is unclear, and keep schema changes, index creation, and migrations out of scope.
 
-- Treat Atlas as the source of truth for observed database stress, not as proof that one specific code path is the only cause.
-- Downgrade confidence when query fields are redacted, explain access is unavailable, or repository ownership is unclear.
-- Treat index recommendations as supporting context, not as automatic code-change instructions.
-- Prefer one defensible anti-pattern report or one safe code fix over a long list of speculative advice.
-- Keep schema changes, index creation, and migration authoring out of scope for this automation.
-- Default to the current repository, all visible namespaces, and a 7 day review window unless the operator narrows the scope.
-- Stay report-only unless the operator explicitly allows a draft PR for query-code fixes.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot safely infer.
-
-Scope example:
+Add context only when Atlas and repo inspection are not enough, for example:
 
 ```text
 Allowed Atlas project(s): checkout-prod
 Allowed Atlas cluster(s): checkout-primary
-```
-
-Namespace example:
-
-```text
-Only inspect namespaces owned by this repository:
-- app.orders
-- app.customers
-- app.sessions
-```
-
-Path example:
-
-```text
+Only inspect namespaces owned by this repository: app.orders, app.customers, app.sessions
 Prioritize services/api, packages/data-access, and db/query-builders.
-Ignore test fixtures, scripts, and generated clients unless Atlas evidence points there.
+Allow draft PR for behavior-preserving query-code fixes only.
 ```
 
-Fix-policy example:
+## Docs
 
-```text
-Allow draft PR for query-code fixes: yes
-
-Only allow behavior-preserving query-code fixes such as:
-- adding a missing projection
-- removing an obvious per-row query loop
-- narrowing an aggregation pipeline earlier when semantics are unchanged
-
-Do not propose or implement index, schema, or migration changes in this automation.
-```
-
-Validation example:
-
-```text
-Run package-level tests for the affected data-access module before opening a draft PR.
-If no targeted validation exists, stay report-only.
-```
+- [MongoDB MCP Server](https://www.mongodb.com/docs/mcp-server/)
+- [Atlas Performance Advisor](https://www.mongodb.com/docs/atlas/performance-advisor/)
+- [Codex Automations](https://openai.com/academy/codex-automations)

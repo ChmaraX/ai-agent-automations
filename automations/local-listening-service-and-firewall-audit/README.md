@@ -2,71 +2,58 @@
 
 ## Overview
 
-`local-listening-service-and-firewall-audit` inspects one macOS or Linux host's inbound exposure surface and produces a plain-language report of what the machine is listening on, what is reachable beyond localhost, and whether the firewall posture looks acceptable.
+`local-listening-service-and-firewall-audit` inspects one macOS or Linux host's inbound exposure surface and produces a plain-language report of what is listening, what is reachable beyond localhost, and whether the firewall posture looks acceptable.
 
-Use it when you want a narrower hardening-oriented view than `local-network-monitor`: what is listening, what is reachable beyond loopback, and whether the local firewall posture looks acceptable. Do not use it for LAN-wide discovery, packet capture, or automatic remediation.
+Use it for host-level hardening review. It does not do LAN-wide discovery, packet capture, or automatic remediation.
 
 ## How It Works
 
-1. Detects the local platform and available read-only tooling, preferring `osquery` for listener and process mapping.
-2. Builds a listener inventory with process ownership, executable path when readable, port, protocol, and bind address.
-3. Reads the local firewall posture from the best native source available on the host.
-4. Ranks only meaningful exposure findings and returns one short human-readable report with a compact technical summary.
+1. Detects the local platform and available read-only tooling, preferring `osquery` when available.
+2. Builds a listener inventory with process ownership, port, protocol, and bind address.
+3. Reads local firewall posture from the best native source available.
+4. Ranks the meaningful exposure findings and returns a short report with a compact technical summary.
 
-```mermaid
-sequenceDiagram
-    participant Agent
-    participant Host
-    participant Report
+## When To Use It
 
-    Agent->>Host: Read listeners and process ownership
-    Agent->>Host: Read firewall posture
-    Agent->>Report: Rank exposure findings and append full listener inventory
-    Note over Agent: No service changes and no firewall changes
-```
+- You want to know what the current machine is exposing inbound.
+- You want a narrower hardening view than `local-network-monitor`.
+- You want a read-only audit before making firewall or service changes.
 
 ## Prerequisites
 
-- The automation must run on the machine being inspected, or in an environment that can execute local shell commands on that machine.
-- The runtime needs read access to local socket state and firewall posture.
-- `osquery` is optional but recommended for cleaner listener and process joins across macOS and Linux.
+- The automation must run on the host being inspected, or in a shell attached to it
+- Read access to local socket state and firewall posture
+- Optional `osquery` for cleaner process and listener mapping
 
-## Cursor Cloud Usage
+## Setup
+
+Use [local-listening-service-and-firewall-audit.md](/Users/adamchmara/projects/awesome-agent-automations/automations/local-listening-service-and-firewall-audit/local-listening-service-and-firewall-audit.md) as the automation prompt.
+
+### Cursor Cloud
 
 1. Open [Cursor Automations](https://cursor.com/automations/new).
-2. Name your automation and paste [local-listening-service-and-firewall-audit.md](/Users/adamchmara/projects/awesome-agent-automations/automations/local-listening-service-and-firewall-audit/local-listening-service-and-firewall-audit.md) as the automation prompt.
-3. Make sure the runner is attached to the host you want to inspect. A generic hosted sandbox will inspect itself, not your workstation or server.
-4. No MCP setup is required. Optionally install `osquery` on the host for more consistent listener and process discovery.
-5. Set the schedule or run manually, then save the automation.
+2. Create a new automation and paste the prompt.
+3. Make sure the runner is attached to the machine you actually want to inspect.
+4. Optional: install `osquery` for more consistent listener output.
+5. Save and schedule the automation.
 
-## Codex App Usage
+### Codex App
 
 1. Click `Automation` > `New Automation`.
-2. Name your automation and paste [local-listening-service-and-firewall-audit.md](/Users/adamchmara/projects/awesome-agent-automations/automations/local-listening-service-and-firewall-audit/local-listening-service-and-firewall-audit.md) as the automation prompt.
-3. Run it only in a Codex environment that has shell access to the machine you want to inspect.
-4. No MCP setup is required. Optionally install `osquery` on the host for more consistent listener inventory output.
-5. Set the schedule or run manually and save the automation.
+2. Paste the prompt and run it only where the environment has shell access to the target host.
+3. Optional: install `osquery`.
+4. Save the automation.
 
-## Claude Code / Codex CLI / Copilot Usage
+### Claude Code
 
-1. No extra MCP setup is required for the core workflow.
-2. Start the agent session on the host you want to inspect, or in a remote shell environment that can read that host's local socket state and firewall posture.
-3. For repeated checks in an open Claude Code session, use `/loop`, for example:
+1. Start the session on the host you want to inspect, or in a shell that can read that host's local state.
+2. For repeated runs in one session, use:
 
 ```text
 /loop 1d Follow the instructions in automations/local-listening-service-and-firewall-audit/local-listening-service-and-firewall-audit.md
 ```
 
-4. For durable Claude-managed automation, use `/schedule` or create a Routine in `claude.ai/code/routines`.
-5. In Codex CLI or Copilot coding-agent environments, schedule this only if the runtime stays attached to the target host between runs.
-
-References:
-
-- [Cursor Automations](https://cursor.com/blog/automations)
-- [Codex Automations](https://openai.com/academy/codex-automations)
-- [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-usage)
-- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
-- [Automate work with routines](https://code.claude.com/docs/en/web-scheduled-tasks)
+3. For durable automation, use `/schedule` or a Routine.
 
 ## Recommended Defaults
 
@@ -79,37 +66,28 @@ References:
 | Allowlist mode | `none unless explicitly provided` |
 | Output | `plain-language Markdown report with compact technical summary` |
 
-Additional prompt behavior:
+If firewall state is partial, return the listener report anyway and call out the gap. Prefer short explanations over large tables and keep exposure language concrete.
 
-- Prefer `osquery` when available, but do not fail just because it is missing.
-- If firewall state is unreadable or partial, return the listener report anyway and call out the posture gap.
-- Keep exposure language concrete. A service can be unexpected without being malicious.
-- Prefer short explanations over large tables. Lead with what matters and keep the detailed listener list compact.
+## Useful Inputs
 
-## Useful Host-Specific Inputs
-
-Tell the runner anything it cannot safely infer from the host snapshot alone.
-
-Expected-service example:
+Example expected-service rule:
 
 ```text
 Expected non-loopback listeners: ssh on 22/tcp, Tailscale on 41641/udp, local file sharing disabled, no VNC, no AirPlay receiver.
 ```
 
-Risk-tolerance example:
+Example risk priority:
 
 ```text
 Treat remote-access services, admin panels, SMB, printer services, and anything bound to 0.0.0.0 as higher priority than developer-only loopback listeners.
 ```
 
-Firewall example:
-
-```text
-If the firewall is enabled but broad allow rules exist, rank them as posture gaps rather than exposure findings unless a specific listener maps to the rule.
-```
-
-Verification example:
+Example verification rule:
 
 ```text
 For any non-loopback listener that is not obviously expected, include one manual verification command before suggesting a hardening change.
 ```
+
+## Docs
+
+- [Codex Automations](https://openai.com/academy/codex-automations)

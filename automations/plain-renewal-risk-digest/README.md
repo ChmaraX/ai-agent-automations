@@ -4,7 +4,7 @@
 
 `plain-renewal-risk-digest` reviews recent Plain support activity for accounts that may be heading toward renewal friction, churn risk, or executive escalation.
 
-Use it when your Plain workspace carries enough tenant or account context to connect support behavior with renewal-sensitive customers. This automation is intentionally stricter than the customer voice digest because false positives are expensive. When the workspace is writable, it can also persist a companion static HTML artifact for watchlist review.
+Use it when your Plain workspace carries enough tenant or account context to connect support behavior with renewal-sensitive customers. It is intentionally stricter than the customer voice digest because false positives are expensive. When the workspace is writable, it can also save a static HTML watchlist report.
 
 ## Preview
 
@@ -51,10 +51,6 @@ sequenceDiagram
 4. Optionally add a short workspace note if you want to narrow scope to enterprise, strategic, or renewal-sensitive tenants.
 5. Save the automation.
 
-References:
-
-- [Plain MCP Server](https://help.plain.com/article/mcp-server)
-
 ## Codex App Usage
 
 1. Install the Plain MCP server in Codex:
@@ -62,17 +58,11 @@ References:
   codex mcp add plain -- npx -y mcp-remote https://mcp.plain.com/mcp
   codex mcp list
   ```
-  This wrapper matters for Codex runs that use `codex exec` or automations. In testing, the direct streamable HTTP setup with `codex mcp add plain --url https://mcp.plain.com/mcp` did not expose Plain as a callable tool source inside the automation runner, while the `mcp-remote` stdio wrapper did.
 2. If Stripe is available in your Codex environment, leave it connected so the automation can enrich support-driven risk with subscription and billing context when matching is reliable.
 3. Click `Automation` > `New Automation`.
 4. Name your automation and paste [plain-renewal-risk-digest.md](/Users/adamchmara/projects/awesome-agent-automations/automations/plain-renewal-risk-digest/plain-renewal-risk-digest.md) as the automation prompt.
 5. Optionally add a short workspace note if you want to narrow scope to enterprise, strategic, or renewal-sensitive tenants.
 6. Set the schedule or run manually and save the automation.
-
-References:
-
-- [Plain MCP Server](https://help.plain.com/article/mcp-server)
-- [Codex Automations](https://openai.com/academy/codex-automations)
 
 ## Claude Code Usage
 
@@ -91,11 +81,6 @@ References:
 
 5. For durable Claude-managed automation, use `/schedule` or create a Routine in `claude.ai/code/routines`.
 
-References:
-
-- [Plain MCP Server](https://help.plain.com/article/mcp-server)
-- [Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)
-
 ## Recommended Defaults
 
 | Setting | Default |
@@ -109,64 +94,20 @@ References:
 | Delivery mode | `preview output with optional static HTML artifact` |
 | Write mode | `read-only` |
 
-Additional guidance:
+Keep the run conservative: start with manual review, prefer repeated evidence over sentiment alone, use Stripe only to confirm business significance, and use watchlist language when account importance or timing is unclear.
 
-- Start with manual review of the digest before operationalizing any downstream workflow.
-- Narrow to renewal-sensitive or strategic accounts when the workspace can define that scope clearly, but do not require operator configuration just to run.
-- Prefer repeated evidence over sentiment alone.
-- Prefer real tenant and customer display names over anonymized placeholders whenever the workspace exposes them.
-- Use Stripe to confirm business significance, not to override clear support evidence or to guess at weak account matches.
-- Exclude low-context noisy customers unless the operator explicitly includes them.
-- When account importance or renewal timing is unclear, classify candidates as watchlist rather than high risk.
+## Prompt Inputs
 
-## Useful Workspace-Specific Inputs
-
-Tell the runner anything it cannot infer reliably from Plain alone.
-
-Risk scope example:
+Add context only when scope or risk policy cannot be inferred cleanly, for example:
 
 ```text
 Only evaluate enterprise and mid-market tenants.
 Ignore free workspaces, sandbox tenants, and internal accounts.
+Treat repeated unresolved bugs, multiple reopenings within 14 days, urgent threads, and explicit churn language as strong signals.
+If Stripe matching is ambiguous, skip Stripe enrichment instead of guessing.
 ```
 
-Renewal policy example:
+## Docs
 
-```text
-Treat these as strong signals:
-- repeated unresolved bugs
-- multiple reopenings within 14 days
-- urgent or high-priority threads from the same tenant
-- explicit churn, cancellation, rollback, or legal-escalation language
-Treat these as weak signals unless repeated:
-- generic dissatisfaction
-- one delayed response
-- a single feature request without operational impact
-```
-
-Scope note example:
-
-```text
-If tenant tier is visible, prioritize enterprise and strategic accounts first.
-If tenant tier is not visible, stay read-only and use watchlist language unless the support pattern is clearly severe.
-```
-
-Stripe enrichment example:
-
-```text
-If Stripe is connected and the tenant/customer match is reliable, enrich each risk candidate with:
-- subscription status
-- current plan
-- recent invoice spikes
-- failed payments
-- refunds or disputes
-- scheduled cancellation or contraction
-If the match is ambiguous, skip Stripe enrichment instead of guessing.
-```
-
-Escalation example:
-
-```text
-If Slack is connected, send only the final ranked digest to #customer-risk-review.
-Do not notify customer-facing channels directly.
-```
+- [Plain MCP Server](https://help.plain.com/article/mcp-server)
+- [Codex Automations](https://openai.com/academy/codex-automations)
