@@ -8,6 +8,36 @@
   </p>
 </div>
 
+<p align="center">
+  <sub>For multiple agent environments and workflow platforms</sub>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Codex-111827?style=flat-square" alt="Codex">
+  <img src="https://img.shields.io/badge/Cursor-000000?style=flat-square" alt="Cursor">
+  <img src="https://img.shields.io/badge/Claude%20Code-D97757?style=flat-square" alt="Claude Code">
+  <img src="https://img.shields.io/badge/ChatGPT-10A37F?style=flat-square&logo=openai&logoColor=white" alt="ChatGPT">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub">
+  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions">
+  <img src="https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white" alt="Gmail">
+  <img src="https://img.shields.io/badge/Calendar-4285F4?style=flat-square&logo=googlecalendar&logoColor=white" alt="Google Calendar">
+  <img src="https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=slack&logoColor=white" alt="Slack">
+  <img src="https://img.shields.io/badge/Linear-5E6AD2?style=flat-square&logo=linear&logoColor=white" alt="Linear">
+  <img src="https://img.shields.io/badge/Sentry-362D59?style=flat-square&logo=sentry&logoColor=white" alt="Sentry">
+  <img src="https://img.shields.io/badge/Stripe-635BFF?style=flat-square&logo=stripe&logoColor=white" alt="Stripe">
+  <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB">
+  <img src="https://img.shields.io/badge/New%20Relic-1CE783?style=flat-square&logo=newrelic&logoColor=04103B" alt="New Relic">
+  <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" alt="Hugging Face">
+  <img src="https://img.shields.io/badge/Plain-111827?style=flat-square" alt="Plain">
+  <img src="https://img.shields.io/badge/LaunchDarkly-4050FF?style=flat-square" alt="LaunchDarkly">
+  <img src="https://img.shields.io/badge/Public%20Web-2563EB?style=flat-square" alt="Public Web">
+  <img src="https://img.shields.io/badge/Local%20Host-334155?style=flat-square" alt="Local Host">
+  <img src="https://img.shields.io/badge/Docs-0F766E?style=flat-square" alt="Docs">
+</p>
+
 ## What this is
 
 A curated collection of ready-to-run AI agent automations for real-world workflows.
