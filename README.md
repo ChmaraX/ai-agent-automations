@@ -50,24 +50,24 @@ Browse by category, pick a workflow, and tune it to fit your tools, context, and
   <tr>
     <td width="33%" align="center">
       <a href="./automations/github-actions-ci-cost-and-time-digest/assets/html-report-preview.html">
-        <img src="./automations/github-actions-ci-cost-and-time-digest/assets/html-report-preview.png" alt="GitHub Actions CI cost and time digest preview">
+        <img src="./automations/github-actions-ci-cost-and-time-digest/assets/html-report-preview.png" alt="GitHub Actions CI cost and time">
       </a>
       <br>
-      <sub>GitHub Actions CI digest</sub>
+      <sub>GitHub Actions CI</sub>
     </td>
     <td width="33%" align="center">
       <a href="./automations/crypto-market-research-digest/assets/html-report-preview.html">
-        <img src="./automations/crypto-market-research-digest/assets/html-report-preview.png" alt="Crypto market research digest preview">
+        <img src="./automations/crypto-market-research-digest/assets/html-report-preview.png" alt="Crypto market research">
       </a>
       <br>
-      <sub>Crypto market research digest</sub>
+      <sub>Crypto market research</sub>
     </td>
     <td width="33%" align="center">
       <a href="./automations/stripe-failed-payment-risk-digest/assets/html-report-preview.html">
-        <img src="./automations/stripe-failed-payment-risk-digest/assets/html-report-preview.png" alt="Stripe failed payment risk digest preview">
+        <img src="./automations/stripe-failed-payment-risk-digest/assets/html-report-preview.png" alt="Stripe failed payment risk">
       </a>
       <br>
-      <sub>Stripe failed payment risk digest</sub>
+      <sub>Stripe failed payment risk</sub>
     </td>
   </tr>
 </table>
