@@ -1,6 +1,6 @@
 <div align="center">
   <h1>AI Agent Automations</h1>
-  <p>A curated collection of ready-to-run AI agent automations for real-world workflows.</p>
+  <p>A curated collection of 50+ ready-to-run AI agent automations for real-world workflows.</p>
   <p>
     <a href="./README.md"><strong>English</strong></a>
     <span> · </span>
