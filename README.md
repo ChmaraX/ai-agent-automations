@@ -40,7 +40,7 @@
 
 ## What this is
 
-A curated collection of ready-to-run AI agent automations for real-world workflows.
+A collection of field tested and ready-to-run AI agent automations for real-world workflows.
 
 Each automation includes a structured prompt and companion README you can run as-is, adapt to your stack, or use as inspiration for your own workflows. They cover practical tasks across code, inboxes, support, billing, observability, research, security, and team operations.
 
