@@ -16,8 +16,6 @@ Each automation includes a structured prompt and companion README you can run as
 
 Browse by category, pick a workflow, and tune it to fit your tools, context, and use case.
 
-Some automations can also produce polished report artifacts, not just text summaries.
-
 <table>
   <tr>
     <td width="33%" align="center">
