@@ -1,0 +1,13 @@
+{
+  "title": "Plain Customer Voice Digest",
+  "description": "`plain-customer-voice-digest` reviews a bounded set of recent Plain support threads and turns them into one evidence-backed customer voice summary.",
+  "categories": [
+    "Customer Success"
+  ],
+  "surfaces": [
+    "Plain"
+  ],
+  "tools": [
+    "Plain MCP"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Hugging Face Model Digest",
+  "description": "`huggingface-model-digest` turns recent public Hugging Face activity into one short Markdown digest.",
+  "categories": [
+    "Research & Trends"
+  ],
+  "surfaces": [
+    "Hugging Face"
+  ],
+  "tools": [
+    "Hugging Face API",
+    "Hugging Face Hub"
+  ]
+}

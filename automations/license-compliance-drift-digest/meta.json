@@ -1,0 +1,15 @@
+{
+  "title": "License Compliance Drift Digest",
+  "description": "`license-compliance-drift-digest` inspects the current repository's dependency and package metadata surface, compares it against the best available baseline and any local license policy, and produces a ranked read-only digest of the changes most likely to matter.",
+  "categories": [
+    "Security & Compliance"
+  ],
+  "surfaces": [
+    "Repository"
+  ],
+  "tools": [
+    "package manager lockfiles",
+    "license metadata sources",
+    "git"
+  ]
+}

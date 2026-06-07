@@ -1,0 +1,13 @@
+{
+  "title": "Gmail Inbox Triage",
+  "description": "`gmail-inbox-triage` is a short Gmail cleanup automation with a fixed policy.",
+  "categories": [
+    "Inbox & Calendar"
+  ],
+  "surfaces": [
+    "Gmail"
+  ],
+  "tools": [
+    "Gmail MCP"
+  ]
+}

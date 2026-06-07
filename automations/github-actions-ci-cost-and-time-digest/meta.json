@@ -1,0 +1,16 @@
+{
+  "title": "GitHub Actions CI Cost And Time Digest",
+  "description": "`github-actions-ci-cost-and-time-digest` reads recent GitHub Actions history, finds the workflows and jobs consuming the most CI time, highlights likely cost drivers, and turns that into a recurring digest.",
+  "categories": [
+    "Developer Workflow",
+    "Cost & Performance"
+  ],
+  "surfaces": [
+    "GitHub",
+    "GitHub Actions"
+  ],
+  "tools": [
+    "GitHub MCP",
+    "GitHub Actions API"
+  ]
+}

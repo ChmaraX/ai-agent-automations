@@ -1,0 +1,16 @@
+{
+  "title": "Plain Renewal Risk Digest",
+  "description": "`plain-renewal-risk-digest` reviews recent Plain support activity for accounts that may be heading toward renewal friction, churn risk, or executive escalation.",
+  "categories": [
+    "Customer Success",
+    "Revenue & Billing"
+  ],
+  "surfaces": [
+    "Plain",
+    "Stripe"
+  ],
+  "tools": [
+    "Plain MCP",
+    "Stripe MCP"
+  ]
+}

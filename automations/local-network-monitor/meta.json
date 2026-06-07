@@ -1,0 +1,17 @@
+{
+  "title": "Local Network Monitor",
+  "description": "`local-network-monitor` inspects one macOS or Linux host's current network state and produces a concise report with evidence, confidence, and explicit coverage gaps. Targeted log review is optional follow-up evidence, not part of the default run.",
+  "categories": [
+    "Local Security",
+    "Security & Compliance"
+  ],
+  "surfaces": [
+    "Local Host"
+  ],
+  "tools": [
+    "lsof",
+    "netstat",
+    "ifconfig",
+    "route"
+  ]
+}

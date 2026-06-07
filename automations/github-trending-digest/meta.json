@@ -1,0 +1,15 @@
+{
+  "title": "GitHub Trending Digest",
+  "description": "`github-trending-digest` reads the GitHub Trending page, keeps GitHub's ranking as-is, and turns the top repositories into a short digest.",
+  "categories": [
+    "Research & Trends"
+  ],
+  "surfaces": [
+    "GitHub",
+    "Public Web"
+  ],
+  "tools": [
+    "GitHub Trending",
+    "public web fetch"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Brand Typosquat Monitor",
+  "description": "`brand-typosquat-monitor` reviews one protected brand or domain family, generates a bounded set of likely typo or impersonation domains, and returns a short read-only risk brief backed by public DNS, registration, and lightweight web evidence.",
+  "categories": [
+    "Security & Compliance"
+  ],
+  "surfaces": [
+    "Public Web"
+  ],
+  "tools": [
+    "python3",
+    "run_monitor.py",
+    "DNS/RDAP/WHOIS lookups",
+    "HTTP(S) requests"
+  ]
+}

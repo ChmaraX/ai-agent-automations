@@ -1,0 +1,13 @@
+{
+  "title": "Stripe Webhook Health Watch",
+  "description": "`stripe-webhook-health-watch` uses Stripe CLI as the source of truth and produces one internal, read-only digest of live production webhook health.",
+  "categories": [
+    "Revenue & Billing"
+  ],
+  "surfaces": [
+    "Stripe"
+  ],
+  "tools": [
+    "Stripe CLI"
+  ]
+}

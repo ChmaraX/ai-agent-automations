@@ -1,0 +1,18 @@
+{
+  "title": "MongoDB Query Anti-Pattern Scout",
+  "description": "`mongodb-query-anti-pattern-scout` looks for risky MongoDB query usage by combining Atlas performance evidence with repository-level code search.",
+  "categories": [
+    "Database Reliability",
+    "Cost & Performance"
+  ],
+  "surfaces": [
+    "MongoDB Atlas",
+    "Repository"
+  ],
+  "tools": [
+    "MongoDB MCP",
+    "Atlas CLI",
+    "mongosh",
+    "ripgrep"
+  ]
+}

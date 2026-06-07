@@ -1,0 +1,18 @@
+{
+  "title": "Support Docs Gap Drafter",
+  "description": "`support-docs-gap-drafter` reads a bounded slice of recent support conversations, checks the current docs, and drafts one small docs improvement for the strongest repeated gap.",
+  "categories": [
+    "Customer Success"
+  ],
+  "surfaces": [
+    "Support System",
+    "Documentation",
+    "Repository"
+  ],
+  "tools": [
+    "support system MCP/API",
+    "git",
+    "ripgrep",
+    "docs site search"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "title": "LaunchAgent And LaunchDaemon Evidence Pack",
+  "description": "`launchagent-launchdaemon-evidence-pack` inspects readable `launchd` persistence surfaces on one macOS host and produces a concise evidence pack of LaunchAgents and LaunchDaemons that look most worth human review.",
+  "categories": [
+    "Local Security",
+    "Security & Compliance"
+  ],
+  "surfaces": [
+    "Local Host"
+  ],
+  "tools": [
+    "launchctl",
+    "plutil",
+    "codesign",
+    "mdfind"
+  ]
+}

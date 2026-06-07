@@ -1,0 +1,16 @@
+{
+  "title": "Shell History Anomaly Digest",
+  "description": "`shell-history-anomaly-digest` inspects a bounded recent slice of readable shell history on one local machine and produces a concise, evidence-backed digest of unusual or security-relevant command patterns.",
+  "categories": [
+    "Local Security",
+    "Security & Compliance"
+  ],
+  "surfaces": [
+    "Local Host"
+  ],
+  "tools": [
+    "zsh history",
+    "bash history",
+    "fish history"
+  ]
+}

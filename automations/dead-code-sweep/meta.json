@@ -1,0 +1,16 @@
+{
+  "title": "Dead Code Sweep",
+  "description": "`dead-code-sweep` runs `knip`, reviews the report conservatively, removes a defined number of safe candidates, validates the affected surfaces, and prepares a draft PR or review summary.",
+  "categories": [
+    "Code Quality & Maintenance"
+  ],
+  "surfaces": [
+    "Repository"
+  ],
+  "tools": [
+    "knip",
+    "pnpm",
+    "git",
+    "repo validation commands"
+  ]
+}

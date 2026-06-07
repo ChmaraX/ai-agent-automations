@@ -1,0 +1,18 @@
+{
+  "title": "Crypto Market Research Digest",
+  "description": "`crypto-market-research-digest` turns public crypto market, DeFi, SEC, and OFAC data into one daily research digest.",
+  "categories": [
+    "Research & Trends"
+  ],
+  "surfaces": [
+    "Public Web"
+  ],
+  "tools": [
+    "python3",
+    "run_digest.py",
+    "Binance API",
+    "DeFiLlama API",
+    "SEC data feeds",
+    "OFAC data feeds"
+  ]
+}

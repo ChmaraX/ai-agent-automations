@@ -1,0 +1,14 @@
+{
+  "title": "New Relic Cost And Ingest Hygiene Audit",
+  "description": "`new-relic-cost-and-ingest-hygiene-audit` reads recent New Relic usage and ingest signals for one account, finds the biggest telemetry cost surfaces, and turns them into one compact audit plus an optional HTML report.",
+  "categories": [
+    "Cost & Performance"
+  ],
+  "surfaces": [
+    "New Relic"
+  ],
+  "tools": [
+    "New Relic MCP",
+    "NRQL"
+  ]
+}

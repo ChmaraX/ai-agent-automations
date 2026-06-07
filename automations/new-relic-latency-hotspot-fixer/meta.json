@@ -1,0 +1,19 @@
+{
+  "title": "New Relic Latency Hotspot Fixer",
+  "description": "`new-relic-latency-hotspot-fixer` inspects one explicitly scoped New Relic service or endpoint family, finds one meaningful high-latency hotspot, localizes the most likely bottleneck, and either opens a draft PR for a narrow app-side fix or returns a concrete report.",
+  "categories": [
+    "Observability & Incident Response",
+    "Cost & Performance"
+  ],
+  "surfaces": [
+    "New Relic",
+    "Repository",
+    "GitHub"
+  ],
+  "tools": [
+    "New Relic MCP",
+    "git",
+    "repo validation commands",
+    "GitHub MCP"
+  ]
+}

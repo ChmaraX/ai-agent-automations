@@ -1,0 +1,17 @@
+{
+  "title": "Branch Change Test Coverage",
+  "description": "`branch-change-test-coverage` inspects the current branch or a recent merged change set, identifies the main behavior that should be covered by tests, adds the minimum meaningful missing coverage, validates it, and opens a draft PR only when the result is trustworthy.",
+  "categories": [
+    "Code Quality & Maintenance",
+    "Developer Workflow"
+  ],
+  "surfaces": [
+    "Repository",
+    "GitHub"
+  ],
+  "tools": [
+    "git",
+    "repo validation commands",
+    "GitHub MCP"
+  ]
+}

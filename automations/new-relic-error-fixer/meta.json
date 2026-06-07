@@ -1,0 +1,18 @@
+{
+  "title": "New Relic Error Fixer",
+  "description": "`new-relic-error-fixer` selects one strong New Relic error candidate, validates the repository and code evidence, attempts the smallest safe fix, runs validation, and opens a draft PR or prepares PR-ready output.",
+  "categories": [
+    "Observability & Incident Response"
+  ],
+  "surfaces": [
+    "New Relic",
+    "Repository",
+    "GitHub"
+  ],
+  "tools": [
+    "New Relic MCP",
+    "git",
+    "repo validation commands",
+    "GitHub MCP"
+  ]
+}

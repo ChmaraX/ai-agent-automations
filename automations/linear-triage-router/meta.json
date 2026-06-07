@@ -1,0 +1,13 @@
+{
+  "title": "Linear Triage Router",
+  "description": "`linear-triage-router` reviews a bounded slice of Linear Triage issues and applies only high-confidence team, label, priority, and internal-comment updates.",
+  "categories": [
+    "Work Triage"
+  ],
+  "surfaces": [
+    "Linear"
+  ],
+  "tools": [
+    "Linear MCP"
+  ]
+}

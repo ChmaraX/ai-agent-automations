@@ -1,0 +1,13 @@
+{
+  "title": "Gmail Sent Email Follow-Up Watcher",
+  "description": "`gmail-sent-email-follow-up-watcher` finds sent Gmail threads that still appear unreplied after a configured waiting period, ranks the strongest follow-up candidates, and produces one reviewable queue with optional Gmail draft nudges.",
+  "categories": [
+    "Inbox & Calendar"
+  ],
+  "surfaces": [
+    "Gmail"
+  ],
+  "tools": [
+    "Gmail MCP"
+  ]
+}

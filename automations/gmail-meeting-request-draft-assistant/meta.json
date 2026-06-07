@@ -1,0 +1,15 @@
+{
+  "title": "Gmail Meeting Request Draft Assistant",
+  "description": "`gmail-meeting-request-draft-assistant` reviews a bounded set of recent inbound Gmail threads that appear to ask for a meeting, a meeting move, or a meeting confirmation, checks availability on the user's primary Google Calendar by default, and prepares a reply draft.",
+  "categories": [
+    "Inbox & Calendar"
+  ],
+  "surfaces": [
+    "Gmail",
+    "Google Calendar"
+  ],
+  "tools": [
+    "Gmail MCP",
+    "Google Calendar MCP"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Production Data Contract Change Watch",
+  "description": "`production-data-contract-change-watch` compares live MongoDB document shapes against the contracts implied by the current repository and returns a ranked drift report. If one fix is unusually narrow and clearly code-side, it can also open one draft PR.",
+  "categories": [
+    "Database Reliability"
+  ],
+  "surfaces": [
+    "MongoDB",
+    "Repository",
+    "GitHub"
+  ],
+  "tools": [
+    "MongoDB MCP",
+    "mongosh",
+    "ripgrep",
+    "git",
+    "GitHub MCP"
+  ]
+}

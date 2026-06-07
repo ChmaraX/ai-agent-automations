@@ -1,0 +1,15 @@
+{
+  "title": "Gmail Newsletter Intel Brief",
+  "description": "`gmail-newsletter-intel-brief` turns recent newsletter-like Gmail messages into one concise periodic intelligence brief.",
+  "categories": [
+    "Research & Trends"
+  ],
+  "surfaces": [
+    "Gmail",
+    "Public Web"
+  ],
+  "tools": [
+    "Gmail MCP",
+    "public web fetch"
+  ]
+}

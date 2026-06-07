@@ -1,0 +1,19 @@
+{
+  "title": "Atlas Performance Advisor Digest And PR",
+  "description": "`atlas-performance-advisor-digest-and-pr` reviews Atlas Performance Advisor signals for one cluster, checks them against database and repository context, and produces a ranked digest of which recommendations look usable, noisy, or still need benchmarking.",
+  "categories": [
+    "Cost & Performance"
+  ],
+  "surfaces": [
+    "MongoDB Atlas",
+    "Repository",
+    "GitHub"
+  ],
+  "tools": [
+    "Atlas CLI",
+    "MongoDB MCP",
+    "mongosh",
+    "GitHub MCP",
+    "git"
+  ]
+}

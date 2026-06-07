@@ -1,0 +1,13 @@
+{
+  "title": "Stripe Cancel At Period End Watch",
+  "description": "`stripe-cancel-at-period-end-watch` uses Stripe CLI as the source of truth and produces one internal, read-only watchlist of subscriptions scheduled to cancel at period end that most deserve human review.",
+  "categories": [
+    "Revenue & Billing"
+  ],
+  "surfaces": [
+    "Stripe"
+  ],
+  "tools": [
+    "Stripe CLI"
+  ]
+}

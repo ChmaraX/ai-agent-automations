@@ -1,0 +1,16 @@
+{
+  "title": "CISA KEV Relevance Digest",
+  "description": "`cisa-kev-relevance-digest` reads a bounded recent slice of the official CISA Known Exploited Vulnerabilities catalog, compares it against high-signal evidence in the current repository or workspace, and returns a short read-only brief of the KEV items that look most relevant for human review.",
+  "categories": [
+    "Security & Compliance"
+  ],
+  "surfaces": [
+    "Public Web",
+    "Repository"
+  ],
+  "tools": [
+    "CISA KEV catalog",
+    "ripgrep",
+    "repository manifests and lockfiles"
+  ]
+}

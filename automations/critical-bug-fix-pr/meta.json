@@ -1,0 +1,16 @@
+{
+  "title": "Critical Bug Fix PR",
+  "description": "`critical-bug-fix-pr` reviews a bounded set of recent high-risk code changes in the current repository, proves at most one critical correctness bug, implements the smallest safe fix, validates it locally, and opens a draft PR only when the result is narrow and trustworthy.",
+  "categories": [
+    "Code Quality & Maintenance"
+  ],
+  "surfaces": [
+    "Repository",
+    "GitHub"
+  ],
+  "tools": [
+    "git",
+    "repo validation commands",
+    "GitHub MCP"
+  ]
+}

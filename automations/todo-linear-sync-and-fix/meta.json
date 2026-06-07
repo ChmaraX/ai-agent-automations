@@ -1,0 +1,20 @@
+{
+  "title": "TODO Linear Sync And Fix",
+  "description": "`todo-linear-sync-and-fix` scans repo TODO-style comments, fixes the easy ones directly, turns the harder ones into Linear issues, updates the source comments, and opens one draft PR for the run.",
+  "categories": [
+    "Work Triage",
+    "Code Quality & Maintenance"
+  ],
+  "surfaces": [
+    "Repository",
+    "Linear",
+    "GitHub"
+  ],
+  "tools": [
+    "ripgrep",
+    "Linear MCP",
+    "git",
+    "repo validation commands",
+    "GitHub MCP"
+  ]
+}

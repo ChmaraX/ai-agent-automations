@@ -1,0 +1,15 @@
+{
+  "title": "Sentry Slack Triage Digest",
+  "description": "`sentry-slack-triage-digest` reads a bounded set of high-signal Sentry issues, performs evidence-backed triage, and posts one concise Slack digest for on-call or engineering review.",
+  "categories": [
+    "Observability & Incident Response"
+  ],
+  "surfaces": [
+    "Sentry",
+    "Slack"
+  ],
+  "tools": [
+    "Sentry MCP",
+    "Slack MCP"
+  ]
+}

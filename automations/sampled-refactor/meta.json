@@ -1,0 +1,17 @@
+{
+  "title": "Sampled Refactor",
+  "description": "`sampled-refactor` inspects a real random slice of a JavaScript or TypeScript repository, applies at most one coherent behavior-preserving refactor, validates it, and opens a draft PR or prepares PR-ready output.",
+  "categories": [
+    "Code Quality & Maintenance"
+  ],
+  "surfaces": [
+    "Repository",
+    "GitHub"
+  ],
+  "tools": [
+    "find",
+    "shuf",
+    "git",
+    "repo validation commands"
+  ]
+}
