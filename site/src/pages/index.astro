@@ -1,17 +1,126 @@
 ---
+import HomeCollectionMeta from '../components/home/HomeCollectionMeta.astro';
+import HomeFilters from '../components/home/HomeFilters.astro';
+import HomeGrid from '../components/home/HomeGrid.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import { siteConfig } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAutomationEntries } from '../lib/automations';
+import { buildHomepageData } from '../lib/homepage';
 
+export const prerender = true;
+
+const homepage = buildHomepageData(getAutomationEntries());
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={siteConfig.title} description={siteConfig.description}>
+  <main class="page">
+    <HomeHero site={siteConfig} />
+    <HomeFilters categories={homepage.categories} surfaces={homepage.surfaces} />
+    <HomeCollectionMeta totalCount={homepage.automations.length} />
+    <HomeGrid automations={homepage.automations} />
+  </main>
+
+  <script is:inline>
+    (() => {
+      const search = new URLSearchParams(window.location.search);
+      const validTypes = new Set(['category', 'surface']);
+      const buttons = Array.from(document.querySelectorAll('[data-filter-type]'));
+      const cards = Array.from(document.querySelectorAll('[data-automation-card]'));
+      const countNode = document.querySelector('[data-count]');
+      const summaryNode = document.querySelector('[data-active-filters]');
+      const liveStatusNode = document.querySelector('[data-live-status]');
+      const emptyStateNode = document.querySelector('[data-empty-state]');
+
+      const state = {
+        category: search.get('category') ?? '',
+        surface: search.get('surface') ?? '',
+      };
+
+      const getFilterLabel = (type, value) => {
+        if (!value) {
+          return type === 'category' ? 'all categories' : 'any surface';
+        }
+
+        return value;
+      };
+
+      const readValues = (node, key) => {
+        try {
+          return JSON.parse(node.dataset[key] ?? '[]');
+        } catch {
+          return [];
+        }
+      };
+
+      const syncButtons = () => {
+        for (const button of buttons) {
+          const type = button.dataset.filterType;
+          if (!type || !validTypes.has(type)) continue;
+
+          const isActive = (state[type] ?? '') === (button.dataset.filterValue ?? '');
+          button.classList.toggle('active', isActive);
+          button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        }
+      };
+
+      const syncCards = () => {
+        let visibleCount = 0;
+
+        for (const card of cards) {
+          const categories = readValues(card, 'categories');
+          const surfaces = readValues(card, 'surfaces');
+          const matchesCategory = !state.category || categories.includes(state.category);
+          const matchesSurface = !state.surface || surfaces.includes(state.surface);
+          const visible = matchesCategory && matchesSurface;
+
+          card.hidden = !visible;
+          if (visible) visibleCount += 1;
+        }
+
+        if (countNode) {
+          countNode.textContent = String(visibleCount).padStart(2, '0');
+        }
+
+        const categoryLabel = getFilterLabel('category', state.category);
+        const surfaceLabel = getFilterLabel('surface', state.surface);
+
+        if (summaryNode) {
+          summaryNode.textContent = `Showing ${categoryLabel} / ${surfaceLabel}`;
+        }
+
+        if (liveStatusNode) {
+          liveStatusNode.textContent = `Showing ${visibleCount} automations for ${categoryLabel} and ${surfaceLabel}.`;
+        }
+
+        if (emptyStateNode) {
+          emptyStateNode.hidden = visibleCount !== 0;
+        }
+      };
+
+      const syncUrl = () => {
+        const next = new URLSearchParams();
+        if (state.category) next.set('category', state.category);
+        if (state.surface) next.set('surface', state.surface);
+        const query = next.toString();
+        const nextUrl = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+        window.history.replaceState({}, '', nextUrl);
+      };
+
+      for (const button of buttons) {
+        button.addEventListener('click', () => {
+          const type = button.dataset.filterType;
+          if (!type || !validTypes.has(type)) return;
+
+          state[type] = button.dataset.filterValue ?? '';
+          syncButtons();
+          syncCards();
+          syncUrl();
+        });
+      }
+
+      syncButtons();
+      syncCards();
+    })();
+  </script>
+</BaseLayout>

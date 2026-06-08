@@ -1,0 +1,44 @@
+---
+import type { AutomationEntry } from '../../lib/automations';
+
+type Props = {
+  automations: AutomationEntry[];
+};
+
+const { automations } = Astro.props;
+
+function formatDescription(entry: AutomationEntry): string {
+  const leadingSlug = `\`${entry.slug}\` `;
+  if (entry.description.startsWith(leadingSlug)) {
+    return entry.description.slice(leadingSlug.length);
+  }
+
+  return entry.description;
+}
+---
+
+<section class="collection" data-collection aria-label="Automation catalog">
+  {
+    automations.map((entry, index) => (
+      <article
+        class="card"
+        data-automation-card
+        data-categories={JSON.stringify(entry.categories)}
+        data-surfaces={JSON.stringify(entry.surfaces)}
+      >
+        <div class="card-index mono">{String(index + 1).padStart(2, '0')}</div>
+        <h2>{entry.title}</h2>
+        <p>{formatDescription(entry)}</p>
+        <div class="badge-groups">
+          <div class="badges" aria-label="Categories">
+            {entry.categories.map((label) => <span class="badge category">{label}</span>)}
+          </div>
+          <div class="badges" aria-label="Surfaces">
+            {entry.surfaces.map((label) => <span class="badge">{label}</span>)}
+          </div>
+        </div>
+      </article>
+    ))
+  }
+  <p class="empty" data-empty-state hidden>No automations match this filter combination.</p>
+</section>

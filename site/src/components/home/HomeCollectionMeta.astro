@@ -1,0 +1,15 @@
+---
+type Props = {
+  totalCount: number;
+};
+
+const { totalCount } = Astro.props;
+---
+
+<div class="collection-meta">
+  <span><span data-count>{String(totalCount).padStart(2, '0')}</span> automations</span>
+  <span data-active-filters>Showing all categories / any surface</span>
+  <span class="sr-only" data-live-status aria-live="polite">
+    Showing {totalCount} automations for all categories and any surface.
+  </span>
+</div>

@@ -1,0 +1,40 @@
+---
+import type { FilterOption } from '../../lib/homepage';
+
+type Props = {
+  categories: FilterOption[];
+  surfaces: FilterOption[];
+};
+
+const { categories, surfaces } = Astro.props;
+---
+
+<section class="filters" aria-label="Automation filters">
+  <div>
+    <div class="filter-label">Category</div>
+    <div class="filter-options" data-filter-group="category">
+      <button type="button" class="filter-button active" data-filter-type="category" data-filter-value="" aria-pressed="true">All</button>
+      {
+        categories.map((option) => (
+          <button type="button" class="filter-button" data-filter-type="category" data-filter-value={option.label} aria-pressed="false">
+            {option.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <div>
+    <div class="filter-label">Surface</div>
+    <div class="filter-options" data-filter-group="surface">
+      <button type="button" class="filter-button active" data-filter-type="surface" data-filter-value="" aria-pressed="true">Any</button>
+      {
+        surfaces.map((option) => (
+          <button type="button" class="filter-button" data-filter-type="surface" data-filter-value={option.label} aria-pressed="false">
+            {option.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
