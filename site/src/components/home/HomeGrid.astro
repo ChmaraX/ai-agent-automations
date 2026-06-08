@@ -20,11 +20,13 @@ function formatDescription(entry: AutomationEntry): string {
 <section class="collection" data-collection aria-label="Automation catalog">
   {
     automations.map((entry, index) => (
-      <article
+      <a
         class="card"
+        href={`/automations/${entry.slug}/`}
         data-automation-card
         data-categories={JSON.stringify(entry.categories)}
         data-surfaces={JSON.stringify(entry.surfaces)}
+        aria-label={`Open ${entry.title}`}
       >
         <div class="card-index mono">{String(index + 1).padStart(2, '0')}</div>
         <h2>{entry.title}</h2>
@@ -37,7 +39,7 @@ function formatDescription(entry: AutomationEntry): string {
             {entry.surfaces.map((label) => <span class="badge">{label}</span>)}
           </div>
         </div>
-      </article>
+      </a>
     ))
   }
   <p class="empty" data-empty-state hidden>No automations match this filter combination.</p>

@@ -1,0 +1,266 @@
+---
+import { siteConfig } from '../../data/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAutomationDetailEntry, getAutomationEntries } from '../../lib/automations';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  return getAutomationEntries().map((entry) => ({
+    params: { slug: entry.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+if (!slug) {
+  throw new Error('Missing automation slug.');
+}
+
+const entry = await getAutomationDetailEntry(slug);
+const pageTitle = `${entry.title} | ${siteConfig.title}`;
+const sourceBaseUrl = `${siteConfig.repoUrl}/tree/main/automations/${entry.slug}`;
+const repoLink = { label: 'GitHub repo ★', href: siteConfig.repoUrl };
+const sourceLink = { label: 'View source', href: sourceBaseUrl };
+
+type ReadmeSection = {
+  id: string;
+  title: string;
+  bodyHtml: string;
+};
+
+function buildReadmeSections(readmeHtml: string): ReadmeSection[] {
+  const sectionPattern = /<h2 id="([^"]+)">([^<]+)<\/h2>([\s\S]*?)(?=<h2 id="|$)/g;
+  const sections: ReadmeSection[] = [];
+
+  for (const match of readmeHtml.matchAll(sectionPattern)) {
+    const [, id, title, bodyHtml] = match;
+    sections.push({
+      id,
+      title,
+      bodyHtml: bodyHtml.trim(),
+    });
+  }
+
+  return sections;
+}
+
+const readmeSections = buildReadmeSections(entry.readmeHtml);
+const promptInsertIndex = Math.max(
+  readmeSections.findIndex((section) => section.id === 'preview'),
+  readmeSections.findIndex((section) => section.id === 'overview'),
+);
+const sectionsBeforePrompt =
+  promptInsertIndex >= 0 ? readmeSections.slice(0, promptInsertIndex + 1) : readmeSections;
+const sectionsAfterPrompt =
+  promptInsertIndex >= 0 ? readmeSections.slice(promptInsertIndex + 1) : [];
+const tableOfContents = [
+  { slug: 'prompt', text: 'Prompt' },
+  ...readmeSections.map((section) => ({
+  slug: section.id,
+  text: section.title,
+  })),
+];
+
+function formatDescription(description: string): string {
+  const leadingSlug = `\`${entry.slug}\` `;
+  if (description.startsWith(leadingSlug)) {
+    return description.slice(leadingSlug.length);
+  }
+
+  return description;
+}
+---
+
+<BaseLayout title={pageTitle} description={formatDescription(entry.description)}>
+  <main class="page detail-page">
+    <div class="topbar">
+      <a class="back-link mono" href="/">Back to catalog</a>
+      <a class="repo-link mono" href={repoLink.href} target="_blank" rel="noreferrer">{repoLink.label}</a>
+    </div>
+
+    <header class="detail-hero">
+      <div class="kicker mono">automation / {entry.slug}</div>
+      <h1 class="title-boxed">{entry.title}</h1>
+      <p class="subtitle">{formatDescription(entry.description)}</p>
+      <div class="header-actions">
+        <button class="action primary mono" type="button" data-copy-prompt data-copy-text={entry.promptText}>
+          Copy prompt
+        </button>
+        <a class="action mono" href={sourceLink.href} target="_blank" rel="noreferrer">
+          {sourceLink.label}
+        </a>
+      </div>
+    </header>
+
+    <div class="detail-layout">
+      <article class="detail-content">
+        <div class="markdown-shell">
+          {
+            sectionsBeforePrompt.map((section) => (
+              <section class="md-section" id={section.id}>
+                <div class="md-label mono">{section.title}</div>
+                <div class="md-body" set:html={section.bodyHtml} />
+              </section>
+            ))
+          }
+
+          <section class="md-section prompt-section" id="prompt">
+            <div class="md-label mono">Prompt</div>
+            <div class="prompt-body">
+              <div class="prompt-head">
+                <button class="copy mono" type="button" data-copy-prompt data-copy-text={entry.promptText}>
+                  Copy prompt
+                </button>
+              </div>
+              <div class="prompt-box">
+                <pre class="mono"><code>{entry.promptText}</code></pre>
+              </div>
+            </div>
+          </section>
+
+          {
+            sectionsAfterPrompt.map((section) => (
+              <section class="md-section" id={section.id}>
+                <div class="md-label mono">{section.title}</div>
+                <div class="md-body" set:html={section.bodyHtml} />
+              </section>
+            ))
+          }
+        </div>
+      </article>
+
+      <aside class="detail-sidebar">
+        {
+          tableOfContents.length > 0 && (
+            <div class="side-block">
+              <div class="side-title mono">On this page</div>
+              <nav aria-label="Table of contents">
+                <ul class="toc-list">
+                  {tableOfContents.map((heading) => (
+                    <li>
+                      <a class="toc-link" href={`#${heading.slug}`}>
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          )
+        }
+
+        <div class="side-block">
+          <div class="side-title mono">Surfaces</div>
+          <div class="badges">
+            {entry.surfaces.map((value) => <span class="badge">{value}</span>)}
+          </div>
+        </div>
+
+        <div class="side-block">
+          <div class="side-title mono">Tools</div>
+          <div class="badges">
+            {entry.tools.map((value) => <span class="badge">{value}</span>)}
+          </div>
+        </div>
+
+        <div class="side-block">
+          <div class="side-title mono">Categories</div>
+          <div class="badges">
+            {entry.categories.map((value) => <span class:list={['badge', 'strong']}>{value}</span>)}
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script is:inline>
+    (() => {
+      const buttons = Array.from(document.querySelectorAll('[data-copy-prompt]')).filter(
+        (node) => node instanceof HTMLButtonElement,
+      );
+      const promptText = buttons[0]?.dataset.copyText ?? '';
+      if (buttons.length === 0 || !promptText) return;
+      const defaultLabels = new Map(buttons.map((button) => [button, button.textContent ?? 'Copy prompt']));
+
+      const writePrompt = async () => {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(promptText);
+          return;
+        }
+
+        const textarea = document.createElement('textarea');
+        textarea.value = promptText;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        document.body.append(textarea);
+        textarea.select();
+        // Deprecated but still needed as a fallback where async clipboard is blocked.
+        const copied = document.execCommand('copy');
+        textarea.remove();
+        if (!copied) {
+          throw new Error('execCommand copy failed');
+        }
+      };
+
+      for (const button of buttons) {
+        button.addEventListener('click', async () => {
+          try {
+            await writePrompt();
+            for (const target of buttons) {
+              target.textContent = 'Copied';
+            }
+            window.setTimeout(() => {
+              for (const target of buttons) {
+                target.textContent = defaultLabels.get(target) ?? 'Copy prompt';
+              }
+            }, 1600);
+          } catch {
+            for (const target of buttons) {
+              target.textContent = 'Copy failed';
+            }
+            window.setTimeout(() => {
+              for (const target of buttons) {
+                target.textContent = defaultLabels.get(target) ?? 'Copy prompt';
+              }
+            }, 1600);
+          }
+        });
+      }
+    })();
+  </script>
+
+  <script>
+    import mermaid from 'mermaid';
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'neutral',
+    });
+
+    const mermaidBlocks = Array.from(document.querySelectorAll('.md-body [data-language="mermaid"]')).filter(
+      (node) => node instanceof HTMLElement,
+    );
+
+    await Promise.all(
+      mermaidBlocks.map(async (block, index) => {
+        const definition = block.textContent?.trim();
+        if (!definition) return;
+
+        const mount = document.createElement('div');
+        mount.className = 'mermaid-diagram';
+
+        try {
+          const renderId = `mermaid-diagram-${index}`;
+          const { svg, bindFunctions } = await mermaid.render(renderId, definition);
+          mount.innerHTML = svg;
+          bindFunctions?.(mount);
+          block.replaceWith(mount);
+        } catch (error) {
+          console.error('Failed to render Mermaid diagram', error);
+        }
+      }),
+    );
+  </script>
+</BaseLayout>
