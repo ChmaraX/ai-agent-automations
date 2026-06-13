@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/github_readme_agent_provider_logo_strip@2x.png" width="480" alt="Codex, Cursor, and Claude Code logo strip">
+  <img src="./assets/github_readme_agent_provider_logo_strip@2x.png" width="160" alt="Codex, Cursor, and Claude Code logo strip">
 </p>
 
 <p align="center">
