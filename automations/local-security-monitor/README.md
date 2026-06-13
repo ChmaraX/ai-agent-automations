@@ -2,10 +2,7 @@
 
 ## Overview
 
-`local-security-monitor` inspects one macOS or Linux host and produces a concise, evidence-backed security report. It checks disk-encryption posture, local firewall state, security-update coverage, remote-access exposure, notable persistence surfaces, privileged-file risk, and a small set of recent security-relevant host signals.
-
-Use it for recurring host-local posture reviews that should stay read-only and conservative. Do not use it for automated hardening, package remediation, SCAP compliance scans, or file-integrity baselining.
-
+This automation performs a bounded security review of a local host and highlights the issues most likely to matter. It is a general local posture check.
 ## How It Works
 
 1. Detects the local platform and available read-only tooling, preferring native OS signals first.

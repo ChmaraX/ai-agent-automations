@@ -2,10 +2,7 @@
 
 ## Overview
 
-`new-relic-error-fixer` selects one strong New Relic error candidate, validates the repository and code evidence, attempts the smallest safe fix, runs validation, and opens a draft PR or prepares PR-ready output.
-
-Use it when you want one high-value production error turned into reviewable engineering work, not an unattended batch autofix pipeline. If no safe fix is available, it still produces a structured investigation report with a Slack-ready summary block.
-
+This automation picks one important production error from New Relic, traces it back to the code when safe, and prepares a small fix. It is for focused incident follow-through.
 ## How It Works
 
 1. Queries New Relic for a bounded set of recent high-signal unexpected or resurfacing error groups.

@@ -2,10 +2,7 @@
 
 ## Overview
 
-`dead-code-sweep` runs `knip`, reviews the report conservatively, removes a defined number of safe candidates, validates the affected surfaces, and prepares a draft PR or review summary.
-
-Use it for small, repeatable cleanup passes rather than large one-shot refactors.
-
+This automation looks for code that appears unused, removes only low-risk candidates, and checks that the cleanup still passes validation. It is for steady maintenance, not aggressive deletion.
 ## How It Works
 
 1. Runs `knip` and reads both the report and diagnostics output.

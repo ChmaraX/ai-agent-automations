@@ -1,6 +1,6 @@
 {
   "title": "Scan Codebase Vulnerabilities",
-  "description": "`scan-codebase-vulnerabilities` is a scheduled or manual application-security reviewer for a repository. It looks for validated medium, high, or critical vulnerabilities with a real attack path and returns a concise Slack summary or preview.",
+  "description": "Finds real application security issues in a repository with a believable attack path, not just scanner noise.",
   "categories": [
     "Security & Compliance"
   ],

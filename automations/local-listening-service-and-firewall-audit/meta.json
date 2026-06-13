@@ -1,6 +1,6 @@
 {
   "title": "Local Listening Service And Firewall Audit",
-  "description": "`local-listening-service-and-firewall-audit` inspects one macOS or Linux host's inbound exposure surface and produces a plain-language report of what is listening, what is reachable beyond localhost, and whether the firewall posture looks acceptable.",
+  "description": "Shows which local services are exposed and how the firewall is set up, so host risk is easier to review.",
   "categories": [
     "Local Security",
     "Security & Compliance"

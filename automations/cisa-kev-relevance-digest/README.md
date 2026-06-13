@@ -2,10 +2,7 @@
 
 ## Overview
 
-`cisa-kev-relevance-digest` reads a bounded recent slice of the official CISA Known Exploited Vulnerabilities catalog, compares it against high-signal evidence in the current repository or workspace, and returns a short read-only brief of the KEV items that look most relevant for human review.
-
-This automation is narrower than a general security advisory monitor. It does not try to cover every advisory source, prove exploitability, or mutate dependency state. Use it when you want a recurring answer to "which newly added or recently updated KEV items might actually matter to this codebase?" rather than a generic vulnerability feed.
-
+This automation compares recent CISA KEV entries against your repository and highlights the ones that look relevant. It is a quick way to see what may need security review.
 ## How It Works
 
 1. Fetches the official CISA KEV catalog.

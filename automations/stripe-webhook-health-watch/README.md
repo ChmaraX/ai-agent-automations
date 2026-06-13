@@ -2,12 +2,7 @@
 
 ## Overview
 
-`stripe-webhook-health-watch` uses Stripe CLI as the source of truth and produces one internal, read-only digest of live production webhook health.
-
-Use it when you want a bounded operational report that surfaces production delivery failures, live-mode misconfiguration, and anomaly patterns that suggest Stripe events are being dropped or routed to the wrong destination.
-
-It is report-only. It does not update webhook endpoints, resend events, or mutate Stripe state. It also avoids noisy inventory output for test, staging, and local endpoints unless they are part of live traffic.
-
+This automation reviews production Stripe webhook delivery health and highlights failed deliveries, noisy endpoints, or setup problems. It helps teams catch billing or integration issues early.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

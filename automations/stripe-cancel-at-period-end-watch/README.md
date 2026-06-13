@@ -2,10 +2,7 @@
 
 ## Overview
 
-`stripe-cancel-at-period-end-watch` uses Stripe CLI as the source of truth and produces one internal, read-only watchlist of subscriptions scheduled to cancel at period end that most deserve human review.
-
-Use it when you want an operational churn watchlist ranked by period-end urgency, ARR proxy, plan tier, billing stress, and save opportunity. It stays read-only and does not reactivate subscriptions, change cancellation settings, apply discounts, or contact customers.
-
+This automation reviews Stripe subscriptions set to cancel at period end and ranks the ones most worth a save or follow-up. It helps teams focus on the highest-value cancellations.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

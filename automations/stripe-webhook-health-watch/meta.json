@@ -1,6 +1,6 @@
 {
   "title": "Stripe Webhook Health Watch",
-  "description": "`stripe-webhook-health-watch` uses Stripe CLI as the source of truth and produces one internal, read-only digest of live production webhook health.",
+  "description": "Checks whether Stripe webhooks are healthy and highlights delivery failures or setup problems worth fixing.",
   "categories": [
     "Revenue & Billing"
   ],

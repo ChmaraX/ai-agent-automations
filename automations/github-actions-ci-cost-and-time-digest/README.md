@@ -2,10 +2,7 @@
 
 ## Overview
 
-`github-actions-ci-cost-and-time-digest` reads recent GitHub Actions history, finds the workflows and jobs consuming the most CI time, highlights likely cost drivers, and turns that into a recurring digest.
-
-It is read-only. Each run shows where CI time is going now, what got slower recently, and which hotspots are worth human attention first.
-
+This automation reviews recent GitHub Actions runs and highlights the workflows and jobs that consume the most CI time. It gives teams a quick view of where optimization effort will matter most.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

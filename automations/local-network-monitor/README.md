@@ -2,10 +2,7 @@
 
 ## Overview
 
-`local-network-monitor` inspects one macOS or Linux host's current network state and produces a concise report with evidence, confidence, and explicit coverage gaps. Targeted log review is optional follow-up evidence, not part of the default run.
-
-Use it for passive host review: interface health, routes, listeners, notable outbound connections, firewall posture, and lightweight persistence context when it is already visible from host tooling. Do not use it for LAN discovery, packet capture, or unattended network changes.
-
+This automation reviews the current network state of a machine and produces a compact evidence-based summary. It is for quick situational awareness, not deep forensics.
 ## How It Works
 
 1. Detects the local platform and available read-only tooling, preferring `osquery` when installed.

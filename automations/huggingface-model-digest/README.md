@@ -2,10 +2,7 @@
 
 ## Overview
 
-`huggingface-model-digest` turns recent public Hugging Face activity into one short Markdown digest.
-
-It looks at a bounded recent window, shortlists only a few notable models, and reads model-card intro context before summarizing. The goal is signal, not a raw newest-upload feed.
-
+This automation finds recent Hugging Face models worth paying attention to and gives a quick summary of each one. It is for keeping up with model releases without scanning the Hub manually.
 ## How It Works
 
 1. Searches a recent Hugging Face window.

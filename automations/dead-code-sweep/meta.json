@@ -1,6 +1,6 @@
 {
   "title": "Dead Code Sweep",
-  "description": "`dead-code-sweep` runs `knip`, reviews the report conservatively, removes a defined number of safe candidates, validates the affected surfaces, and prepares a draft PR or review summary.",
+  "description": "Removes safe dead code and validates the cleanup so small maintenance work actually sticks.",
   "categories": [
     "Code Quality & Maintenance"
   ],

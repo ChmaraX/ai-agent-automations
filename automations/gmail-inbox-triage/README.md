@@ -2,10 +2,7 @@
 
 ## Overview
 
-`gmail-inbox-triage` is a short Gmail cleanup automation with a fixed policy.
-
-It looks only at new unread inbox mail, assigns one semantic label, archives low-value categories by default, keeps high-risk categories in the inbox, and returns a short summary only for messages that still need attention.
-
+This automation labels unread inbox mail into a small set of categories and archives low-value messages by policy. It is a lightweight inbox cleanup workflow.
 ## Policy
 
 Fixed labels:

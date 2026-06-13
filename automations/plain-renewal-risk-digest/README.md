@@ -2,10 +2,7 @@
 
 ## Overview
 
-`plain-renewal-risk-digest` reviews recent Plain support activity for accounts that may be heading toward renewal friction, churn risk, or executive escalation.
-
-Use it when your Plain workspace carries enough tenant or account context to connect support behavior with renewal-sensitive customers. It is intentionally stricter than the customer voice digest because false positives are expensive. When the workspace is writable, it can also save a static HTML watchlist report.
-
+This automation looks for support patterns that may signal renewal risk, churn risk, or account frustration. It helps success teams focus on the accounts that may need attention.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

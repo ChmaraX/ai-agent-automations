@@ -1,6 +1,6 @@
 {
   "title": "GitHub PR Review Router",
-  "description": "`github-pr-review-router` reads the open pull request queue for a repository, classifies each PR by its real blocking state, and turns that into a concise review-routing report.",
+  "description": "Shows what each open PR is waiting on, so reviewers and authors know where attention should go next.",
   "categories": [
     "Developer Workflow"
   ],

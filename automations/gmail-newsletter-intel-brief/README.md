@@ -2,12 +2,7 @@
 
 ## Overview
 
-`gmail-newsletter-intel-brief` turns recent newsletter-like Gmail messages into one concise periodic intelligence brief.
-
-It is built for newsletter-like Gmail reads, not for broad inbox summarization. By default it discovers recurring newsletter senders from a bounded recent Gmail window, reads the current issues from those senders, clusters overlapping items into a few themes, removes repetition, and keeps only the highest-signal items with source links.
-
-Use it when you already receive useful newsletters but want one reviewable brief instead of reading each issue separately.
-
+This automation pulls useful signals from recent newsletter emails and combines them into one concise digest. It is for people who want the takeaways without reading every newsletter.
 ## How It Works
 
 1. Looks back over a bounded recent Gmail window and discovers likely recurring newsletter senders.

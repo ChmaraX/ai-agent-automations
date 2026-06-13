@@ -1,6 +1,6 @@
 {
   "title": "Support Docs Gap Drafter",
-  "description": "`support-docs-gap-drafter` reads a bounded slice of recent support conversations, checks the current docs, and drafts one small docs improvement for the strongest repeated gap.",
+  "description": "Drafts a small docs improvement from repeated support questions, so the same tickets happen less often.",
   "categories": [
     "Customer Success"
   ],

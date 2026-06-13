@@ -2,10 +2,7 @@
 
 ## Overview
 
-`license-compliance-drift-digest` inspects the current repository's dependency and package metadata surface, compares it against the best available baseline and any local license policy, and produces a ranked read-only digest of the changes most likely to matter.
-
-It is triage-first. The goal is not to fail on every license warning or dump raw scanner noise. The useful output is a short report that distinguishes real review items from routine dependency churn. When the workspace is writable, it can also save a static HTML report.
-
+This automation checks dependency license changes and highlights the ones most likely to matter for compliance. It is a quick review step for teams that track license risk.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

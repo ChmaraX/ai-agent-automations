@@ -2,10 +2,7 @@
 
 ## Overview
 
-`sentry-triage-and-fix` selects one strong Sentry issue candidate, validates the repository and code evidence, attempts the smallest safe fix, runs validation, and opens a draft PR or prepares PR-ready output.
-
-Use it when you want one high-value production issue turned into reviewable engineering work, not an unattended batch autofix pipeline.
-
+This automation picks one strong Sentry issue candidate, traces it to the code when safe, and prepares a focused fix. It is for making progress on production errors one issue at a time.
 ## How It Works
 
 1. Queries Sentry for a bounded set of high-signal unresolved issues.

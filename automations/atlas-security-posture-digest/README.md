@@ -2,10 +2,7 @@
 
 ## Overview
 
-`atlas-security-posture-digest` runs a read-only audit of one MongoDB Atlas project and returns a compact security posture report with the findings that most likely matter, the ones that may be acceptable with context, and the gaps that still need an owner decision.
-
-It focuses on interpretation rather than raw settings export. The review covers network exposure, database-user hygiene, role breadth, recent access, backup posture, and alert coverage. When the workspace is writable, it can also save a static HTML report.
-
+This automation reviews access, network, backups, and alerts for one MongoDB Atlas project. It gives a short report of the security issues that matter most.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

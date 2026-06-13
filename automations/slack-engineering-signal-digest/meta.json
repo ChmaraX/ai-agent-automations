@@ -1,6 +1,6 @@
 {
   "title": "Slack Engineering Signal Digest",
-  "description": "`slack-engineering-signal-digest` reads a defined set of Slack engineering channels, pulls out the highest-signal recent threads, verifies linked system state when possible, and returns one concise digest.",
+  "description": "Summarizes the most important recent engineering Slack discussions so teams can catch up quickly.",
   "categories": [
     "Observability & Incident Response"
   ],

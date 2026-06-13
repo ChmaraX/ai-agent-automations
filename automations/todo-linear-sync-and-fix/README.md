@@ -2,10 +2,7 @@
 
 ## Overview
 
-`todo-linear-sync-and-fix` scans repo TODO-style comments, fixes the easy ones directly, turns the harder ones into Linear issues, updates the source comments, and opens one draft PR for the run.
-
-Use it when you want TODO comments to become either finished work or clearly tracked backlog instead of accumulating silently.
-
+This automation finds TODOs in the codebase, handles the easy safe fixes directly, and routes the rest into tracked Linear work. It helps teams turn loose notes into real follow-up.
 ## How It Works
 
 1. Scans the repository for `TODO`, `FIXME`, `XXX`, and similar markers.

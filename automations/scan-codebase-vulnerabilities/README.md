@@ -2,10 +2,7 @@
 
 ## Overview
 
-`scan-codebase-vulnerabilities` is a scheduled or manual application-security reviewer for a repository. It looks for validated medium, high, or critical vulnerabilities with a real attack path and returns a concise Slack summary or preview.
-
-It is for exploitable code-path review, not dependency version remediation. If you want package upgrade PRs, use `dependency-vulnerability-autofix` instead.
-
+This automation scans a repository for vulnerabilities that appear to have a believable attack path. It focuses on issues worth human security review, not raw scanner noise.
 ## How It Works
 
 1. Maps the repository's key trust boundaries and exposed entry points.

@@ -2,10 +2,7 @@
 
 ## Overview
 
-`plain-customer-voice-digest` reviews a bounded set of recent Plain support threads and turns them into one evidence-backed customer voice summary.
-
-It is meant for recurring support insight: repeated pain points, confusing workflows, common objections, and customer phrasing worth preserving.
-
+This automation groups recent Plain support conversations into themes and surfaces the strongest customer signals. It helps teams quickly see what customers keep running into.
 ## How It Works
 
 1. Reads a bounded slice of recent support threads from Plain.

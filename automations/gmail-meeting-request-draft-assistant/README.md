@@ -2,12 +2,7 @@
 
 ## Overview
 
-`gmail-meeting-request-draft-assistant` reviews a bounded set of recent inbound Gmail threads that appear to ask for a meeting, a meeting move, or a meeting confirmation, checks availability on the user's primary Google Calendar by default, and prepares a reply draft.
-
-It is draft-first. The automation never sends email, never creates or edits calendar events, and never searches an entire mailbox or all calendars without bounds. When the requested time is workable, it drafts a confirmation or acceptance reply. When it is not, it proposes realistic alternatives and explains the constraint briefly.
-
-Use it when you want a scheduling assistant that works with minimal setup and without giving the agent permission to commit to meetings on its own.
-
+This automation checks calendar availability and prepares draft email replies to meeting requests. It helps you respond faster without automatically booking anything.
 ## How It Works
 
 1. Starts from safe defaults: a bounded recent inbound Gmail slice, the primary calendar, the account timezone when available, and ordinary weekday working hours.

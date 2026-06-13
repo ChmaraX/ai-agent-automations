@@ -2,10 +2,7 @@
 
 ## Overview
 
-`local-listening-service-and-firewall-audit` inspects one macOS or Linux host's inbound exposure surface and produces a plain-language report of what is listening, what is reachable beyond localhost, and whether the firewall posture looks acceptable.
-
-Use it for host-level hardening review. It does not do LAN-wide discovery, packet capture, or automatic remediation.
-
+This automation checks listening services and firewall settings on a local machine. It gives a short report of what is exposed and what may need attention.
 ## How It Works
 
 1. Detects the local platform and available read-only tooling, preferring `osquery` when available.

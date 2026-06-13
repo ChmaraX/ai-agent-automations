@@ -1,6 +1,6 @@
 {
   "title": "Dependency Major Upgrade Planner",
-  "description": "`dependency-major-upgrade-planner` scans the current repository for direct dependencies that have newer stable major versions, reads the official migration guidance for the best candidates, and turns only the high-confidence ones into Linear migration tasks.",
+  "description": "Turns major dependency upgrades into concrete migration tasks so teams can plan the work clearly.",
   "categories": [
     "Work Triage"
   ],

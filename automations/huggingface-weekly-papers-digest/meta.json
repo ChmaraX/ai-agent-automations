@@ -1,6 +1,6 @@
 {
   "title": "Hugging Face Weekly Papers Digest",
-  "description": "`huggingface-weekly-papers-digest` turns a recent Hugging Face Daily Papers slice into one short paper-first digest.",
+  "description": "Summarizes recent Hugging Face paper activity in a compact weekly research brief.",
   "categories": [
     "Research & Trends"
   ],
