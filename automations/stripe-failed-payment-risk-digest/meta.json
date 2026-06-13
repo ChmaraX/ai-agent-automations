@@ -1,6 +1,6 @@
 {
   "title": "Stripe Failed Payment Risk Digest",
-  "description": "`stripe-failed-payment-risk-digest` reads a bounded Stripe billing window and ranks the failed-payment situations most likely to turn into involuntary churn, delayed cash collection, or support escalations.",
+  "description": "Finds failed payments most likely to become churn, cash collection, or support risk, so teams can act first.",
   "categories": [
     "Revenue & Billing"
   ],

@@ -2,10 +2,7 @@
 
 ## Overview
 
-`sampled-refactor` inspects a real random slice of a JavaScript or TypeScript repository, applies at most one coherent behavior-preserving refactor, validates it, and opens a draft PR or prepares PR-ready output.
-
-Use it for recurring maintainability work when you want small automated improvements instead of a report-only scout.
-
+This automation picks a small piece of code, applies a behavior-preserving refactor, and validates the change. It is for steady code health improvements without feature work.
 ## How It Works
 
 1. Searches the repository for source files while excluding obvious non-source paths.

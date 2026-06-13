@@ -2,10 +2,7 @@
 
 ## Overview
 
-`sentry-slack-triage-digest` reads a bounded set of high-signal Sentry issues, performs evidence-backed triage, and posts one concise Slack digest for on-call or engineering review.
-
-Use it when teams want production error triage to land in a channel people actually read, without automatically creating tickets, changing Sentry issue state, or opening pull requests.
-
+This automation reviews recent high-signal Sentry issues and posts a concise digest to Slack for engineering or on-call review. It is for keeping teams aligned on what matters now.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

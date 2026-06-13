@@ -2,10 +2,7 @@
 
 ## Overview
 
-`critical-bug-fix-pr` reviews a bounded set of recent high-risk code changes in the current repository, proves at most one critical correctness bug, implements the smallest safe fix, validates it locally, and opens a draft PR only when the result is narrow and trustworthy.
-
-It is not a generic code-review bot. The automation is for catching severe regressions that should result in real code changes, not for producing broad speculative findings or noisy low-severity fixes.
-
+This automation reviews recent high-risk code changes, proves one real critical bug when it can, and applies the smallest safe fix. If the fix is trustworthy, it opens a draft PR.
 ## How It Works
 
 1. Uses the current repository and discovers the narrowest trustworthy recent production-code scope.

@@ -1,6 +1,6 @@
 {
   "title": "Shell History Anomaly Digest",
-  "description": "`shell-history-anomaly-digest` inspects a bounded recent slice of readable shell history on one local machine and produces a concise, evidence-backed digest of unusual or security-relevant command patterns.",
+  "description": "Finds unusual or risky patterns in shell history that may deserve a human follow-up.",
   "categories": [
     "Local Security",
     "Security & Compliance"

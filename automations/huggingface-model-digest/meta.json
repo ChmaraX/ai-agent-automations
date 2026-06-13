@@ -1,6 +1,6 @@
 {
   "title": "Hugging Face Model Digest",
-  "description": "`huggingface-model-digest` turns recent public Hugging Face activity into one short Markdown digest.",
+  "description": "Summarizes notable new Hugging Face models with quick context on what they do and why they matter.",
   "categories": [
     "Research & Trends"
   ],

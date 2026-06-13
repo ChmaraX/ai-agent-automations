@@ -2,10 +2,7 @@
 
 ## Overview
 
-`gmail-billing-organizer` scans the connected Gmail account for invoices, receipts, renewal notices, and payment confirmations, then turns the matches into one clean billing digest plus a ledger-friendly list while applying simple Gmail labels to confident matches.
-
-Use it when you want billing email easier to review in Gmail without forwarding messages, renaming files, or building heavier mailbox automation. The default behavior is digest-first, with narrow Gmail label writes only for confident classifications. When the workspace is writable, it can also save HTML, Markdown, and CSV artifacts.
-
+This automation labels and sorts billing-related Gmail messages so finance and ops mail is easier to manage. It is for keeping payment and renewal email from getting lost in the inbox.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

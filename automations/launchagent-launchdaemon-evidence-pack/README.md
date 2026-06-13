@@ -2,10 +2,7 @@
 
 ## Overview
 
-`launchagent-launchdaemon-evidence-pack` inspects readable `launchd` persistence surfaces on one macOS host and produces a concise evidence pack of LaunchAgents and LaunchDaemons that look most worth human review.
-
-It is intentionally narrow and macOS-specific. It does not try to perform full host forensics, prove malware, or clean up persistence automatically. Use it when you want a recurring or on-demand review of macOS persistence artifacts without expanding into a broader local-security audit.
-
+This automation reviews LaunchAgents and LaunchDaemons on a Mac and highlights the ones that look worth a human check. It is for gathering evidence, not making system changes.
 ## How It Works
 
 1. Confirms the host is macOS and checks readable `launchd` surfaces.

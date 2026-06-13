@@ -1,6 +1,6 @@
 {
   "title": "Gmail Newsletter Intel Brief",
-  "description": "`gmail-newsletter-intel-brief` turns recent newsletter-like Gmail messages into one concise periodic intelligence brief.",
+  "description": "Turns newsletters into one short brief with the main takeaways worth reading.",
   "categories": [
     "Research & Trends"
   ],

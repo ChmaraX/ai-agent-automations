@@ -1,6 +1,6 @@
 {
   "title": "GitHub Trending Digest",
-  "description": "`github-trending-digest` reads the GitHub Trending page, keeps GitHub's ranking as-is, and turns the top repositories into a short digest.",
+  "description": "Summarizes the top projects on GitHub Trending and explains why each one stands out.",
   "categories": [
     "Research & Trends"
   ],

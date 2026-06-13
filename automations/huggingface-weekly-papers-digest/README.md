@@ -2,10 +2,7 @@
 
 ## Overview
 
-`huggingface-weekly-papers-digest` turns a recent Hugging Face Daily Papers slice into one short paper-first digest.
-
-It is for staying current without reading the whole feed. The automation uses the official `hf` CLI as its source of truth and can optionally add linked Hugging Face artifacts when they clearly help.
-
+This automation turns recent Hugging Face paper activity into a compact weekly research brief. It is for quickly spotting papers worth a closer read.
 ## How It Works
 
 1. Uses `hf papers ls` with a defined date window.

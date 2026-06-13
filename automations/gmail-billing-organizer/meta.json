@@ -1,6 +1,6 @@
 {
   "title": "Gmail Billing Organizer",
-  "description": "`gmail-billing-organizer` scans the connected Gmail account for invoices, receipts, renewal notices, and payment confirmations, then turns the matches into one clean billing digest plus a ledger-friendly list while applying simple Gmail labels to confident matches.",
+  "description": "Organizes billing emails like invoices, receipts, and renewals so important finance messages are easier to track.",
   "categories": [
     "Revenue & Billing",
     "Inbox & Calendar"

@@ -2,10 +2,7 @@
 
 ## Overview
 
-`new-relic-cost-and-ingest-hygiene-audit` reads recent New Relic usage and ingest signals for one account, finds the biggest telemetry cost surfaces, and turns them into one compact audit plus an optional HTML report.
-
-It is read-only. The goal is to show where ingest is going, which waste looks concrete, and what the smallest useful reduction action is. A good run should name specific repeated patterns or levers, not just the biggest service.
-
+This automation reviews one New Relic account and highlights the biggest sources of ingest waste and avoidable telemetry cost. It helps teams clean up noisy or expensive monitoring.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

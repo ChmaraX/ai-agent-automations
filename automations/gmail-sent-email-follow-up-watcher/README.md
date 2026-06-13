@@ -2,10 +2,7 @@
 
 ## Overview
 
-`gmail-sent-email-follow-up-watcher` finds sent Gmail threads that still appear unreplied after a configured waiting period, ranks the strongest follow-up candidates, and produces one reviewable queue with optional Gmail draft nudges.
-
-It is draft-first and mailbox-scoped. The automation never sends email, never scans an entire Google Workspace tenant, and never guesses that a thread is unreplied when the evidence is incomplete. Use it when you want a practical answer to "which sent emails probably need a follow-up now?" without handing autonomous outreach to the automation.
-
+This automation looks for sent threads that have likely gone quiet and drafts follow-up nudges. It helps important conversations avoid falling through the cracks.
 ## How It Works
 
 1. Starts from an explicit Gmail scope and a bounded time window from the prompt's required run-configuration block.

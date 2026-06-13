@@ -2,10 +2,7 @@
 
 ## Overview
 
-`linear-triage-router` reviews a bounded slice of Linear Triage issues and applies only high-confidence team, label, priority, and internal-comment updates.
-
-It is meant for safe routing, not broad backlog cleanup. When evidence is weak or writes are unavailable, it falls back to prepared output.
-
+This automation reviews Linear issues and applies high-confidence routing updates such as team, label, priority, or comment. It helps keep the backlog organized with less manual triage.
 ## How It Works
 
 1. Reads a bounded set of new or aging Triage issues.

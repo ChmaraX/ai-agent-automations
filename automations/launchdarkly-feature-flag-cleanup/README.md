@@ -2,10 +2,7 @@
 
 ## Overview
 
-`launchdarkly-feature-flag-cleanup` removes stale temporary LaunchDarkly flag code, validates the change, and opens a draft PR or prepares PR-ready output.
-
-It uses LaunchDarkly to identify cleanup candidates and confirm the served flag state first. It does not archive or delete flags in LaunchDarkly.
-
+This automation looks for stale LaunchDarkly flag code that can likely be removed, makes the cleanup, and validates the result. It is for keeping temporary flag paths from lingering.
 ## How It Works
 
 1. Finds stale temporary flags that look safe to remove.

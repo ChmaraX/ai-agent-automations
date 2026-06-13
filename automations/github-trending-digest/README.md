@@ -2,10 +2,7 @@
 
 ## Overview
 
-`github-trending-digest` reads the GitHub Trending page, keeps GitHub's ranking as-is, and turns the top repositories into a short digest.
-
-It summarizes each repo from its description and README intro without adding a custom ranking layer.
-
+This automation reads the current GitHub Trending list and gives quick summaries of the most notable repos. It keeps the original ranking and focuses on why each project matters.
 ## How It Works
 
 1. Opens the GitHub Trending page for the selected period.

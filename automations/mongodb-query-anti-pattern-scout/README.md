@@ -2,10 +2,7 @@
 
 ## Overview
 
-`mongodb-query-anti-pattern-scout` looks for risky MongoDB query usage by combining Atlas performance evidence with repository-level code search.
-
-It is report-first. Each run should tell you which query patterns are most likely hurting performance or scalability, which ones are strongly supported by Atlas evidence, and whether one small behavior-preserving query-code fix is safe enough for a draft PR. It never creates indexes, changes Atlas configuration, or edits schema or migration files.
-
+This automation combines Atlas signals with repository code search to spot MongoDB query patterns that may hurt performance or reliability. It helps teams find the code paths most worth fixing.
 ## How It Works
 
 1. Requires a small run-configuration block with explicit Atlas project and cluster only.

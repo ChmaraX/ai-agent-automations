@@ -2,10 +2,7 @@
 
 ## Overview
 
-`support-docs-gap-drafter` reads a bounded slice of recent support conversations, checks the current docs, and drafts one small docs improvement for the strongest repeated gap.
-
-It is not a generic support summary. The job is to find fix-worthy documentation problems such as missing, stale, hard-to-find, or confusing docs. Use it when support keeps answering the same question and you want one concrete docs fix instead of another complaint dashboard.
-
+This automation looks for repeated support friction and turns it into a draft documentation update. It helps teams close small docs gaps that keep creating tickets.
 ## How It Works
 
 1. Starts from an explicit support source and bounded support scope from the prompt's required run-configuration block.

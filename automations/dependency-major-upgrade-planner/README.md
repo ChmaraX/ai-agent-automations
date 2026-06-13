@@ -2,10 +2,7 @@
 
 ## Overview
 
-`dependency-major-upgrade-planner` scans the current repository for direct dependencies that have newer stable major versions, reads the official migration guidance for the best candidates, and turns only the high-confidence ones into Linear migration tasks.
-
-It is planning-focused, not code-changing. Each run stays bounded, prefers official maintainer guidance over community chatter, and falls back to report-only output when the migration path is too ambiguous or write access is unavailable.
-
+This automation looks for important major version upgrades and breaks the work into clear Linear tasks. It is for planning upgrades before anyone starts changing code.
 ## How It Works
 
 1. Detects manifests, lockfiles, workspaces, and package-manager files in the current repository.

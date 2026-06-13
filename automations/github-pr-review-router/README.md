@@ -2,10 +2,7 @@
 
 ## Overview
 
-`github-pr-review-router` reads the open pull request queue for a repository, classifies each PR by its real blocking state, and turns that into a concise review-routing report.
-
-Use it when you want a reliable answer to "what needs attention in our PR queue?" without merging, reviewing, relabeling, or changing GitHub state.
-
+This automation reviews the open PR queue and sorts each PR by its real blocking state, such as waiting on author, reviewer, or CI. It helps teams know where attention should go next.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

@@ -1,6 +1,6 @@
 {
   "title": "Linear Triage Router",
-  "description": "`linear-triage-router` reviews a bounded slice of Linear Triage issues and applies only high-confidence team, label, priority, and internal-comment updates.",
+  "description": "Routes new Linear issues to the right team and priority when the signal is strong enough.",
   "categories": [
     "Work Triage"
   ],

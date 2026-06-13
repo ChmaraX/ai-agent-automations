@@ -1,6 +1,6 @@
 {
   "title": "Atlas Performance Advisor Digest And PR",
-  "description": "`atlas-performance-advisor-digest-and-pr` reviews Atlas Performance Advisor signals for one cluster, checks them against database and repository context, and produces a ranked digest of which recommendations look usable, noisy, or still need benchmarking.",
+  "description": "Reviews Atlas Performance Advisor recommendations, explains which ones look worth testing, and can prepare one safe index PR.",
   "categories": [
     "Cost & Performance"
   ],

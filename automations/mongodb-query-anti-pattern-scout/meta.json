@@ -1,6 +1,6 @@
 {
   "title": "MongoDB Query Anti-Pattern Scout",
-  "description": "`mongodb-query-anti-pattern-scout` looks for risky MongoDB query usage by combining Atlas performance evidence with repository-level code search.",
+  "description": "Finds risky MongoDB query patterns in code, backed by the Atlas signals most worth fixing.",
   "categories": [
     "Database Reliability",
     "Cost & Performance"

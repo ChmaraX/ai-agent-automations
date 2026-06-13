@@ -1,6 +1,6 @@
 {
   "title": "Sentry Linear Backlog Sync",
-  "description": "`sentry-linear-backlog-sync` takes actionable Sentry issues, proves they are not already tracked, and creates or links durable Linear backlog work.",
+  "description": "Turns actionable Sentry issues into Linear backlog items so recurring production problems get tracked.",
   "categories": [
     "Work Triage",
     "Developer Workflow"

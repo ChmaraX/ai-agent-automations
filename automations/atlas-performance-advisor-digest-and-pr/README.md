@@ -2,10 +2,7 @@
 
 ## Overview
 
-`atlas-performance-advisor-digest-and-pr` reviews Atlas Performance Advisor signals for one cluster, checks them against database and repository context, and produces a ranked digest of which recommendations look usable, noisy, or still need benchmarking.
-
-Most runs should stop at the digest. It opens a draft PR only when exactly one additive index change is clearly justified, low risk, and easy to stage for review. When the workspace is writable, it can also save a static HTML report.
-
+This automation checks Atlas Performance Advisor suggestions, filters out noisy ones, and shows which changes look worth testing. If one index change is clearly safe, it can draft a small PR.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

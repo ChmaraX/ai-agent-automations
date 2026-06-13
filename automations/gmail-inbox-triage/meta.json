@@ -1,6 +1,6 @@
 {
   "title": "Gmail Inbox Triage",
-  "description": "`gmail-inbox-triage` is a short Gmail cleanup automation with a fixed policy.",
+  "description": "Sorts new inbox email and archives low-value messages so the inbox stays focused on what matters.",
   "categories": [
     "Inbox & Calendar"
   ],

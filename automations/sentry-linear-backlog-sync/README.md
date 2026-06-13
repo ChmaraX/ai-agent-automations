@@ -2,10 +2,7 @@
 
 ## Overview
 
-`sentry-linear-backlog-sync` takes actionable Sentry issues, proves they are not already tracked, and creates or links durable Linear backlog work.
-
-Use it when Sentry should remain the operational source of truth for production error evidence, while Linear becomes the durable planning and ownership surface for follow-up work.
-
+This automation reviews Sentry issues and creates or updates Linear work for the ones worth tracking. It helps teams move recurring production problems into the backlog.
 ## How It Works
 
 1. Queries Sentry for a bounded set of high-signal unresolved issues such as regressed, escalating, for-review, or high-priority production issues.

@@ -1,6 +1,6 @@
 {
   "title": "Brand Typosquat Monitor",
-  "description": "`brand-typosquat-monitor` reviews one protected brand or domain family, generates a bounded set of likely typo or impersonation domains, and returns a short read-only risk brief backed by public DNS, registration, and lightweight web evidence.",
+  "description": "Finds suspicious typo or lookalike domains for your brand so teams know what to investigate first.",
   "categories": [
     "Security & Compliance"
   ],
