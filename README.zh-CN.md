@@ -185,6 +185,7 @@
 
 | 自动化 | 用途 | 作用面 | 链接 |
 | --- | --- | --- | --- |
+| [`backlink-opportunity-finder`](./automations/backlink-opportunity-finder/README.md) | 查找未链接的品牌提及，草拟礼貌的 Gmail 外联，并记录已经处理过的机会。 | ![Public Web][web-badge] ![Gmail][gmail-badge] | [README](./automations/backlink-opportunity-finder/README.md) · [Prompt](./automations/backlink-opportunity-finder/backlink-opportunity-finder.md) |
 | [`github-product-post-drafts`](./automations/github-product-post-drafts/README.md) | 将已发布的 GitHub 工作转成面向产品传播的帖文草稿。 | ![GitHub][github-badge] | [README](./automations/github-product-post-drafts/README.md) · [Prompt](./automations/github-product-post-drafts/github-product-post-drafts.md) |
 
 ### 工作分诊
