@@ -1,0 +1,16 @@
+{
+  "title": "Backlink Opportunity Finder",
+  "description": "Finds unlinked mentions of your brand, drafts polite outreach in Gmail, and tracks what was already handled so backlink follow-up stays focused.",
+  "categories": [
+    "Marketing"
+  ],
+  "surfaces": [
+    "Public Web",
+    "Gmail"
+  ],
+  "tools": [
+    "Firecrawl",
+    "Gmail MCP",
+    "public web fetch"
+  ]
+}

@@ -183,6 +183,7 @@ Automations that turn shipped engineering work into product-facing launch copy.
 
 | Automation | What it does | Surface | Links |
 | --- | --- | --- | --- |
+| [`backlink-opportunity-finder`](./automations/backlink-opportunity-finder/README.md) | Finds unlinked mentions of your brand, drafts polite outreach in Gmail, and tracks what was already handled so backlink follow-up stays focused. | ![Public Web][web-badge] ![Gmail][gmail-badge] | [README](./automations/backlink-opportunity-finder/README.md) · [Prompt](./automations/backlink-opportunity-finder/backlink-opportunity-finder.md) |
 | [`github-product-post-drafts`](./automations/github-product-post-drafts/README.md) | Turns shipped GitHub work into draft product posts that are easier to publish and refine. | ![GitHub][github-badge] | [README](./automations/github-product-post-drafts/README.md) · [Prompt](./automations/github-product-post-drafts/github-product-post-drafts.md) |
 
 ### Work Triage
