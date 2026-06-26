@@ -2,10 +2,7 @@
 
 ## Overview
 
-`brand-typosquat-monitor` reviews one protected brand or domain family, generates a bounded set of likely typo or impersonation domains, and returns a short read-only risk brief backed by public DNS, registration, and lightweight web evidence.
-
-It is intentionally narrow. It is good at first-pass monitoring and triage, not at exhaustive global discovery. The bundled Python collector handles candidate generation, bounded evidence collection, timeouts, and report artifacts.
-
+This automation checks likely typo and impersonation domains around a brand or main domain. It gives a short risk report so someone can decide what to investigate.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

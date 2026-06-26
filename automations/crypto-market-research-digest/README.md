@@ -2,10 +2,7 @@
 
 ## Overview
 
-`crypto-market-research-digest` turns public crypto market, DeFi, SEC, and OFAC data into one daily research digest.
-
-It uses a fixed source set, keeps the output report-only, and produces an HTML companion artifact for easier review. The goal is a market-structure and compliance snapshot, not trading advice.
-
+This automation turns recent crypto, DeFi, regulatory, and sanctions signals into a concise research digest. It is for people who want a quick market brief instead of reading many sources.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

@@ -2,10 +2,7 @@
 
 ## Overview
 
-`shell-history-anomaly-digest` inspects a bounded recent slice of readable shell history on one local machine and produces a concise, evidence-backed digest of unusual or security-relevant command patterns.
-
-It is intentionally narrow. It does not try to prove compromise, reconstruct a full incident timeline, or replace broader host forensics. Use it when you want a recurring answer to "did anything recently happen in shell history that looks unusual enough to investigate?" rather than a full host security audit.
-
+This automation reviews shell history for commands or patterns that look unusual, sensitive, or security-relevant. It gives a short report for human follow-up.
 ## How It Works
 
 1. Detects readable shell history sources such as `zsh`, `bash`, or `fish` history files.

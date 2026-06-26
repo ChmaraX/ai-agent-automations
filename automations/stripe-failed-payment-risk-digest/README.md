@@ -2,10 +2,7 @@
 
 ## Overview
 
-`stripe-failed-payment-risk-digest` reads a bounded Stripe billing window and ranks the failed-payment situations most likely to turn into involuntary churn, delayed cash collection, or support escalations.
-
-Use it when finance, support, or revenue operations teams want one internal report about failed invoices, past-due subscriptions, high-value open balances, retry gaps, usage spikes, and recovery blind spots without sending customer messages or mutating Stripe.
-
+This automation reviews recent Stripe payment failures and highlights the customers most likely to turn into involuntary churn, delayed cash collection, or support escalations. It helps revenue teams focus on the riskiest cases first.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

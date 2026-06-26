@@ -2,10 +2,7 @@
 
 ## Overview
 
-`github-ci-speedup-optimizer` looks at recent GitHub Actions history, chooses one safe CI bottleneck to test, applies one focused change, waits for a comparable run, and reports the result.
-
-Each run is intentionally narrow: either a validated improvement, an inconclusive result, or a suggestion-only outcome when a safe automated patch is not justified.
-
+This automation finds one likely CI bottleneck, tries a focused speed improvement, and reports whether it actually helped. It is for gradual CI tuning with measurable results.
 ## How It Works
 
 1. Reads recent successful CI runs and the workflow files that define current behavior.

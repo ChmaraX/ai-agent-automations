@@ -1,6 +1,6 @@
 {
   "title": "Local Security Monitor",
-  "description": "`local-security-monitor` inspects one macOS or Linux host and produces a concise, evidence-backed security report. It checks disk-encryption posture, local firewall state, security-update coverage, remote-access exposure, notable persistence surfaces, privileged-file risk, and a small set of recent security-relevant host signals.",
+  "description": "Runs a basic security health check on a local machine and highlights the issues most worth attention.",
   "categories": [
     "Local Security",
     "Security & Compliance"

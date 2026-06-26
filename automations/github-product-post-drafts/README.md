@@ -2,10 +2,7 @@
 
 ## Overview
 
-`github-product-post-drafts` turns recent shipped GitHub work into post drafts for X, LinkedIn, and similar channels.
-
-It prefers real release and PR context over raw commit lists, keeps the output draft-only, and tries to find one strong product story instead of dumping repo activity.
-
+This automation looks at recently shipped work and writes simple product-facing draft posts for channels like X or LinkedIn. It is for turning engineering output into launch copy faster.
 ## How It Works
 
 1. Reads the latest release up to `HEAD`, or falls back to recent merged PRs.

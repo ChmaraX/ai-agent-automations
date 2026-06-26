@@ -2,10 +2,7 @@
 
 ## Overview
 
-`production-data-contract-change-watch` compares live MongoDB document shapes against the contracts implied by the current repository and returns a ranked drift report. If one fix is unusually narrow and clearly code-side, it can also open one draft PR.
-
-It is report-first and database-read-only. The output should highlight affected collections, code paths, evidence, and test ideas, not become a full schema inventory. It must never mutate database state, run a backfill, or invent a migration plan. When the workspace is writable, it can also save a static HTML report.
-
+This automation compares production MongoDB document shapes against the data contracts implied by your codebase. It helps teams catch drift before it causes bugs.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

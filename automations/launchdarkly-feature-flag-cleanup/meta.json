@@ -1,6 +1,6 @@
 {
   "title": "LaunchDarkly Feature Flag Cleanup",
-  "description": "`launchdarkly-feature-flag-cleanup` removes stale temporary LaunchDarkly flag code, validates the change, and opens a draft PR or prepares PR-ready output.",
+  "description": "Removes old temporary feature-flag code and validates that the cleanup is still safe.",
   "categories": [
     "Code Quality & Maintenance"
   ],

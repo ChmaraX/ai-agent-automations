@@ -1,6 +1,6 @@
 {
   "title": "Sentry Triage And Fix",
-  "description": "`sentry-triage-and-fix` selects one strong Sentry issue candidate, validates the repository and code evidence, attempts the smallest safe fix, runs validation, and opens a draft PR or prepares PR-ready output.",
+  "description": "Fixes one important Sentry issue and turns it into a focused, reviewable code change.",
   "categories": [
     "Observability & Incident Response"
   ],

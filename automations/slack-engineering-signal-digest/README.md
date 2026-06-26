@@ -2,10 +2,7 @@
 
 ## Overview
 
-`slack-engineering-signal-digest` reads a defined set of Slack engineering channels, pulls out the highest-signal recent threads, verifies linked system state when possible, and returns one concise digest.
-
-Use it when important engineering discussion starts in Slack but the source of truth may still live in GitHub, Jira, Linear, or Sentry.
-
+This automation reads selected engineering Slack channels and turns the highest-signal recent threads into one digest. It helps people catch up without reading everything.
 ## How It Works
 
 1. Searches only the channels you explicitly allow and only within a bounded time window.

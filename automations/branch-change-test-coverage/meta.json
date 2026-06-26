@@ -1,6 +1,6 @@
 {
   "title": "Branch Change Test Coverage",
-  "description": "`branch-change-test-coverage` inspects the current branch or a recent merged change set, identifies the main behavior that should be covered by tests, adds the minimum meaningful missing coverage, validates it, and opens a draft PR only when the result is trustworthy.",
+  "description": "Adds missing tests for a recent branch or merged change, focusing on the behavior that matters most.",
   "categories": [
     "Code Quality & Maintenance",
     "Developer Workflow"

@@ -13,10 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Codex-111827?style=flat-square" alt="Codex">
-  <img src="https://img.shields.io/badge/Cursor-000000?style=flat-square" alt="Cursor">
-  <img src="https://img.shields.io/badge/Claude%20Code-D97757?style=flat-square" alt="Claude Code">
-  <img src="https://img.shields.io/badge/ChatGPT-10A37F?style=flat-square&logo=openai&logoColor=white" alt="ChatGPT">
+  <img src="./assets/github_readme_agent_provider_logo_strip@2x.png" width="160" alt="Codex, Cursor, and Claude Code logo strip">
 </p>
 
 <p align="center">

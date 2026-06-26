@@ -1,6 +1,6 @@
 {
   "title": "Sampled Refactor",
-  "description": "`sampled-refactor` inspects a real random slice of a JavaScript or TypeScript repository, applies at most one coherent behavior-preserving refactor, validates it, and opens a draft PR or prepares PR-ready output.",
+  "description": "Applies one small safe refactor in the codebase to improve maintainability without changing behavior.",
   "categories": [
     "Code Quality & Maintenance"
   ],

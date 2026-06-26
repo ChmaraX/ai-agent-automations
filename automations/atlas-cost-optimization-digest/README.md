@@ -2,10 +2,7 @@
 
 ## Overview
 
-`atlas-cost-optimization-digest` runs a read-only review of one MongoDB Atlas project and produces a compact report of the strongest cost-saving opportunities, ambiguous cases, and owner questions.
-
-Use it when you want Atlas cost review with context, not just raw metrics. It checks cluster sizing, storage, backups, archives, and Search-related spend without changing Atlas resources. When the workspace is writable, it can also save a static HTML report.
-
+This automation reviews one MongoDB Atlas project and highlights where you may be overpaying for clusters, storage, backups, archives, or search. It is read-only and meant to help a human decide what to optimize next.
 ## Preview
 
 ![HTML report preview](./assets/html-report-preview.png)

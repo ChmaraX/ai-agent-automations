@@ -2,10 +2,7 @@
 
 ## Overview
 
-`branch-change-test-coverage` inspects the current branch or a recent merged change set, identifies the main behavior that should be covered by tests, adds the minimum meaningful missing coverage, validates it, and opens a draft PR only when the result is trustworthy.
-
-It is not a generic coverage maximizer. The goal is to cover the important behavior in a coherent change set, not to chase percentages or generate low-signal tests.
-
+This automation looks at a recent code change, finds the most important missing test coverage, and adds the smallest useful tests. It is for tightening confidence without broad test rewrites.
 ## How It Works
 
 1. Discovers a trustworthy diff from the current branch or default branch.

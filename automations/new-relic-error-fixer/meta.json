@@ -1,6 +1,6 @@
 {
   "title": "New Relic Error Fixer",
-  "description": "`new-relic-error-fixer` selects one strong New Relic error candidate, validates the repository and code evidence, attempts the smallest safe fix, runs validation, and opens a draft PR or prepares PR-ready output.",
+  "description": "Fixes one important production error from New Relic when the code path and smallest safe fix are clear.",
   "categories": [
     "Observability & Incident Response"
   ],

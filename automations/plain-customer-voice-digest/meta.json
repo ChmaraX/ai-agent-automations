@@ -1,6 +1,6 @@
 {
   "title": "Plain Customer Voice Digest",
-  "description": "`plain-customer-voice-digest` reviews a bounded set of recent Plain support threads and turns them into one evidence-backed customer voice summary.",
+  "description": "Summarizes what customers are saying in support conversations, grouped into the signals that matter most.",
   "categories": [
     "Customer Success"
   ],

@@ -1,6 +1,6 @@
 {
   "title": "TODO Linear Sync And Fix",
-  "description": "`todo-linear-sync-and-fix` scans repo TODO-style comments, fixes the easy ones directly, turns the harder ones into Linear issues, updates the source comments, and opens one draft PR for the run.",
+  "description": "Fixes easy TODOs and turns the rest into Linear tasks so loose notes become real follow-up.",
   "categories": [
     "Work Triage",
     "Code Quality & Maintenance"

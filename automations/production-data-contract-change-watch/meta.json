@@ -1,6 +1,6 @@
 {
   "title": "Production Data Contract Change Watch",
-  "description": "`production-data-contract-change-watch` compares live MongoDB document shapes against the contracts implied by the current repository and returns a ranked drift report. If one fix is unusually narrow and clearly code-side, it can also open one draft PR.",
+  "description": "Finds differences between live data and your expected data shape before the drift turns into bugs.",
   "categories": [
     "Database Reliability"
   ],

@@ -2,10 +2,7 @@
 
 ## Overview
 
-`new-relic-latency-hotspot-fixer` inspects one explicitly scoped New Relic service or endpoint family, finds one meaningful high-latency hotspot, localizes the most likely bottleneck, and either opens a draft PR for a narrow app-side fix or returns a concrete report.
-
-Each run should tell you what is currently slow enough to matter, whether the main culprit looks like app code, a downstream dependency, or the database, and whether a narrow repo-local fix is safe enough for a draft PR.
-
+This automation looks for a meaningful latency hotspot in New Relic, identifies the likely code path, and prepares a narrow improvement when justified. It is for targeted performance fixes.
 ## How It Works
 
 1. Requires a completed run-configuration block with explicit account, service scope, and time window.
