@@ -1,7 +1,11 @@
 ---
 import { siteConfig } from '../../data/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAutomationDetailEntry, getAutomationEntries } from '../../lib/automations';
+import {
+  getAutomationAppActions,
+  getAutomationDetailEntry,
+  getAutomationEntries,
+} from '../../lib/automations';
 
 export const prerender = true;
 
@@ -17,6 +21,7 @@ if (!slug) {
 }
 
 const entry = await getAutomationDetailEntry(slug);
+const appActions = getAutomationAppActions(entry);
 const pageTitle = `${entry.title} | ${siteConfig.title}`;
 const sourceBaseUrl = `${siteConfig.repoUrl}/tree/main/automations/${entry.slug}`;
 const repoLink = { label: 'GitHub repo ★', href: siteConfig.repoUrl };
@@ -83,13 +88,42 @@ function formatDescription(description: string): string {
       <h1 class="title-boxed">{entry.title}</h1>
       <p class="subtitle">{formatDescription(entry.description)}</p>
       <div class="header-actions">
-        <button class="action primary mono" type="button" data-copy-prompt data-copy-text={entry.promptText}>
-          Copy prompt
-        </button>
-        <a class="action mono" href={sourceLink.href} target="_blank" rel="noreferrer">
-          {sourceLink.label}
-        </a>
+        {
+          appActions.length > 0 && (
+            <div class="header-actions-row header-actions-row-app">
+              <div class="action-group" role="group" aria-label="Add this automation to an AI app">
+                {appActions.map((action) => (
+                  <a class="action primary action-agent mono" href={action.href} title={action.title}>
+                    <img
+                      class:list={['agent-button-logo', 'agent-logo', action.iconClassName]}
+                      src={action.iconSrc}
+                      alt={action.iconAlt}
+                      loading="lazy"
+                    />
+                    <span>{action.label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+        <div class="header-actions-row header-actions-row-utility">
+          <button class="action primary mono" type="button" data-copy-prompt data-copy-text={entry.promptText}>
+            Copy prompt
+          </button>
+          <a class="action mono" href={sourceLink.href} target="_blank" rel="noreferrer">
+            {sourceLink.label}
+          </a>
+        </div>
       </div>
+      {
+        appActions.length > 0 && (
+          <p class="prototype-note">
+            Prototype: launches Codex or Cursor with a prefilled automation-setup prompt. You still need to confirm the
+            required tools or MCPs, repository scope, schedule, and any validation commands before saving.
+          </p>
+        )
+      }
     </header>
 
     <div class="detail-layout">

@@ -26,10 +26,35 @@ export type AutomationDetailEntry = AutomationEntry & {
   readmeHtml: string;
 };
 
+export type CursorAutomatePrototype = {
+  appUrl: string;
+  webUrl: string;
+  prompt: string;
+  promptVariant: 'full' | 'compact' | 'minimal';
+  truncated: boolean;
+  encodedLength: number;
+};
+
+export type CodexAutomatePrototype = {
+  appUrl: string;
+  prompt: string;
+  truncated: boolean;
+  encodedLength: number;
+};
+
 export type AutomationAssetEntry = {
   absolutePath: string;
   assetPath: string;
   slug: string;
+};
+
+export type AutomationAppAction = {
+  href: string;
+  label: string;
+  title: string;
+  iconSrc: string;
+  iconAlt: string;
+  iconClassName: string;
 };
 
 type RawAutomationMeta = {
@@ -40,7 +65,16 @@ type RawAutomationMeta = {
   tools?: unknown;
 };
 
+type CursorAutomatePromptInput = Pick<
+  AutomationDetailEntry,
+  'description' | 'promptText'
+>;
+
 const automationsDir = resolve(process.cwd(), '../automations');
+const cursorPromptAppBaseUrl = 'cursor://anysphere.cursor-deeplink/prompt';
+const cursorPromptWebBaseUrl = 'https://cursor.com/link/prompt';
+const codexPromptAppBaseUrl = 'codex://new';
+const deeplinkMaxLength = 8000;
 
 let markdownProcessorPromise: ReturnType<typeof createMarkdownProcessor> | undefined;
 
@@ -131,6 +165,134 @@ function buildMetadataGroups(entry: AutomationEntry): AutomationMetadataGroup[] 
     { label: 'Categories', values: entry.categories },
     { label: 'Surfaces', values: entry.surfaces },
     { label: 'Tools', values: entry.tools },
+  ];
+}
+
+function buildCursorPrompt(entry: CursorAutomatePromptInput): string {
+  return [
+    'Use /automate to create a Cursor Automation.',
+    '',
+    `Goal: ${entry.description}`,
+    '',
+    'Prompt:',
+    entry.promptText,
+  ].join('\n');
+}
+
+function createCursorPromptUrl(baseUrl: string, prompt: string): string {
+  const url = new URL(baseUrl);
+  url.searchParams.set('text', prompt);
+  return url.toString();
+}
+
+export function getCursorAutomatePrototype(entry: CursorAutomatePromptInput): CursorAutomatePrototype {
+  const prompt = buildCursorPrompt(entry);
+  const appUrl = createCursorPromptUrl(cursorPromptAppBaseUrl, prompt);
+
+  if (appUrl.length <= deeplinkMaxLength) {
+    return {
+      appUrl,
+      webUrl: createCursorPromptUrl(cursorPromptWebBaseUrl, prompt),
+      prompt,
+      promptVariant: 'full',
+      truncated: false,
+      encodedLength: appUrl.length,
+    };
+  }
+
+  const reservedPrompt = [
+    'Use /automate to create a Cursor Automation.',
+    '',
+    `Goal: ${entry.description}`,
+    '',
+    'Prompt:',
+  ].join('\n');
+  const maxPromptLength = Math.max(0, Math.floor((deeplinkMaxLength - cursorPromptAppBaseUrl.length) * 0.55));
+  const truncatedPromptText = entry.promptText.slice(0, Math.max(0, maxPromptLength - reservedPrompt.length - 28)).trimEnd();
+  const truncatedPrompt = `${reservedPrompt}\n${truncatedPromptText}\n\n[truncated for deeplink length]`;
+  const truncatedAppUrl = createCursorPromptUrl(cursorPromptAppBaseUrl, truncatedPrompt);
+
+  return {
+    appUrl: truncatedAppUrl,
+    webUrl: createCursorPromptUrl(cursorPromptWebBaseUrl, truncatedPrompt),
+    prompt: truncatedPrompt,
+    promptVariant: 'minimal',
+    truncated: true,
+    encodedLength: truncatedAppUrl.length,
+  };
+}
+
+function buildCodexPrompt(entry: CursorAutomatePromptInput): string {
+  return [
+    'Create a Codex automation for this task.',
+    '',
+    `Goal: ${entry.description}`,
+    '',
+    'Prompt:',
+    entry.promptText,
+  ].join('\n');
+}
+
+function createCodexPromptUrl(prompt: string): string {
+  const url = new URL(codexPromptAppBaseUrl);
+  url.searchParams.set('prompt', prompt);
+  return url.toString();
+}
+
+export function getCodexAutomatePrototype(entry: CursorAutomatePromptInput): CodexAutomatePrototype {
+  const prompt = buildCodexPrompt(entry);
+  const appUrl = createCodexPromptUrl(prompt);
+
+  if (appUrl.length <= deeplinkMaxLength) {
+    return {
+      appUrl,
+      prompt,
+      truncated: false,
+      encodedLength: appUrl.length,
+    };
+  }
+
+  const reservedPrompt = [
+    'Create a Codex automation for this task.',
+    '',
+    `Goal: ${entry.description}`,
+    '',
+    'Prompt:',
+  ].join('\n');
+  const maxPromptLength = Math.max(0, Math.floor((deeplinkMaxLength - codexPromptAppBaseUrl.length) * 0.55));
+  const truncatedPromptText = entry.promptText.slice(0, Math.max(0, maxPromptLength - reservedPrompt.length - 28)).trimEnd();
+  const truncatedPrompt = `${reservedPrompt}\n${truncatedPromptText}\n\n[truncated for deeplink length]`;
+  const truncatedAppUrl = createCodexPromptUrl(truncatedPrompt);
+
+  return {
+    appUrl: truncatedAppUrl,
+    prompt: truncatedPrompt,
+    truncated: true,
+    encodedLength: truncatedAppUrl.length,
+  };
+}
+
+export function getAutomationAppActions(entry: AutomationDetailEntry): AutomationAppAction[] {
+  const codexPrototype = getCodexAutomatePrototype(entry);
+  const cursorPrototype = getCursorAutomatePrototype(entry);
+
+  return [
+    {
+      href: codexPrototype.appUrl,
+      label: 'Add to Codex',
+      title: 'Prototype Codex launch for automation creation',
+      iconSrc: '/logos/codex.png',
+      iconAlt: 'Codex',
+      iconClassName: 'agent-logo-codex',
+    },
+    {
+      href: cursorPrototype.appUrl,
+      label: 'Add to Cursor',
+      title: 'Prototype Cursor launch for /automate',
+      iconSrc: '/logos/cursor.png',
+      iconAlt: 'Cursor',
+      iconClassName: 'agent-logo-cursor',
+    },
   ];
 }
 
