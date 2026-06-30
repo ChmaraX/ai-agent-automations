@@ -113,10 +113,34 @@ a {
 }
 
 .header-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.header-actions-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 18px;
+}
+
+.action-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.prototype-note {
+  max-width: 720px;
+  margin: 12px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.prototype-note code {
+  font-family: 'SF Mono', 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.92em;
 }
 
 .action {
@@ -124,12 +148,30 @@ a {
   min-height: 38px;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   border: 1px solid var(--border-strong);
   padding: 0 12px;
   background: var(--surface);
   color: var(--text);
   font-size: 12px;
   text-decoration: none;
+}
+
+.action-agent {
+  min-width: 156px;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 16px 0 14px;
+}
+
+.action-agent .agent-button-logo {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+  opacity: 1;
+  object-fit: contain;
+  object-position: center;
 }
 
 .action.primary {
@@ -146,6 +188,18 @@ a {
 .action.primary:hover,
 .action.primary:focus-visible {
   background: #222;
+}
+
+@media (max-width: 640px) {
+  .action-group {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .action-agent {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
 
 .detail-layout {
