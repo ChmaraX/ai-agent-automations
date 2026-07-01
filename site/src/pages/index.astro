@@ -5,17 +5,19 @@ import HomeGrid from '../components/home/HomeGrid.astro';
 import HomeHero from '../components/home/HomeHero.astro';
 import { siteConfig } from '../data/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAutomationEntries } from '../lib/automations';
+import { getAutomationEntries, getCatalogAssessmentPrompt } from '../lib/automations';
 import { buildHomepageData } from '../lib/homepage';
 
 export const prerender = true;
 
-const homepage = buildHomepageData(getAutomationEntries());
+const automationEntries = getAutomationEntries();
+const homepage = buildHomepageData(automationEntries);
+const assessmentPrompt = getCatalogAssessmentPrompt(automationEntries);
 ---
 
 <BaseLayout title={siteConfig.title} description={siteConfig.description}>
   <main class="page">
-    <HomeHero site={siteConfig} />
+    <HomeHero site={siteConfig} assessmentPrompt={assessmentPrompt} />
     <HomeFilters categories={homepage.categories} surfaces={homepage.surfaces} />
     <HomeCollectionMeta totalCount={homepage.automations.length} />
     <HomeGrid automations={homepage.automations} />

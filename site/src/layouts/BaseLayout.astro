@@ -22,5 +22,44 @@ const { title, description } = Astro.props;
   </head>
   <body>
     <slot />
+    <script is:inline>
+      (() => {
+        const links = Array.from(document.querySelectorAll('[data-github-star-link]')).filter(
+          (node) => node instanceof HTMLAnchorElement,
+        );
+        if (links.length === 0) return;
+
+        const repo = links[0]?.dataset.githubRepo;
+        if (!repo) return;
+
+        const formatCount = (count) => {
+          if (!Number.isFinite(count)) return '';
+          if (count < 1000) return String(count);
+          return `${(count / 1000).toFixed(count < 10000 ? 1 : 0)}k`;
+        };
+
+        fetch(`https://api.github.com/repos/${repo}`, {
+          headers: { Accept: 'application/vnd.github+json' },
+        })
+          .then((response) => {
+            if (!response.ok) throw new Error('GitHub star count unavailable');
+            return response.json();
+          })
+          .then((data) => {
+            const count = formatCount(Number(data.stargazers_count));
+            if (!count) return;
+
+            for (const link of links) {
+              const countNode = link.querySelector('[data-github-star-count]');
+              if (!(countNode instanceof HTMLElement)) continue;
+              countNode.textContent = count;
+              countNode.hidden = false;
+            }
+          })
+          .catch(() => {
+            // Keep the static CTA when GitHub rate-limits or the visitor is offline.
+          });
+      })();
+    </script>
   </body>
 </html>
