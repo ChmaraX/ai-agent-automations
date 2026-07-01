@@ -95,33 +95,35 @@ a {
   border-bottom: 1px solid var(--border-strong);
 }
 
-.repo-link {
+.github-star-link {
   display: inline-flex;
+  min-height: 34px;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: 1px solid var(--border-strong);
-  padding: 8px 12px;
+  padding: 0 11px;
+  background: var(--surface);
   color: var(--text);
   font-size: 12px;
+  line-height: 1;
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.repo-link:hover,
-.repo-link:focus-visible {
-  background: var(--text);
-  color: var(--surface);
+.github-star-link:hover,
+.github-star-link:focus-visible {
+  background: var(--surface-muted);
+  color: var(--text);
   outline: none;
 }
 
 .header-actions {
-  display: grid;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.header-actions-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 18px;
+  align-items: center;
 }
 
 .action-group {
@@ -513,16 +515,37 @@ a {
 
 
 .hero {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 390px;
   align-items: center;
   gap: 28px;
   border-bottom: 1px solid var(--border-strong);
-  padding-bottom: 18px;
+  padding: 28px 0 18px;
 }
 
 .hero-copy {
   min-width: 0;
+}
+
+.hero-star-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.github-star-count {
+  display: inline-flex;
+  min-height: 18px;
+  align-items: center;
+  border-left: 1px solid currentColor;
+  padding-left: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.github-star-icon {
+  flex: 0 0 auto;
+  color: currentColor;
 }
 
 .kicker {
@@ -555,6 +578,59 @@ a {
   color: #333;
   font-size: 15px;
   line-height: 1.55;
+}
+
+.hero-primary-action {
+  display: flex;
+  width: min(100%, 560px);
+  margin-top: 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 9px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.hero-copy-action {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 126px;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--border-strong);
+  padding: 0 14px;
+  background: var(--text);
+  color: var(--surface);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.hero-copy-icon {
+  flex: 0 0 auto;
+  color: currentColor;
+}
+
+.hero-copy-label {
+  display: inline-block;
+  min-width: 78px;
+  text-align: left;
+}
+
+.hero-copy-action:hover,
+.hero-copy-action:focus-visible {
+  background: #222;
+  outline: none;
+}
+
+.hero-copy-support {
+  min-width: 0;
+  margin: 0;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .agent-strip {
@@ -605,72 +681,6 @@ a {
 
 .agent-logo-cursor {
   height: 18px;
-}
-
-.repo-callout {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr) auto;
-  width: min(100%, 520px);
-  margin-top: 18px;
-  align-items: center;
-  gap: 10px;
-  padding: 9px;
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  color: var(--text);
-  text-decoration: none;
-}
-
-.repo-callout:hover,
-.repo-callout:focus-visible {
-  outline: none;
-  background: var(--surface-muted);
-}
-
-.repo-icon {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  background: var(--text);
-  color: var(--surface);
-}
-
-.repo-text {
-  display: grid;
-  min-width: 0;
-  gap: 3px;
-}
-
-.repo-kicker {
-  color: var(--text-muted);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.repo-name {
-  overflow: hidden;
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.repo-star {
-  display: inline-flex;
-  min-height: 34px;
-  align-items: center;
-  padding: 0 10px;
-  background: var(--text);
-  color: var(--surface);
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.repo-callout:hover .repo-star,
-.repo-callout:focus-visible .repo-star {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .header-art {
@@ -949,17 +959,17 @@ a {
     padding: 22px 0 18px;
   }
 
-  .repo-link {
+  .github-star-link {
     margin-top: 12px;
   }
 
-  .repo-callout {
-    grid-template-columns: 34px minmax(0, 1fr);
+  .hero-primary-action {
+    display: grid;
+    gap: 9px;
   }
 
-  .repo-star {
-    grid-column: 1 / -1;
-    justify-content: center;
+  .hero-copy-action {
+    width: 100%;
   }
 
   .collection-meta {

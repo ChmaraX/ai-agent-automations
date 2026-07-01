@@ -1,4 +1,5 @@
 ---
+import GitHubStarLink from '../../components/GitHubStarLink.astro';
 import { siteConfig } from '../../data/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import {
@@ -24,7 +25,6 @@ const entry = await getAutomationDetailEntry(slug);
 const appActions = getAutomationAppActions(entry);
 const pageTitle = `${entry.title} | ${siteConfig.title}`;
 const sourceBaseUrl = `${siteConfig.repoUrl}/tree/main/automations/${entry.slug}`;
-const repoLink = { label: 'GitHub repo ★', href: siteConfig.repoUrl };
 const sourceLink = { label: 'View source', href: sourceBaseUrl };
 
 type ReadmeSection = {
@@ -80,7 +80,7 @@ function formatDescription(description: string): string {
   <main class="page detail-page">
     <div class="topbar">
       <a class="back-link mono" href="/">Back to catalog</a>
-      <a class="repo-link mono" href={repoLink.href} target="_blank" rel="noreferrer">{repoLink.label}</a>
+      <GitHubStarLink />
     </div>
 
     <header class="detail-hero">
@@ -90,40 +90,28 @@ function formatDescription(description: string): string {
       <div class="header-actions">
         {
           appActions.length > 0 && (
-            <div class="header-actions-row header-actions-row-app">
-              <div class="action-group" role="group" aria-label="Add this automation to an AI app">
-                {appActions.map((action) => (
-                  <a class="action primary action-agent mono" href={action.href} title={action.title}>
-                    <img
-                      class:list={['agent-button-logo', 'agent-logo', action.iconClassName]}
-                      src={action.iconSrc}
-                      alt={action.iconAlt}
-                      loading="lazy"
-                    />
-                    <span>{action.label}</span>
-                  </a>
-                ))}
-              </div>
+            <div class="action-group" role="group" aria-label="Add this automation to an AI app">
+              {appActions.map((action) => (
+                <a class="action primary action-agent mono" href={action.href} title={action.title}>
+                  <img
+                    class:list={['agent-button-logo', 'agent-logo', action.iconClassName]}
+                    src={action.iconSrc}
+                    alt={action.iconAlt}
+                    loading="lazy"
+                  />
+                  <span>{action.label}</span>
+                </a>
+              ))}
             </div>
           )
         }
-        <div class="header-actions-row header-actions-row-utility">
-          <button class="action primary mono" type="button" data-copy-prompt data-copy-text={entry.promptText}>
-            Copy prompt
-          </button>
-          <a class="action mono" href={sourceLink.href} target="_blank" rel="noreferrer">
-            {sourceLink.label}
-          </a>
-        </div>
+        <button class="action primary mono" type="button" data-copy-prompt data-copy-text={entry.promptText}>
+          Copy prompt
+        </button>
+        <a class="action mono" href={sourceLink.href} target="_blank" rel="noreferrer">
+          {sourceLink.label}
+        </a>
       </div>
-      {
-        appActions.length > 0 && (
-          <p class="prototype-note">
-            Prototype: launches Codex or Cursor with a prefilled automation-setup prompt. You still need to confirm the
-            required tools or MCPs, repository scope, schedule, and any validation commands before saving.
-          </p>
-        )
-      }
     </header>
 
     <div class="detail-layout">

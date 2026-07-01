@@ -70,6 +70,11 @@ type CursorAutomatePromptInput = Pick<
   'description' | 'promptText'
 >;
 
+type CatalogAssessmentEntry = Pick<
+  AutomationEntry,
+  'slug' | 'title' | 'description' | 'categories' | 'surfaces' | 'tools'
+>;
+
 const automationsDir = resolve(process.cwd(), '../automations');
 const cursorPromptAppBaseUrl = 'cursor://anysphere.cursor-deeplink/prompt';
 const cursorPromptWebBaseUrl = 'https://cursor.com/link/prompt';
@@ -270,6 +275,59 @@ export function getCodexAutomatePrototype(entry: CursorAutomatePromptInput): Cod
     truncated: true,
     encodedLength: truncatedAppUrl.length,
   };
+}
+
+function toCatalogAssessmentEntries(entries: AutomationEntry[]): CatalogAssessmentEntry[] {
+  return entries.map(({ slug, title, description, categories, surfaces, tools }) => ({
+    slug,
+    title,
+    description,
+    categories,
+    surfaces,
+    tools,
+  }));
+}
+
+function formatCatalogAssessmentEntries(entries: CatalogAssessmentEntry[]): string {
+  const formatEntry = (entry: CatalogAssessmentEntry): string =>
+    `{"slug": ${JSON.stringify(entry.slug)}, "title": ${JSON.stringify(entry.title)}, "description": ${JSON.stringify(entry.description)}, "categories": ${JSON.stringify(entry.categories)}, "surfaces": ${JSON.stringify(entry.surfaces)}, "tools": ${JSON.stringify(entry.tools)}}`;
+
+  return [
+    '[',
+    ...entries.map((entry, index) => `  ${formatEntry(entry)}${index === entries.length - 1 ? '' : ','}`),
+    ']',
+  ].join('\n');
+}
+
+export function getCatalogAssessmentPrompt(entries: AutomationEntry[] = getAutomationEntries()): string {
+  return [
+    'Help me find useful AI automations from the catalog below.',
+    '',
+    'First infer the context where this prompt was pasted:',
+    '- If you can inspect a project, repository, workspace, or codebase, use that evidence to identify relevant automations.',
+    '- If this was pasted into a general chat without project context, interview me briefly before recommending automations.',
+    '- If the context is ambiguous, ask whether I want project-specific recommendations or general workflow recommendations for my role, tools, company, or personal operations.',
+    '',
+    'When interviewing me, ask only the minimum useful questions. Prefer concise questions about my role, active tools, recurring workflows, business model, project stack, and pain points.',
+    '',
+    'Recommend up to 5 automations from the catalog once you have enough context.',
+    'For project-specific recommendations, use evidence such as dependencies, source files, CI, monitoring, billing, docs, scripts, and obvious workflow gaps.',
+    'For general workflow recommendations, use evidence from my answers about tools, responsibilities, repeated tasks, risks, and goals.',
+    'Do not force weak recommendations just to fill the list.',
+    '',
+    'For each recommended automation, provide:',
+    '- why it fits the project, workflow, or person',
+    '- what evidence supports it',
+    '- expected value',
+    '- requirements or caveats',
+    '',
+    'Also include:',
+    '- A short start-here-first rollout order.',
+    '- Optional later additions or near-misses worth revisiting later.',
+    '',
+    'Automation catalog:',
+    formatCatalogAssessmentEntries(toCatalogAssessmentEntries(entries)),
+  ].join('\n');
 }
 
 export function getAutomationAppActions(entry: AutomationDetailEntry): AutomationAppAction[] {

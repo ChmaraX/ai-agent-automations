@@ -10,7 +10,7 @@ export const siteConfig = {
   repoUrl: 'https://github.com/ChmaraX/ai-agent-automations',
   repoName: 'ChmaraX/ai-agent-automations',
   repoKicker: 'GitHub repository',
-  repoCta: 'Star ★',
+  repoCta: 'Star on GitHub',
   heroVideoSrc: '/media/home-hero.webm',
   logos: [
     { src: '/logos/codex.png', alt: 'Codex', className: 'agent-logo-codex' },

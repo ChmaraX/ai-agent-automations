@@ -1,14 +1,18 @@
 ---
+import GitHubStarLink from '../GitHubStarLink.astro';
 import type { SiteConfig } from '../../data/site';
 
 type Props = {
   site: SiteConfig;
+  assessmentPrompt: string;
 };
 
-const { site } = Astro.props;
+const { site, assessmentPrompt } = Astro.props;
 ---
 
 <header class="hero">
+  <GitHubStarLink class="hero-star-link" />
+
   <div class="hero-copy">
     <div class="kicker mono">{site.heroKicker}</div>
     <h1 class="title-boxed">
@@ -29,21 +33,24 @@ const { site } = Astro.props;
       </div>
     </div>
 
-    <a class="repo-callout" href={site.repoUrl} target="_blank" rel="noreferrer">
-      <span class="repo-icon" aria-hidden="true">
-        <svg viewBox="0 0 16 16" width="15" height="15">
+    <div class="hero-primary-action">
+      <button class="hero-copy-action mono" type="button" data-copy-assessment>
+        <svg class="hero-copy-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
           <path
-            fill="currentColor"
-            d="M8 0C3.58 0 0 3.64 0 8.13c0 3.59 2.29 6.63 5.47 7.71.4.08.55-.18.55-.39 0-.19-.01-.83-.01-1.51-2.01.38-2.53-.5-2.69-.96-.09-.24-.48-.96-.82-1.15-.28-.15-.68-.52-.01-.53.63-.01 1.08.59 1.23.83.72 1.23 1.87.88 2.33.67.07-.53.28-.88.51-1.08-1.78-.21-3.64-.91-3.64-4.03 0-.89.31-1.62.82-2.19-.08-.21-.36-1.04.08-2.16 0 0 .67-.22 2.2.84A7.45 7.45 0 0 1 8 3.91c.68 0 1.36.09 2 .27 1.53-1.06 2.2-.84 2.2-.84.44 1.12.16 1.95.08 2.16.51.57.82 1.3.82 2.19 0 3.13-1.87 3.82-3.65 4.03.29.25.54.75.54 1.52 0 1.1-.01 1.98-.01 2.25 0 .21.15.47.55.39A8.02 8.02 0 0 0 16 8.13C16 3.64 12.42 0 8 0Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0zM20 3v4M22 5h-4M4 17v2M5 18H3"
           ></path>
         </svg>
-      </span>
-      <span class="repo-text">
-        <span class="repo-kicker mono">{site.repoKicker}</span>
-        <span class="repo-name mono">{site.repoName}</span>
-      </span>
-      <span class="repo-star mono">{site.repoCta}</span>
-    </a>
+        <span class="hero-copy-label" data-copy-assessment-label>Copy prompt</span>
+      </button>
+      <p class="hero-copy-support">
+        Paste into a project or agent chat to find automations that fit.
+      </p>
+    </div>
   </div>
 
   <div class="header-art" aria-hidden="true">
@@ -52,3 +59,78 @@ const { site } = Astro.props;
     </video>
   </div>
 </header>
+
+<script id="assessment-prompt-data" type="application/json" set:html={JSON.stringify(assessmentPrompt)}></script>
+
+<script is:inline>
+  (() => {
+    const buttons = Array.from(document.querySelectorAll('[data-copy-assessment]')).filter(
+      (node) => node instanceof HTMLButtonElement,
+    );
+    const promptNode = document.getElementById('assessment-prompt-data');
+    const promptText = promptNode?.textContent ? JSON.parse(promptNode.textContent) : '';
+    if (buttons.length === 0 || !promptText) return;
+
+    const labels = new Map(
+      buttons.map((button) => [
+        button,
+        button.querySelector('[data-copy-assessment-label]'),
+      ]),
+    );
+    const defaultLabels = new Map(
+      buttons.map((button) => [
+        button,
+        labels.get(button)?.textContent ?? 'Copy prompt',
+      ]),
+    );
+
+    const setLabel = (button, text) => {
+      const label = labels.get(button);
+      if (label) {
+        label.textContent = text;
+      }
+    };
+
+    const writePrompt = async () => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(promptText);
+        return;
+      }
+
+      const textarea = document.createElement('textarea');
+      textarea.value = promptText;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      textarea.style.pointerEvents = 'none';
+      document.body.append(textarea);
+      textarea.select();
+      const copied = document.execCommand('copy');
+      textarea.remove();
+      if (!copied) {
+        throw new Error('execCommand copy failed');
+      }
+    };
+
+    for (const button of buttons) {
+      button.addEventListener('click', async () => {
+        try {
+          await writePrompt();
+          for (const target of buttons) {
+            setLabel(target, 'Copied');
+          }
+        } catch {
+          for (const target of buttons) {
+            setLabel(target, 'Copy failed');
+          }
+        }
+
+        window.setTimeout(() => {
+          for (const target of buttons) {
+            setLabel(target, defaultLabels.get(target) ?? 'Copy prompt');
+          }
+        }, 1600);
+      });
+    }
+  })();
+</script>
