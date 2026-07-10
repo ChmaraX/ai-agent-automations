@@ -196,6 +196,15 @@ function formatDescription(description: string): string {
     </div>
   </main>
 
+  <dialog class="mermaid-lightbox" data-mermaid-lightbox>
+    <div class="mermaid-lightbox__header">
+      <button class="mermaid-lightbox__close mono" type="button" data-mermaid-lightbox-close>
+        Close
+      </button>
+    </div>
+    <div class="mermaid-lightbox__body" data-mermaid-lightbox-body></div>
+  </dialog>
+
   <script is:inline>
     (() => {
       const buttons = Array.from(document.querySelectorAll('[data-copy-prompt]')).filter(
@@ -257,6 +266,33 @@ function formatDescription(description: string): string {
   <script src={mermaidScriptUrl}></script>
   <script is:inline>
     (() => {
+      const lightbox = document.querySelector('[data-mermaid-lightbox]');
+      const lightboxBody = lightbox?.querySelector('[data-mermaid-lightbox-body]');
+      const lightboxClose = lightbox?.querySelector('[data-mermaid-lightbox-close]');
+
+      if (lightbox instanceof HTMLDialogElement && lightboxBody instanceof HTMLElement) {
+        lightbox.addEventListener('click', (event) => {
+          if (event.target === lightbox) {
+            lightbox.close();
+          }
+        });
+
+        lightboxClose?.addEventListener('click', () => {
+          lightbox.close();
+        });
+      }
+
+      const openLightbox = (source) => {
+        if (!(lightbox instanceof HTMLDialogElement) || !(lightboxBody instanceof HTMLElement)) return;
+
+        const svg = source.querySelector('svg');
+        if (!(svg instanceof SVGElement)) return;
+
+        const clone = svg.cloneNode(true);
+        lightboxBody.replaceChildren(clone);
+        lightbox.showModal();
+      };
+
       const run = async () => {
         const mermaid = window.mermaid;
         if (!mermaid) {
@@ -286,6 +322,22 @@ function formatDescription(description: string): string {
               const { svg, bindFunctions } = await mermaid.render(renderId, definition);
               mount.innerHTML = svg;
               bindFunctions?.(mount);
+
+              const expandButton = document.createElement('button');
+              expandButton.className = 'mermaid-diagram__expand mono';
+              expandButton.type = 'button';
+              expandButton.textContent = 'Expand';
+              expandButton.setAttribute('aria-label', 'Expand diagram');
+              expandButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                openLightbox(mount);
+              });
+              mount.append(expandButton);
+
+              mount.addEventListener('click', () => {
+                openLightbox(mount);
+              });
+
               block.replaceWith(mount);
             } catch (error) {
               console.error('Failed to render Mermaid diagram', error);
