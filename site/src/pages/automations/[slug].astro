@@ -1,5 +1,6 @@
 ---
 import GitHubStarLink from '../../components/GitHubStarLink.astro';
+import mermaidScriptUrl from 'mermaid/dist/mermaid.min.js?url';
 import { siteConfig } from '../../data/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import {
@@ -253,36 +254,58 @@ function formatDescription(description: string): string {
     })();
   </script>
 
-  <script>
-    import mermaid from 'mermaid';
-
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'neutral',
-    });
-
-    const mermaidBlocks = Array.from(document.querySelectorAll('.md-body [data-language="mermaid"]')).filter(
-      (node) => node instanceof HTMLElement,
-    );
-
-    await Promise.all(
-      mermaidBlocks.map(async (block, index) => {
-        const definition = block.textContent?.trim();
-        if (!definition) return;
-
-        const mount = document.createElement('div');
-        mount.className = 'mermaid-diagram';
-
-        try {
-          const renderId = `mermaid-diagram-${index}`;
-          const { svg, bindFunctions } = await mermaid.render(renderId, definition);
-          mount.innerHTML = svg;
-          bindFunctions?.(mount);
-          block.replaceWith(mount);
-        } catch (error) {
-          console.error('Failed to render Mermaid diagram', error);
+  <script src={mermaidScriptUrl}></script>
+  <script is:inline>
+    (() => {
+      const run = async () => {
+        const mermaid = window.mermaid;
+        if (!mermaid) {
+          console.error('Mermaid failed to load');
+          return;
         }
-      }),
-    );
+
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'neutral',
+        });
+
+        const mermaidBlocks = Array.from(document.querySelectorAll('.md-body [data-language="mermaid"]')).filter(
+          (node) => node instanceof HTMLElement,
+        );
+
+        await Promise.all(
+          mermaidBlocks.map(async (block, index) => {
+            const definition = block.textContent?.trim();
+            if (!definition) return;
+
+            const mount = document.createElement('div');
+            mount.className = 'mermaid-diagram';
+
+            try {
+              const renderId = `mermaid-diagram-${index}`;
+              const { svg, bindFunctions } = await mermaid.render(renderId, definition);
+              mount.innerHTML = svg;
+              bindFunctions?.(mount);
+              block.replaceWith(mount);
+            } catch (error) {
+              console.error('Failed to render Mermaid diagram', error);
+            }
+          }),
+        );
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener(
+          'DOMContentLoaded',
+          () => {
+            void run();
+          },
+          { once: true },
+        );
+        return;
+      }
+
+      void run();
+    })();
   </script>
 </BaseLayout>
