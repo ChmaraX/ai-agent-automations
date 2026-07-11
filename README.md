@@ -21,13 +21,13 @@
 </p>
 
 <p align="center">
-  <a href="https://chmarax.github.io/ai-agent-automations/launch/codex/">
+  <a href="https://trigger.tools/launch/codex/">
     <img src="https://img.shields.io/badge/Open%20In-Codex-111111?style=for-the-badge" alt="Open in Codex">
   </a>
-  <a href="https://chmarax.github.io/ai-agent-automations/launch/cursor/">
+  <a href="https://trigger.tools/launch/cursor/">
     <img src="https://img.shields.io/badge/Open%20In-Cursor-111111?style=for-the-badge" alt="Open in Cursor">
   </a>
-  <a href="https://chmarax.github.io/ai-agent-automations/launch/claude/">
+  <a href="https://trigger.tools/launch/claude/">
     <img src="https://img.shields.io/badge/Open%20In-Claude-111111?style=for-the-badge" alt="Open in Claude Code">
   </a>
 </p>

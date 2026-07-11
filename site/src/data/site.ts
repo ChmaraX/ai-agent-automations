@@ -1,6 +1,6 @@
 export const siteConfig = {
   title: 'AI Agent Automations',
-  siteUrl: 'https://chmarax.github.io/ai-agent-automations',
+  siteUrl: 'https://trigger.tools',
   description:
     'A focused directory of practical AI automations you can run as-is, adapt to your tools, or use as starting points for your own agent workflows.',
   heroKicker: 'ai-agent-automations / index',

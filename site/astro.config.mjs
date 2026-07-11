@@ -3,5 +3,5 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://chmarax.github.io/ai-agent-automations',
+  site: 'https://trigger.tools',
 });
