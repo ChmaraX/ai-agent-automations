@@ -99,7 +99,7 @@ type RawAutomationMeta = {
 
 type CursorAutomatePromptInput = Pick<
   AutomationDetailEntry,
-  'description' | 'promptText'
+  'slug' | 'description' | 'promptText'
 >;
 
 type CatalogAssessmentEntry = Pick<
@@ -206,14 +206,23 @@ function buildMetadataGroups(entry: AutomationEntry): AutomationMetadataGroup[] 
   ];
 }
 
+export function getAutomationPromptUrl(slug: string): string {
+  return `${siteConfig.siteUrl}/automation-prompts/${slug}.md`;
+}
+
 function buildCursorPrompt(entry: CursorAutomatePromptInput): string {
   return [
     'Use /automate to create a Cursor Automation.',
     '',
     `Goal: ${entry.description}`,
     '',
-    'Prompt:',
-    entry.promptText,
+    'Before doing anything else, fetch and read the source automation prompt at:',
+    getAutomationPromptUrl(entry.slug),
+    '',
+    'If direct fetch fails, open this page and use the Prompt section:',
+    `${siteConfig.siteUrl}/automations/${entry.slug}/#prompt`,
+    '',
+    'Then follow that automation prompt exactly.',
   ].join('\n');
 }
 
@@ -265,8 +274,13 @@ function buildCodexPrompt(entry: CursorAutomatePromptInput): string {
     '',
     `Goal: ${entry.description}`,
     '',
-    'Prompt:',
-    entry.promptText,
+    'Before doing anything else, fetch and read the source automation prompt at:',
+    getAutomationPromptUrl(entry.slug),
+    '',
+    'If direct fetch fails, open this page and use the Prompt section:',
+    `${siteConfig.siteUrl}/automations/${entry.slug}/#prompt`,
+    '',
+    'Then follow that automation prompt exactly.',
   ].join('\n');
 }
 
@@ -282,8 +296,13 @@ function buildClaudePrompt(entry: CursorAutomatePromptInput): string {
     '',
     `Goal: ${entry.description}`,
     '',
-    'Prompt:',
-    entry.promptText,
+    'Before doing anything else, fetch and read the source automation prompt at:',
+    getAutomationPromptUrl(entry.slug),
+    '',
+    'If direct fetch fails, open this page and use the Prompt section:',
+    `${siteConfig.siteUrl}/automations/${entry.slug}/#prompt`,
+    '',
+    'Then follow that automation prompt exactly.',
   ].join('\n');
 }
 
@@ -384,16 +403,16 @@ function formatCatalogAssessmentEntries(entries: CatalogAssessmentEntry[]): stri
 
 export function getCatalogAssessmentPrompt(entries: AutomationEntry[] = getAutomationEntries()): string {
   return [
-    'Help me find useful AI automations from the catalog below.',
+    'Help me find useful AI automations for this repo, workspace, or workflow.',
     '',
-    'First infer the context where this prompt was pasted:',
-    '- If you can inspect a project, repository, workspace, or codebase, use that evidence to identify relevant automations.',
-    '- If this was pasted into a general chat without project context, interview me briefly before recommending automations.',
-    '- If the context is ambiguous, ask whether I want project-specific recommendations or general workflow recommendations for my role, tools, company, or personal operations.',
+    'First infer the context where this prompt was pasted.',
+    '- If you can inspect a project, repository, workspace, or codebase, do that first and use the evidence you find.',
+    '- If web fetch is available, read the automation catalog docs at:',
+    `  - ${siteConfig.siteUrl}/llms.txt`,
+    `  - ${siteConfig.siteUrl}/catalog.md`,
+    '- If neither project inspection nor web fetch is available, ask me up to 3 short questions before recommending anything.',
     '',
-    'When interviewing me, ask only the minimum useful questions. Prefer concise questions about my role, active tools, recurring workflows, business model, project stack, and pain points.',
-    '',
-    'Recommend up to 5 automations from the catalog once you have enough context.',
+    'Recommend up to 5 automations once you have enough context.',
     'For project-specific recommendations, use evidence such as dependencies, source files, CI, monitoring, billing, docs, scripts, and obvious workflow gaps.',
     'For general workflow recommendations, use evidence from my answers about tools, responsibilities, repeated tasks, risks, and goals.',
     'Do not force weak recommendations just to fill the list.',
@@ -407,9 +426,79 @@ export function getCatalogAssessmentPrompt(entries: AutomationEntry[] = getAutom
     'Also include:',
     '- A short start-here-first rollout order.',
     '- Optional later additions or near-misses worth revisiting later.',
+  ].join('\n');
+}
+
+export function getCatalogMarkdown(entries: AutomationEntry[] = getAutomationEntries()): string {
+  const categories = new Map<string, AutomationEntry[]>();
+
+  for (const entry of entries) {
+    for (const category of entry.categories) {
+      const bucket = categories.get(category);
+      if (bucket) bucket.push(entry);
+      else categories.set(category, [entry]);
+    }
+  }
+
+  const sections = [...categories.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([category, categoryEntries]) => {
+      const lines = [`## ${category}`, ''];
+
+      for (const entry of categoryEntries.sort((left, right) => left.title.localeCompare(right.title))) {
+        lines.push(`- [${entry.title}](${siteConfig.siteUrl}/automations/${entry.slug}/): ${entry.description}`);
+        lines.push(`  - Slug: \`${entry.slug}\``);
+        lines.push(`  - Surfaces: ${entry.surfaces.join(', ')}`);
+        lines.push(`  - Tools: ${entry.tools.join(', ')}`);
+        lines.push(`  - Prompt: ${getAutomationPromptUrl(entry.slug)}`);
+        lines.push(`  - Details: ${siteConfig.siteUrl}/automations/${entry.slug}/`);
+        lines.push('');
+      }
+
+      return lines.join('\n').trimEnd();
+    });
+
+  return [
+    '# AI Agent Automations Catalog',
     '',
-    'Automation catalog:',
-    formatCatalogAssessmentEntries(toCatalogAssessmentEntries(entries)),
+    '> Agent-readable catalog of practical AI automations from trigger.tools.',
+    '',
+    'Use this document when choosing automations for a repository, workspace, or general workflow.',
+    'Prefer recommendations backed by project evidence or explicit user context.',
+    '',
+    '## How to use this catalog',
+    '',
+    '- Inspect the current project or workspace first when possible.',
+    '- Recommend up to 5 automations, not an exhaustive list.',
+    '- For each recommendation, explain fit, evidence, expected value, and setup caveats.',
+    '- If context is missing, ask only the minimum useful follow-up questions.',
+    '',
+    '## Category index',
+    '',
+    ...[...categories.entries()]
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([category, categoryEntries]) => `- ${category}: ${categoryEntries.length} automations`),
+    '',
+    ...sections.flatMap((section) => [section, '']),
+  ].join('\n').trimEnd();
+}
+
+export function getLlmsTxt(entries: AutomationEntry[] = getAutomationEntries()): string {
+  return [
+    `# ${siteConfig.title}`,
+    '',
+    `> ${siteConfig.description}`,
+    '',
+    'This site publishes practical AI automation prompts and setup guides.',
+    'For automation discovery and recommendation tasks, start with the linked catalog document.',
+    '',
+    '## Recommended docs',
+    '',
+    `- [Automation catalog](${siteConfig.siteUrl}/catalog.md): Agent-readable catalog of all automations with categories, surfaces, tools, and detail links.`,
+    '',
+    '## Recommendation guidance',
+    '',
+    `- [Recommendation guidance](${siteConfig.siteUrl}/catalog.md): Inspect the project first when possible, recommend up to 5 strong matches, and explain evidence, expected value, and caveats.`,
   ].join('\n');
 }
 
