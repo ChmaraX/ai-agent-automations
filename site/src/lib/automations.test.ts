@@ -4,11 +4,14 @@ import assert from 'node:assert/strict';
 import {
   getAutomationAppActions,
   getCatalogAssessmentPrompt,
+  getAutomationPromptUrl,
+  getCatalogMarkdown,
   getClaudeAutomatePrototype,
   getAutomationDetailEntry,
   getAutomationLaunchPath,
   getCodexAutomatePrototype,
   getCursorAutomatePrototype,
+  getLlmsTxt,
 } from './automations.ts';
 
 test('getAutomationDetailEntry returns README content and validated metadata for a known automation', async () => {
@@ -51,8 +54,9 @@ test('getCursorAutomatePrototype returns a direct Cursor prompt deeplink for sen
   assert.ok(prototype.webUrl.startsWith('https://cursor.com/link/prompt?text='));
   assert.ok(prototype.prompt.includes('Use /automate to create a Cursor Automation.'));
   assert.ok(prototype.prompt.includes(`Goal: ${entry.description}`));
-  assert.ok(prototype.prompt.includes('Prompt:'));
-  assert.ok(prototype.prompt.includes('You are a conservative Sentry triage-and-fix automation.'));
+  assert.ok(prototype.prompt.includes(getAutomationPromptUrl(entry.slug)));
+  assert.ok(prototype.prompt.includes(`https://trigger.tools/automations/${entry.slug}/#prompt`));
+  assert.ok(!prototype.prompt.includes(entry.promptText));
   assert.equal(prototype.truncated, false);
   assert.ok(prototype.encodedLength <= 8000);
 });
@@ -64,8 +68,9 @@ test('getCodexAutomatePrototype returns a direct Codex prompt deeplink for sentr
   assert.ok(prototype.appUrl.startsWith('codex://new?prompt='));
   assert.ok(prototype.prompt.includes('Create a Codex automation for this task.'));
   assert.ok(prototype.prompt.includes(`Goal: ${entry.description}`));
-  assert.ok(prototype.prompt.includes('Prompt:'));
-  assert.ok(prototype.prompt.includes('You are a conservative Sentry triage-and-fix automation.'));
+  assert.ok(prototype.prompt.includes(getAutomationPromptUrl(entry.slug)));
+  assert.ok(prototype.prompt.includes(`https://trigger.tools/automations/${entry.slug}/#prompt`));
+  assert.ok(!prototype.prompt.includes(entry.promptText));
   assert.equal(prototype.truncated, false);
   assert.ok(prototype.encodedLength <= 8000);
 });
@@ -79,8 +84,9 @@ test('getClaudeAutomatePrototype returns a direct Claude Code deeplink for sentr
   assert.ok(prototype.appUrl.includes('q='));
   assert.ok(prototype.prompt.includes('Create a Claude Code automation for this task.'));
   assert.ok(prototype.prompt.includes(`Goal: ${entry.description}`));
-  assert.ok(prototype.prompt.includes('Prompt:'));
-  assert.ok(prototype.prompt.includes('You are a conservative Sentry triage-and-fix automation.'));
+  assert.ok(prototype.prompt.includes(getAutomationPromptUrl(entry.slug)));
+  assert.ok(prototype.prompt.includes(`https://trigger.tools/automations/${entry.slug}/#prompt`));
+  assert.ok(!prototype.prompt.includes(entry.promptText));
   assert.equal(prototype.truncated, false);
   assert.ok(prototype.encodedLength <= 8000);
 });
@@ -138,16 +144,40 @@ test('getAutomationLaunchPath returns stable site launcher routes', () => {
   assert.equal(getAutomationLaunchPath('cursor', 'github-pr-review-router'), '/launch/cursor/github-pr-review-router');
 });
 
+test('getAutomationPromptUrl returns stable hosted prompt URLs', () => {
+  assert.equal(getAutomationPromptUrl('github-pr-review-router'), 'https://trigger.tools/automation-prompts/github-pr-review-router.md');
+});
+
 test('getCatalogAssessmentPrompt returns a catalog-wide recommendation prompt', () => {
   const prompt = getCatalogAssessmentPrompt();
 
-  assert.ok(prompt.includes('First infer the context where this prompt was pasted:'));
-  assert.ok(prompt.includes('If this was pasted into a general chat without project context, interview me briefly before recommending automations.'));
-  assert.ok(prompt.includes('Recommend up to 5 automations from the catalog once you have enough context.'));
-  assert.ok(prompt.includes('"slug": "github-pr-review-router"'));
-  assert.ok(prompt.includes('"title": "GitHub PR Review Router"'));
-  assert.ok(prompt.includes('"categories": ["Developer Workflow"]'));
-  assert.ok(prompt.includes('"tools": ["GitHub MCP"]'));
+  assert.ok(prompt.includes('If web fetch is available, read the automation catalog docs at:'));
+  assert.ok(prompt.includes('https://trigger.tools/llms.txt'));
+  assert.ok(prompt.includes('https://trigger.tools/catalog.md'));
+  assert.ok(prompt.includes('If neither project inspection nor web fetch is available, ask me up to 3 short questions before recommending anything.'));
   assert.ok(prompt.includes('For each recommended automation, provide:'));
   assert.ok(prompt.includes('A short start-here-first rollout order.'));
+  assert.ok(!prompt.includes('"slug": "github-pr-review-router"'));
+});
+
+test('getCatalogMarkdown returns an agent-readable markdown catalog', () => {
+  const markdown = getCatalogMarkdown();
+
+  assert.ok(markdown.startsWith('# AI Agent Automations Catalog'));
+  assert.ok(markdown.includes('## Developer Workflow'));
+  assert.ok(markdown.includes('- [GitHub PR Review Router](https://trigger.tools/automations/github-pr-review-router/):'));
+  assert.ok(markdown.includes('  - Slug: `github-pr-review-router`'));
+  assert.ok(markdown.includes('  - Prompt: https://trigger.tools/automation-prompts/github-pr-review-router.md'));
+  assert.ok(markdown.includes('  - Details: https://trigger.tools/automations/github-pr-review-router/'));
+  assert.ok(markdown.includes('## Category index'));
+});
+
+test('getLlmsTxt returns a short index that points agents at the catalog', () => {
+  const llms = getLlmsTxt();
+
+  assert.ok(llms.startsWith('# AI Agent Automations'));
+  assert.ok(llms.includes('[Automation catalog](https://trigger.tools/catalog.md)'));
+  assert.ok(llms.includes('## Recommendation guidance'));
+  assert.ok(llms.includes('[Recommendation guidance](https://trigger.tools/catalog.md):'));
+  assert.ok(!llms.includes('## Category coverage'));
 });
