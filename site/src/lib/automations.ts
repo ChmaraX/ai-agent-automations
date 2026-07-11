@@ -3,6 +3,7 @@ import { relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { createMarkdownProcessor, type MarkdownHeading } from '@astrojs/markdown-remark';
+import { siteConfig } from '../data/site.ts';
 
 export type AutomationEntry = {
   slug: string;
@@ -42,6 +43,35 @@ export type CodexAutomatePrototype = {
   encodedLength: number;
 };
 
+export type ClaudeAutomatePrototype = {
+  appUrl: string;
+  prompt: string;
+  truncated: boolean;
+  encodedLength: number;
+};
+
+export type CursorLaunchPrototype = {
+  appUrl: string;
+  webUrl: string;
+  prompt: string;
+  truncated: boolean;
+  encodedLength: number;
+};
+
+export type CodexLaunchPrototype = {
+  appUrl: string;
+  prompt: string;
+  truncated: boolean;
+  encodedLength: number;
+};
+
+export type ClaudeLaunchPrototype = {
+  appUrl: string;
+  prompt: string;
+  truncated: boolean;
+  encodedLength: number;
+};
+
 export type AutomationAssetEntry = {
   absolutePath: string;
   assetPath: string;
@@ -56,6 +86,8 @@ export type AutomationAppAction = {
   iconAlt: string;
   iconClassName: string;
 };
+
+export type AutomationLaunchApp = 'claude' | 'codex' | 'cursor';
 
 type RawAutomationMeta = {
   title?: unknown;
@@ -76,6 +108,7 @@ type CatalogAssessmentEntry = Pick<
 >;
 
 const automationsDir = resolve(process.cwd(), '../automations');
+const claudePromptAppBaseUrl = 'claude-cli://open';
 const cursorPromptAppBaseUrl = 'cursor://anysphere.cursor-deeplink/prompt';
 const cursorPromptWebBaseUrl = 'https://cursor.com/link/prompt';
 const codexPromptAppBaseUrl = 'codex://new';
@@ -190,8 +223,7 @@ function createCursorPromptUrl(baseUrl: string, prompt: string): string {
   return url.toString();
 }
 
-export function getCursorAutomatePrototype(entry: CursorAutomatePromptInput): CursorAutomatePrototype {
-  const prompt = buildCursorPrompt(entry);
+export function getCursorLaunchPrototype(prompt: string): CursorLaunchPrototype {
   const appUrl = createCursorPromptUrl(cursorPromptAppBaseUrl, prompt);
 
   if (appUrl.length <= deeplinkMaxLength) {
@@ -199,31 +231,31 @@ export function getCursorAutomatePrototype(entry: CursorAutomatePromptInput): Cu
       appUrl,
       webUrl: createCursorPromptUrl(cursorPromptWebBaseUrl, prompt),
       prompt,
-      promptVariant: 'full',
       truncated: false,
       encodedLength: appUrl.length,
     };
   }
 
-  const reservedPrompt = [
-    'Use /automate to create a Cursor Automation.',
-    '',
-    `Goal: ${entry.description}`,
-    '',
-    'Prompt:',
-  ].join('\n');
   const maxPromptLength = Math.max(0, Math.floor((deeplinkMaxLength - cursorPromptAppBaseUrl.length) * 0.55));
-  const truncatedPromptText = entry.promptText.slice(0, Math.max(0, maxPromptLength - reservedPrompt.length - 28)).trimEnd();
-  const truncatedPrompt = `${reservedPrompt}\n${truncatedPromptText}\n\n[truncated for deeplink length]`;
+  const truncatedPromptText = prompt.slice(0, Math.max(0, maxPromptLength - 28)).trimEnd();
+  const truncatedPrompt = `${truncatedPromptText}\n\n[truncated for deeplink length]`;
   const truncatedAppUrl = createCursorPromptUrl(cursorPromptAppBaseUrl, truncatedPrompt);
 
   return {
     appUrl: truncatedAppUrl,
     webUrl: createCursorPromptUrl(cursorPromptWebBaseUrl, truncatedPrompt),
     prompt: truncatedPrompt,
-    promptVariant: 'minimal',
     truncated: true,
     encodedLength: truncatedAppUrl.length,
+  };
+}
+
+export function getCursorAutomatePrototype(entry: CursorAutomatePromptInput): CursorAutomatePrototype {
+  const prototype = getCursorLaunchPrototype(buildCursorPrompt(entry));
+
+  return {
+    ...prototype,
+    promptVariant: prototype.truncated ? 'minimal' : 'full',
   };
 }
 
@@ -244,8 +276,62 @@ function createCodexPromptUrl(prompt: string): string {
   return url.toString();
 }
 
-export function getCodexAutomatePrototype(entry: CursorAutomatePromptInput): CodexAutomatePrototype {
-  const prompt = buildCodexPrompt(entry);
+function buildClaudePrompt(entry: CursorAutomatePromptInput): string {
+  return [
+    'Create a Claude Code automation for this task.',
+    '',
+    `Goal: ${entry.description}`,
+    '',
+    'Prompt:',
+    entry.promptText,
+  ].join('\n');
+}
+
+function createClaudePromptUrl(prompt: string, repoName: string): string {
+  const url = new URL(claudePromptAppBaseUrl);
+  if (repoName.trim()) {
+    url.searchParams.set('repo', repoName);
+  }
+  url.searchParams.set('q', prompt);
+  return url.toString();
+}
+
+export function getClaudeAutomatePrototype(
+  entry: CursorAutomatePromptInput,
+  repoName: string = siteConfig.repoName,
+): ClaudeAutomatePrototype {
+  return getClaudeLaunchPrototype(buildClaudePrompt(entry), repoName);
+}
+
+export function getClaudeLaunchPrototype(
+  prompt: string,
+  repoName: string = siteConfig.repoName,
+): ClaudeLaunchPrototype {
+  const appUrl = createClaudePromptUrl(prompt, repoName);
+
+  if (appUrl.length <= deeplinkMaxLength) {
+    return {
+      appUrl,
+      prompt,
+      truncated: false,
+      encodedLength: appUrl.length,
+    };
+  }
+
+  const maxPromptLength = Math.max(0, Math.floor((deeplinkMaxLength - claudePromptAppBaseUrl.length) * 0.55));
+  const truncatedPromptText = prompt.slice(0, Math.max(0, maxPromptLength - 28)).trimEnd();
+  const truncatedPrompt = `${truncatedPromptText}\n\n[truncated for deeplink length]`;
+  const truncatedAppUrl = createClaudePromptUrl(truncatedPrompt, repoName);
+
+  return {
+    appUrl: truncatedAppUrl,
+    prompt: truncatedPrompt,
+    truncated: true,
+    encodedLength: truncatedAppUrl.length,
+  };
+}
+
+export function getCodexLaunchPrototype(prompt: string): CodexLaunchPrototype {
   const appUrl = createCodexPromptUrl(prompt);
 
   if (appUrl.length <= deeplinkMaxLength) {
@@ -257,16 +343,9 @@ export function getCodexAutomatePrototype(entry: CursorAutomatePromptInput): Cod
     };
   }
 
-  const reservedPrompt = [
-    'Create a Codex automation for this task.',
-    '',
-    `Goal: ${entry.description}`,
-    '',
-    'Prompt:',
-  ].join('\n');
   const maxPromptLength = Math.max(0, Math.floor((deeplinkMaxLength - codexPromptAppBaseUrl.length) * 0.55));
-  const truncatedPromptText = entry.promptText.slice(0, Math.max(0, maxPromptLength - reservedPrompt.length - 28)).trimEnd();
-  const truncatedPrompt = `${reservedPrompt}\n${truncatedPromptText}\n\n[truncated for deeplink length]`;
+  const truncatedPromptText = prompt.slice(0, Math.max(0, maxPromptLength - 28)).trimEnd();
+  const truncatedPrompt = `${truncatedPromptText}\n\n[truncated for deeplink length]`;
   const truncatedAppUrl = createCodexPromptUrl(truncatedPrompt);
 
   return {
@@ -275,6 +354,10 @@ export function getCodexAutomatePrototype(entry: CursorAutomatePromptInput): Cod
     truncated: true,
     encodedLength: truncatedAppUrl.length,
   };
+}
+
+export function getCodexAutomatePrototype(entry: CursorAutomatePromptInput): CodexAutomatePrototype {
+  return getCodexLaunchPrototype(buildCodexPrompt(entry));
 }
 
 function toCatalogAssessmentEntries(entries: AutomationEntry[]): CatalogAssessmentEntry[] {
@@ -330,15 +413,32 @@ export function getCatalogAssessmentPrompt(entries: AutomationEntry[] = getAutom
   ].join('\n');
 }
 
+export function getAutomationLaunchPath(app: AutomationLaunchApp, slug: string): string {
+  return `/launch/${app}/${slug}`;
+}
+
 export function getAutomationAppActions(entry: AutomationDetailEntry): AutomationAppAction[] {
+  const claudePrototype = getClaudeAutomatePrototype(entry);
   const codexPrototype = getCodexAutomatePrototype(entry);
   const cursorPrototype = getCursorAutomatePrototype(entry);
 
   return [
     {
+      href: claudePrototype.appUrl,
+      label: 'Add to Claude',
+      title: claudePrototype.truncated
+        ? 'Launch Claude Code with a shortened prefilled automation prompt'
+        : 'Launch Claude Code with a prefilled automation prompt',
+      iconSrc: '/logos/claude.png',
+      iconAlt: 'Claude',
+      iconClassName: 'agent-logo-claude',
+    },
+    {
       href: codexPrototype.appUrl,
       label: 'Add to Codex',
-      title: 'Prototype Codex launch for automation creation',
+      title: codexPrototype.truncated
+        ? 'Launch Codex with a shortened prefilled automation prompt'
+        : 'Launch Codex with a prefilled automation prompt',
       iconSrc: '/logos/codex.png',
       iconAlt: 'Codex',
       iconClassName: 'agent-logo-codex',
@@ -346,7 +446,9 @@ export function getAutomationAppActions(entry: AutomationDetailEntry): Automatio
     {
       href: cursorPrototype.appUrl,
       label: 'Add to Cursor',
-      title: 'Prototype Cursor launch for /automate',
+      title: cursorPrototype.truncated
+        ? 'Launch Cursor with a shortened prefilled automation prompt'
+        : 'Launch Cursor with a prefilled automation prompt',
       iconSrc: '/logos/cursor.png',
       iconAlt: 'Cursor',
       iconClassName: 'agent-logo-cursor',

@@ -20,6 +20,22 @@
   <img src="./assets/github_readme_provider_logo_strip@2x.png" width="720" alt="Provider logo strip">
 </p>
 
+<p align="center">
+  <a href="https://chmarax.github.io/ai-agent-automations/launch/codex/">
+    <img src="https://img.shields.io/badge/Open%20In-Codex-111111?style=for-the-badge" alt="Open in Codex">
+  </a>
+  <a href="https://chmarax.github.io/ai-agent-automations/launch/cursor/">
+    <img src="https://img.shields.io/badge/Open%20In-Cursor-111111?style=for-the-badge" alt="Open in Cursor">
+  </a>
+  <a href="https://chmarax.github.io/ai-agent-automations/launch/claude/">
+    <img src="https://img.shields.io/badge/Open%20In-Claude-111111?style=for-the-badge" alt="Open in Claude Code">
+  </a>
+</p>
+
+<p align="center">
+  <sub>Open the catalog assessment prompt directly in your AI app and let it recommend the best automation for your repo or workflow.</sub>
+</p>
+
 ## What this is
 
 A collection of field tested and ready-to-run AI agent automations for real-world workflows.
