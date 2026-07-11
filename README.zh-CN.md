@@ -20,6 +20,22 @@
   <img src="./assets/github_readme_provider_logo_strip@2x.png" width="720" alt="Provider logo strip">
 </p>
 
+<p align="center">
+  <a href="https://trigger.tools/launch/codex/">
+    <img src="https://img.shields.io/badge/Open%20In-Codex-111111?style=for-the-badge" alt="在 Codex 中打开">
+  </a>
+  <a href="https://trigger.tools/launch/cursor/">
+    <img src="https://img.shields.io/badge/Open%20In-Cursor-111111?style=for-the-badge" alt="在 Cursor 中打开">
+  </a>
+  <a href="https://trigger.tools/launch/claude/">
+    <img src="https://img.shields.io/badge/Open%20In-Claude-111111?style=for-the-badge" alt="在 Claude Code 中打开">
+  </a>
+</p>
+
+<p align="center">
+  <sub>直接在你的 AI 应用中打开目录评估提示词，让它为你的仓库或工作流推荐最合适的 automation。</sub>
+</p>
+
 ## 这是什么
 
 一个精选的、可直接运行的 AI Agent 自动化集合，面向真实世界的工作流。

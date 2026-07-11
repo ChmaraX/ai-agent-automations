@@ -1,0 +1,183 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../../data/site';
+import {
+  getCatalogAssessmentPrompt,
+  getClaudeLaunchPrototype,
+  getCodexLaunchPrototype,
+  getCursorLaunchPrototype,
+  type AutomationLaunchApp,
+} from '../../../lib/automations';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  return (['claude', 'codex', 'cursor'] as const).map((app) => ({ params: { app } }));
+}
+
+const { app } = Astro.params;
+if (!app || !(['claude', 'codex', 'cursor'] as const).includes(app as AutomationLaunchApp)) {
+  throw new Error('Missing or invalid launcher app.');
+}
+
+const launchApp = app as AutomationLaunchApp;
+const assessmentPrompt = getCatalogAssessmentPrompt();
+
+const launchConfig = (() => {
+  if (launchApp === 'claude') {
+    const prototype = getClaudeLaunchPrototype(assessmentPrompt);
+    return {
+      label: 'Claude Code',
+      appUrl: prototype.appUrl,
+      fallbackUrl: prototype.appUrl,
+      helperText: 'This opens Claude Code with the catalog assessment prompt prefilled so it can inspect your repo or ask brief questions first.',
+    };
+  }
+
+  if (launchApp === 'codex') {
+    const prototype = getCodexLaunchPrototype(assessmentPrompt);
+    return {
+      label: 'Codex',
+      appUrl: prototype.appUrl,
+      fallbackUrl: prototype.appUrl,
+      helperText: 'This opens Codex with the catalog assessment prompt ready to review and send.',
+    };
+  }
+
+  const prototype = getCursorLaunchPrototype(assessmentPrompt);
+  return {
+    label: 'Cursor',
+    appUrl: prototype.appUrl,
+    fallbackUrl: prototype.webUrl,
+    helperText: 'This opens Cursor with the catalog assessment prompt prefilled for a quick best-fit automation recommendation.',
+  };
+})();
+
+const pageTitle = `Launch ${launchConfig.label} | ${siteConfig.title}`;
+const pageDescription = `Open ${launchConfig.label} with the AI Agent Automations catalog assessment prompt.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <main class="page launch-page">
+    <div class="topbar">
+      <a class="back-link mono" href="/">Back to catalog</a>
+      <a class="github-star-link mono" href={siteConfig.repoUrl} target="_blank" rel="noreferrer">
+        View repo
+      </a>
+    </div>
+
+    <section class="launch-shell">
+      <div class="kicker mono">launch / {launchApp}</div>
+      <h1 class="title-boxed">Opening {launchConfig.label}</h1>
+      <p class="subtitle">
+        {launchConfig.helperText}
+      </p>
+
+      <div class="launch-actions">
+        <a class="action primary mono" href={launchConfig.appUrl} data-launch-link>
+          Open {launchConfig.label}
+        </a>
+        <button
+          class="action mono"
+          type="button"
+          data-copy-launch-prompt
+          data-copy-text={assessmentPrompt}
+        >
+          Copy prompt
+        </button>
+        <a class="action mono" href="/">
+          Browse catalog
+        </a>
+      </div>
+
+      <p class="launch-note" data-launch-status>
+        Trying to open the app now. If nothing happens, use the button again or copy the prompt.
+      </p>
+
+      <div class="launch-fallback">
+        <p class="prototype-note">
+          GitHub README buttons land on this HTTPS page because GitHub strips native app schemes like
+          <code>claude-cli://</code>, <code>cursor://</code>, and <code>codex://</code>.
+        </p>
+        {
+          launchConfig.fallbackUrl !== launchConfig.appUrl && (
+            <p class="prototype-note">
+              Cursor fallback: <a href={launchConfig.fallbackUrl}>open the official web handoff link</a>.
+            </p>
+          )
+        }
+      </div>
+    </section>
+  </main>
+
+  <script is:inline>
+    (() => {
+      const launchLink = document.querySelector('[data-launch-link]');
+      const statusNode = document.querySelector('[data-launch-status]');
+      const copyButton = document.querySelector('[data-copy-launch-prompt]');
+      if (!(launchLink instanceof HTMLAnchorElement)) return;
+
+      const appUrl = launchLink.href;
+
+      const updateStatus = (message) => {
+        if (statusNode instanceof HTMLElement) {
+          statusNode.textContent = message;
+        }
+      };
+
+      const tryLaunch = () => {
+        window.location.assign(appUrl);
+        window.setTimeout(() => {
+          updateStatus('If the app did not open, your browser or OS likely blocked the handoff. Use the open button again or copy the prompt.');
+        }, 1200);
+      };
+
+      window.setTimeout(tryLaunch, 120);
+
+      launchLink.addEventListener('click', () => {
+        updateStatus('Trying the app handoff again.');
+      });
+
+      if (!(copyButton instanceof HTMLButtonElement)) return;
+      const defaultLabel = copyButton.textContent ?? 'Copy prompt';
+
+      const writePrompt = async () => {
+        const promptText = copyButton.dataset.copyText ?? '';
+        if (!promptText) return;
+
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(promptText);
+          return;
+        }
+
+        const textarea = document.createElement('textarea');
+        textarea.value = promptText;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.append(textarea);
+        textarea.select();
+        const copied = document.execCommand('copy');
+        textarea.remove();
+        if (!copied) {
+          throw new Error('copy failed');
+        }
+      };
+
+      copyButton.addEventListener('click', async () => {
+        try {
+          await writePrompt();
+          copyButton.textContent = 'Copied';
+          updateStatus('Prompt copied. Paste it into the app if the deep link does not open.');
+        } catch {
+          copyButton.textContent = 'Copy failed';
+          updateStatus('Copy failed. Use the browser context menu or open the catalog page instead.');
+        }
+
+        window.setTimeout(() => {
+          copyButton.textContent = defaultLabel;
+        }, 1600);
+      });
+    })();
+  </script>
+</BaseLayout>

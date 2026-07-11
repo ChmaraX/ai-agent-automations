@@ -59,6 +59,10 @@ a {
   padding-top: 22px;
 }
 
+.launch-page {
+  padding-top: 22px;
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -209,6 +213,33 @@ a {
   grid-template-columns: minmax(0, 1fr) 280px;
   gap: 32px;
   padding-top: 24px;
+}
+
+.launch-shell {
+  max-width: 760px;
+  padding: 28px 0 24px;
+}
+
+.launch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  align-items: center;
+}
+
+.launch-note {
+  max-width: 680px;
+  margin: 14px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.launch-fallback {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-muted);
 }
 
 .detail-content {
